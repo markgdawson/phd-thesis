@@ -1,0 +1,104 @@
+% Chapter 1
+
+\chapter{Physical Problem} % Write in your own chapter title
+\label{Chapter1}
+\lhead{Chapter 1. \emph{Physical Problem}} % Write in your own chapter title to set the page header
+
+\section{Problem Description}
+
+\begin{itemize}
+	\item what is the problem? (resonant frequencies in a cavity)
+	\item how do lasers work? [Maybe]
+	\item what is a cavity? where are they used? why do we care?
+	\item what is a spectrum - how does the transformation work? what does it mean?
+	\item what is a resonant frequency? why are we interested?
+	\item industrial relevance - why is there need for research (nano/smaller)
+\end{itemize}
+\section{Full Maxwells Equations}
+\begin{itemize}
+	\item specify equations (as a system of differential, linear conservation eqtns)
+	\item what is the problem (resonant frequencies in a cavity)
+	\item which equations am I using? and why. Curl/Divergence equations
+	\item what is a resonant frequency? why are we interested
+	\item Differential vs integral formulation
+\end{itemize}
+$$ \pdert{E_1} = \pder[H_{3}]{x_2} - \pder[H_{2}]{x_3} $$
+$$ \pdert{E_2} = \pder[H_{1}]{x_3} - \pder[H_{3}]{x_1} $$
+$$ \pdert{E_3} = \pder[H_{2}]{x_1} - \pder[H_{1}]{x_2} $$
+$$ \pdert{H_1} = - \pder[E_{3}]{x_2} + \pder[E_{2}]{x_3} $$
+$$ \pdert{H_2} = - \pder[E_{1}]{x_3} + \pder[E_{3}]{x_1} $$
+$$ \pdert{H_3} = - \pder[E_{2}]{x_1} + \pder[E_{1}]{x_2} $$
+
+The system of equations can be written in 3D as a linear hyperbolic system of conservation equations:
+
+$$
+\pder[\mathbf{U}]{t} + \pder[\mathbf{F}_k(\mathbf{U})]{x_k} = \mathbf{S}(\mathbf{U})
+$$
+
+where:
+
+$$
+\mathbf{U} = \begin{pmatrix}\epsilon \E \\ \mu \mathbf{H} \end{pmatrix}
+\mathbf{F_1} = \begin{pmatrix}0 \\ H_3 \\ - H_2 \\ 0 \\ - E_3 \\ E_2 \end{pmatrix}
+\mathbf{F_2} = \begin{pmatrix} -H_3 \\ 0 \\ H_1 \\ E_3 \\ 0 \\ - E_1 \end{pmatrix}
+\mathbf{F_3} = \begin{pmatrix} H_3 \\ -H_1 \\ 0 \\ -E_2 \\ E_1 \\ 0 \end{pmatrix}
+\mathbf{S} = \mathbf{0}
+$$
+
+We can approximate the z-dependence of the system as a sinusoidal wave where each component of the system follows a sinusoidal $x_3$ dependence given by:
+
+$$
+\mathbf{U}(x,y,z) = \mathbf{U}(x,y) e^{j(\beta t - \omega t)}
+$$
+
+The system of equations can be reduced to 2D by specifying an explicit form for $F_3$. The equation above is therefore modified to have only $F_1$ and $F_2$ with an explicit form for $\pder{F_3}$ introduced as a source term of form.
+
+$$
+\mathbf{S} = \begin{pmatrix} \beta sin(\omega t - \beta x_3) \\ \beta sin(\omega t - \beta x_3) \\ 0 \\ \beta sin(\omega t - \beta x_3) \\ \beta sin(\omega t - \beta x_3) \\ 0 \end{pmatrix}
+$$
+
+\subsubsection{Loss and Gain}
+[Maybe this should go in the Full Maxwells Equations bit?] Somewhere I need to discuss semiconductor lasers, how they work and how I use complex,
+\begin{itemize}
+	\item significance of parameters, complex material parameters
+	\item loss and gain
+	\item effective refractive index
+	\item propagation loss
+	\item quality factors
+\end{itemize}
+\subsection{Boundary Conditions And Initial Conditions}
+\begin{itemize}
+	\item Interface Boundary constraints + obtaining from integral form of maxwells equations
+	\item Radiation BCs (not really appropriate for me - only used in scattering - don't mention)
+	\item initial conditions + effect on solution. e.g. modal initial conditions etc
+\end{itemize}
+
+$$
+\mathbf{n} \times \mathbf{E^L} = \mathbf{n} \times \mathbf{E^R} 
+\mathbf{n} \times \mathbf{H^L} = \mathbf{n} \times \mathbf{H^R} 
+$$
+
+$$
+\mathbf{n} \dot ( \epsilon^L \mathbf{E^L} ) = - \mathbf{n} \dot ( \epsilon^R \mathbf{E^R} )
+$$
+$$
+\mathbf{n} \dot ( \mu^L \mathbf{H^L} ) = - \mathbf{n} \dot ( mu^R \mathbf{H^R} )
+$$
+
+% TODO - note in Rubens thesis the last equation contains \epsilon^R\H^R (which is wrong I think)
+
+\subsection{Validity and Scope}
+\begin{itemize}
+  \item materials (linear, homogenous, isotropic)
+	\item fields (slow varying compared to material response)
+	\item how do my problems reflect this
+\end{itemize}
+\subsection{Other Forms of Maxwells Equations}
+\subsubsection{2D compact form}
+Mention beta for z-dependence
+Obtain formulation from 3D. Mention B=0 -> equations decouple into TE/TM mode
+\subsubsection{[Incident Wave Formulation]}
+\subsection{Relation to Wave Equation and Helmholtz Equation}
+Discuss Freq vs Time domain HERE - conclude why, never touch again.
+Derivation
+\section{Summary}

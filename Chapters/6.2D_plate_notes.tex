@@ -1,0 +1,123 @@
+% Chapter 1
+
+\chapter{Notes} % Write in your own chapter title
+\label{Chapter2}
+\lhead{Chapter 2. \emph{Numerical Methods}} % Write in your own chapter title to set the page header
+
+Progress [Code Changes]
+\begin{itemize}
+\item plate 2D, beta=zero, delta function excitations
+\item plate 2D, gaussian excitiation (narrow)
+\item plate 2D, gaussian excitiation (wide)
+\item plate 2D, beta non-zero -> same study
+\item plate 2D, FFT vs Harminv (vs..?)
+\item Scattering 2D real - benchmarking
+\item Study of minimum dt and minimum periodetc (time it takes maybe...?)
+\item Scattering 2D complex refractive index - issues (causality)
+\item How much faster is harminv for same dataset...?
+\end{itemize}
+
+Numerics
+\begin{itemize}
+\item Maxwells Eqtns
+\item DG discretisation
+\item Jump Condition
+\item ADE and dispersion
+\item LITERATURE REVIEW  + include some references here...!
+\end{itemize}
+
+Examples to run
+\begin{itemize}
+\item A fuckload of super-short gaussian initial conditions (20 mins each) - showing the effect of the initial condition on the wave and more specifically on convergence. Show lack of convergence for wider gaussians :)
+\item Use optimised gaussian and do the same thing for MULTIPLE gaussians in the initial conditions - conclude with convergence.
+\item compare current (beta=0) to previous 2D (i.e. without beta/TE or TM modes)
+\end{itemize}
+
+Things to Discuss - 2D plate FFT
+\begin{itemize}
+\item Compact 2D formulation with Beta = 0 (which reduces to TE/TM mode decoupling)
+\item Comparison of FFT and harminv
+\item Why 2D-plate doesn't work
+\item Obtaining a good spectrum (how)
+\item Timestep convergence for a spectrum
+\item Period Convergence
+\item Blackman window functions (with without window functions)
+\item How timestep and period converges - how do spectrums look at a lower convergence
+\item Show some BAD spectrums - show examples of BAD components. What happens if I only excite ONE component of my field...does that produce a better result?
+\item Wave comparisons - DO WAVE COMPARISONS AT super-high p (e.g. p1->3 etc)
+\item Show effect of changing the gaussian profile on the convergence (i.e. do a fuckload of gaussian initial conditions and show convergence)
+\item Lorentz Fittings. Improvement in results (careful to not make improvement TOOOO good...! LOL! DO THIS LAST BECAUSE IT ISN'T THAT IMPORTANT)
+\item Difference in components obtained (i.e. some are missing the larger frequency waves...!)
+\item Cut-off point analysis - i.e. how do I choose a cut-off point, what if I choose the wrong cutoff point? How to identify peaks? Other methods for identifying peaks.
+\item Conclusions - how long and how closely sampled, is this good for us? Does problem complexity affect this? There are lots of dependence on dt, period,cut-off points and initial conditions. Lots of factors affecting a good spectrum. We would like to use a more efficient method for finding resonances - but at the same time
+\end{itemize}
+
+Things to Discuss - 2D plate Harminv
+\begin{itemize}
+\item HARMINV - convergence plots + comparison to previous (i.e. improvement in convergence for a bunch of cases)
+\item Harminv window functions
+\item Harminv comparions of results...! :)
+\item Dependence on initial conditions (Gaussian, Delta function, Gaussian support)
+\item Dependence on time step
+\end{itemize}
+
+Things to Discuss - 2D plate Beta non-zero
+\begin{itemize}
+\item show some spectrums obtained. Maybe a comparison to analytical. Just give a slight motivation that it works...In theory would be nice to do all the above analysis with beta different from zero - but just for now do something to show that it works. Just show convergence of a wave maybe using the init conditions used above. Maybe use multiple gaussians to get a good convergence? Who knows...?
+\end{itemize}
+
+Things to Discuss - Complex
+\begin{itemize}
+\item 2d-plate with complex (MAYBE?? Probably not)
+\item 2D-scattering real [benchmarks] - obtaining RCS, obtaining RCS convergence, limitations etc.
+\item 2D-scattering real/complex comparison...why doesn't this work - some EXPLAINATION that doesn't make me look toooo bad (i.e. Kramer-Kronig relationshps which INCLUDE a freq dependence). Try to draw a logical argument between the comparison with real values, the instability and the conclusion of the method being incorrect.
+\item 2D-scattering diagnostics - things going wrong, comparion of waves to real. Comparison of RCS to real. DONT TELL THEM THIS WAS A WASTE OF TIME....!
+\item what is needed to make complex work (i.e. dispersion) + initial comparison
+\item Why 2D-scattering complex doesn't work + Dispersion + blowing up
+\item NEED TO DEMONSTRATE I UNDERSTAND DG and NUMERICAL SIDE OF THINGS TOO...this is where they might catch me out. FIND SOME CLEVER LITTLE SENTENCES TO SAY SHOWING A DEEPER UNDERSTANDING.
+\item ADE, Dispersion and why other options. Why ADE.
+\end{itemize}
+
+Things to Research and Include
+\begin{itemize}
+\item Quality factor calculations
+\item Jump condition - and suitability
+\end{itemize}
+
+\section{2D plate}
+
+Future
+\begin{itemize}
+\item differnt excitiation types - limitations of excitiations
+\end{itemize}
+
+\subsection{Spectral Analysis (Beta equal zero)}
+Content
+\begin{itemize}
+\item comparison of method(s) for different problems
+\item Attempt to quantify what affects the error frequencies obtained.
+\item Effects of Period
+\item Effects of Timestep
+\item Dependence on initial conditions
+\item how to improve spectrum...?
+\item need a sentance like "FFT runs are 4 times shorter (based on a paramtrised signal with changing parameters)"
+\end{itemize}
+
+\begin{itemize}
+\item convergence plots for timestep and period etc etc
+\item convergence plots for wave shapes - depending on initial conditions (for given point excitation)
+\item Effects of Period
+\item Effects of Timestep
+\item Dependence on initial conditions
+\item how to improve spectrum...?
+\item need a sentance like "FFT runs are 4 times shorter (based on a paramtrised signal with changing parameters)"
+\end{itemize}
+
+\subsection{2D plate with/without z-dependence}
+\begin{itemize}
+\item which equations are used
+\item convergence graphs
+\item comparison of running for different T
+\end{itemize}
+\section{2D scattering}
+\section{2D complex parameters}

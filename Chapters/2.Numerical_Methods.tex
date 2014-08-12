@@ -1,0 +1,132 @@
+% Chapter 1
+
+\chapter{Numerical Methods} % Write in your own chapter title
+%\label{Chapter2}
+%\lhead{Chapter 2. \emph{Numerical Methods}} % Write in your own chapter title to set the page header
+
+\section{Motivation}
+\subsection{Available Methods}
+\begin{itemize}
+	\item Finite Difference
+	\item Finite Volume
+	\item Finite Element
+	\item Other High Order competitors to DG
+\end{itemize}
+
+Today there are several poular methods for solving maxwells equations. The one in most widespread use is the Yee Scheme [] proposed in which uses a Finite Difference method. This is popular due to its simplicity and low operation count and has been shown to produce good results [].
+
+However since the method uses structured meshes capturing complicated geometrical boundaries can be an issue and lead to staircasing effects.
+
+In order to resolve these issues several techniques have been proposed. Several techniques incorporate a low finite element or finite volume
+
+
+The past *** year the Yee scheme of FDTD
+
+\subsection{Unstructured Mesh}
+\begin{itemize}
+	\item justification of using FEM as opposed to finite difference
+	\item unstructured mesh vs structured grid - stair-casing/geometric flexibility, refinement to capture solution
+	\item why do we need an unstructured mesg
+\end{itemize}
+% OPTIONS LEFT: FINITE DIFFERENCE, FINITE VOLUME, FINITE ELEMENT
+Finite difference schemes seem very promising and are very popular however in many cases these have many limitations. In FDTD the entire computational domain is discretized using a cartesian structured grid. Complex geometrical boundaries or interfaces become hard to capture with structured grids - and improving the approximation of the boundary requires refiniment of the entire grid. Furthermore capturing solutions which are more complex in certain regions again require refinement over the whole domain. Clearly methods which use an unstructured mesh have a clear advantage since the geometry can be captured accurately with only local refinement of the mesh.
+
+\subsection{High Order}
+\begin{itemize}
+	\item why high order - capture geometric boundaries + soltn
+	\item staircasing + non-physical effects
+	\item capture geometry
+	\item options for high order (i.e. not finite volume)
+\end{itemize}
+% OPTIONS LEFT: FINITE VOLUME (or other low order meshes), FINITE ELEMENT
+The linear approximation of boundaries in low-order schemes has been shown to cause non-physical issues with the solution as a whole []. These low-order approximations of boundaries can include discontinuities in the boundaries themselves or derivaties of the boundaries (staircasing) which can lead to non-physical effects. High-order schemes allow us to approximate boundaries and interfaces with polynomials.
+
+Also low-order methods suffer from issues with numerical disperion and dissipation which can cause significant errors in wave solutions propagated for long periods of time.
+
+\subsection{Limitations of Methods}
+\begin{itemize}
+	\item Limitations with high order
+	\item sparse, global matrix
+	\item approximating curved geometries
+\end{itemize}
+% OPTIONS LEFT: FINITE ELEMENT (HIGH-ORDER)
+High-order FEM scheme have several issues having a sparse global matrix which needs to be inverted. The Discontinuous Galerkin method on the other hand has elemental matricies with elements connected by a numerical flux term. This means there are no large global matricies to invert. Also the approximations in high order are better however geometries are approximated by polynomials. This can still cause issues capturing geometries with a high curvature.
+
+\section{Discontinuous Galerkin}
+\subsection{Advantages Of Discontinuous Galerkin}
+The Discontinuous Galerkin method was first introduced in 1973 by Reed and Hill [W.H. Reed, T.R. Hill, Triangular mesh methods for the neutron transport equation, Los Alamos Scientific Laboratory, 1973 Tech. Rep. LA-UR-73-479] to solve the neutron transport equation.
+\begin{itemize}
+	\item discuss advantages for wave-dominated problems
+	\item how does DG address the issues with FEM
+	\item Capturing wave solutions + numerical dissipation
+	\item Influence of choice of numerical flux
+\end{itemize}
+\subsection{Formulation}
+The problems we wish to consider can be written in conservation form as:
+
+$$
+\ut + \fk  = \mathbf{S(U)}
+$$
+
+This can be written in a weak form as:
+
+$$
+\int_{\Omega_e} \mathbf{w} \ut d\Omega_e  - \int_{\Omega_e} \frac{\partial \mathbf{w}}{ \partial x_k} \mathbf{F}(\mathbf{U}) d\Omega + \int_{\partial \Omega_e} \mathbf{w} \mathbf{F_n}(\mathbf{U_e}) d\Gamma = \int_{\Omega_e} \mathbf{w} \mathbf{S}(\mathbf{U_e}) d\Omega
+$$
+
+$$
+\mathbf{u} = \sum^{N}_{j=1} N_j u_j(t)
+$$
+
+$$
+\mathbf{w} = N_i
+$$
+
+\subsubsection{Local Element Equations}
+\begin{itemize}
+  \item discretised versions of relevant maxwells equations
+	\item local matrix + broken space
+	\item Nodal vs Modal representation
+\end{itemize}
+\subsubsection{Numerical Flux}
+\begin{itemize}
+	\item role of numerical
+  \item specify numerical flux %$A_n^{-}[]$
+	\item effect for wave domination problems - flow of information, upwind flux
+	\item recover global solution
+\end{itemize}
+\subsection{Implementing Boundary Conditions}
+\begin{itemize}
+	\item material interfaces (specifically the PEC) - no need for ABC or PML at the moment (I don't use these)
+\end{itemize}
+\subsubsection{Spatial Discretisation}
+\begin{itemize}
+	\item discuss types of element...? Affine.
+	\item discuss meshing + NEFEM
+	\item condition number of a matrix - moving nodes around (reference work)
+Reference other work a lot for this...
+\end{itemize}
+\subsection{Time Integration}
+\begin{itemize}
+	\item explicit RK4
+	\item explicit vs implicit
+	\item other time integration options
+	\item does this make a difference?
+\end{itemize}
+\subsection{[Errors and convergence - put this somewhere else]}
+\begin{itemize}
+  \item order of errors and expected rates of convergence
+\end{itemize}
+\section{Signal Analysis}
+\begin{itemize}
+  \item dependence of resolution/cut-off
+	\item window functions and blackman envelope [?]
+	\item filter diagonalisation method
+	\item Modal Shapes - how to obtain modes from resonant frequencies.
+  \item possibly a full comparison of the methods can go here...otherwise present the two options and defer discussions of which is better until 2D Plate section.
+\end{itemize}
+\section{Method Summary}
+\begin{itemize}
+  \item Summary of approaches to solving the problem
+	\item Summary of complete methods to recover resonant frequencies for a given problem
+\end{itemize}
