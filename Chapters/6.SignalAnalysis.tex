@@ -1,0 +1,100 @@
+\chapter{Signal Analysis}
+\label{Chapter2}
+\lhead{Chapter 6. \emph{Signal Analysis}} % Write in your own chapter title to set the page header
+
+\section{Fourier Decomposition}
+
+Fourier transform is a techniques which permits decomposition of any time-domain signal into its frequency domain representation. Based on the Fourier series in which a period time domain signal $s(t)$, with a period $T$ such that $s(x)=s(x+nT)$ for $n=1,2,3 ...$ can be written on the interval $(-l,l)$ as
+
+$$
+s(t) = a_0 + \sum_{n=1}^{\infty} a_n cos(\frac{n\pi x}{l}) + b_n sin(\frac{n\pi x}{l})
+$$
+
+where the fourier coefficients are given by:
+
+$$
+a_0 = \frac{1}{2l}\int_{-l}^{l} s(x) dx
+$$
+
+$$
+a_n = \frac{1}{l}\int_{-l}^{l} s(x) cos(\frac{n \pi x}{l}) dx
+$$
+
+$$
+b_n = \frac{1}{l}\int_{-l}^{l} s(x) sin(\frac{n \pi x}{l}) dx
+$$
+
+If $s(x)$ is only defined on $(-l,l)$ this is equivalent to extending $s(x)$ periodically with a period $2l$. Using eulers equations this can be rewritten as
+
+$$
+s(x) = \sum_{n=-\infty}{\infty} c_n e^{\frac{i n \pi x}{l}}
+$$
+
+In order to deal with functions on the interval $(\infty,\infty)$ the interval is extended such that the functions is considered periodic with an infinite period. If $s(x)$ is absolutely integrable over the interval $(-\infty,\infty)$ a change of variable $\omega = n \pi / l$ and allowing $l \lim \infty$ results in the summation becoming an integral and $s(x)$ in the interval $(0,\infty)$ can be expressed as 
+
+$$
+s(x) = \int_{0}^{\infty} \left( A(\omega) cos(\omega x) + B(\omega) sin(\omega x) \right) d\omega
+$$
+
+where 
+
+$$
+A(\omega) = \frac{1}{\pi} \int_{-\infty}^{+\infty} f(u) cos(\omega u) du
+$$
+
+and
+
+$$
+B(\omega) = \frac{1}{\pi} \int_{-\infty}^{+\infty} f(u) sin(\omega u) du
+$$
+
+are known as the fourier coefficients. As above this can be written using the euler relations in complex form as
+
+$$
+f(x) = \frac{1}{2 \pi} \int_{-\infty}^{+\infty} \int_{-\infty}^{+\infty} f(u) e^{- i \omega (u - x)} du d\omega
+$$
+
+which can be written as
+
+$$
+f(x) = \sqrt{\frac{1}{2 \pi}} \int_{-\infty}^{+\infty} \left( \sqrt{\frac{1}{2 \pi}} \int_{-\infty}^{+\infty} f(u) e^{- i \omega u} du \right) e^{i \omega x} d\omega
+$$
+
+the expression in brackets is known as the Fourier transform, $F(\omega)$, of the function $f(x)$ and can be written as
+
+$$
+\hat{s}(\omega) = \sqrt{\frac{1}{2 \pi}} \int_{-\infty}^{+\infty} f(x) e^{- i \omega x} dx
+$$
+
+The Fourier transform of $s(t)$, denoted as $\hat{s}(f)$, is a complex function of frequency whos magnitude and complex argument represent respectively the amplitude and phase offset of the infinite series of sinosoidal functions of which $s(t)$ is composed. The Fourier transform of a continuous signal can be denoted as:
+
+$$
+\hat{s}(f) = \int_{-\infty}^{+\infty} s(t) e^{-2 \pi i t f} dx
+$$
+
+If the signal $s(t)$ is known only at a discrete number of times $t_k$ such that $s_k = s(t_k)$, we can rewrite the fourier transform as
+
+$$
+\hat{s}_k = \sum_{k=0}^{N-1} s_k e^{-2 \pi i n k / N} dx
+$$
+
+A correctly scaled fourier transform of a time domain signal is known as the power spectrum of the signal.
+
+The continuous fourier transform requires that integration is preformed between $\-infty$ and $\infty$, or over an integer multiple of the periodicity of the signal, $T$. For most sampled signal with multiple frequency components it is not possible in general to measure signals which would be repeated periodically in $T$. That is signals where $s(T) = s(0)$. Such signals extended to infinity would exhibit discontinuities. These discontinuities give rise to a phenomena known as spectral leakage[], in order to capture these discontinuities, which intoduces noise into the system. This is clearly not desirable, and can be reduced by using a window function, such as the Blackman window. The signal is multiplied by and envelope which ensures the discontinuity is eliminated.
+
+A system exhibits resonance if frequency components at the resonant frequencies of the system oscillate with larger amplitudes than away from these resonant frequencies. In this case peaks in power spectrum will be seen at the corresponding resonant frequencies. Resonant frequency values can be recovered by peak fitting. [ mention Lorentz fitting here? compare to spline fitting? ]
+
+\section{Resonant Frequencies}
+\section{Mode Shapes}
+\section{Quality Factors}
+\section{Parametric Methods}
+
+\begin{itemize}
+  \item present the basis of the FFT method
+  \item dependence of resolution/cut-off
+	\item window functions / blackman envelope
+	\item filter diagonalisation method
+	\item Modal Shapes - how to obtain modes from resonant frequencies
+  \item comparison of the FFT + FDM
+  \item Summary of complete methods to recover resonant frequencies for a given problem
+\end{itemize}
