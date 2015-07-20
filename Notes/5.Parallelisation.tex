@@ -1,29 +1,28 @@
-\label{Chapter5}
-\chapter{Parallelisation} % Write in your own chapter title
-\lhead{Chapter 5. \emph{Parallelisation}} % Write in your own chapter title to set the page header
-
-[[ Introduction goes here ]]
-The weak form of Maxwells equations means that parallelisation strategies are possibile.
-
-The Message Passing Interface (MPI) is used and a *** strategy with distributed memory is utilised. The parallel computation is performed by a process of data decomposition. This means that the computational domain is partitioned into regions of space and each processor performs computations only on the elements in that region. This is made possible by the form of the weak form given in \eqref{maxwell-DG-weak-form}. We note that the weak form involves primarily values of unknowns on a single element. The only exception being the values of the solution $U_{out}$ from neighbouring elements required for the calculation of the numerical flux, $\tilde{\mathbf{F}}_n$ along element faces. These values should be made available to each element by communication between processors at each timestep.
+Intro...
 
 \section{Domain Decomposition}
 
-Let us consider calculation of updated solution values, $U^{n+1}_i$, from solution values at the previous timestep, $U^{n}_i$ for an element $\Omega_i$. Assume that the open bounded domain $\Omega \subset \R^{n}$ with boundary $\partial \Omega$ is partitioned with a regular partitioning in the usual way for finite elements as $\bar{\Omega} = \cup_{e} \bar{\Omega}_e$, such that $\Omega_i \cap􏰰\Omega_j = \O$, for $i \ne j$. The boundary $\partial \Omega$ is given by $\partial \Omega = \Gamma^{PEC} \cup \Gamma^{ABC}$ where $\Gamma^{PEC}$ and $\Gamma^{ABC}$ are repectively the boundaries along which PEC and ABC boundary conditions are prescribed and $\Gamma^{PEC} \cap \Gamma^{ABC} = \O$. We define the internal faces of the domain as $\Gamma^{I} = ( \cup_e \partial \Omega_{e}) \ \partial \Omega$.
-We wish to divide the computational load between processors, by assigning calculations of each element to different processors. We define a regular partioning of $\Omega$ as $\bar{\Omega} = \cup_{p} \bar{\Omega}^p$ with partition boundary $\partial \Omega^{p}$. Each non-overlapping partition $\Omega^p$ is composed of a number of elements such that $\bar{\Omega}^p = \cup_{e} \bar{\Omega}_e$ and $\Omega^i \cap \Omega^j = \O$, for $i \ne j$. Parallelisation is achieved by assigning computation of the values $U^{n+1}_i$ from $U^{n}$ for each element $\Omega_e \in \Omega^p$ to a processor $P^p$.
+consider calc of updated $U^{n+1}_i$, from $U^{n}_i$ for $\Omega_i$. 
 
-For an element $\Omega_e \in \Omega^p$ we can define its adjacent elements, that is elements that share a face or edge, as $A_e = \{ \Omega_a \subset \Omega \| \partial \bar{\Omega}_a \cap \partial \bar{\Omega_e} \ne \O \}$. In general $A_e$ is composed of internal adjacent elements, $A_e^{int}$ = \{ A_e \cap \Omega^p \}, and external adjacent elements, $A_e^{ext} = \{ A_e \cap \Omega \setminus \Omega^p \}$. If $A_e^{ext} = \O$ the element $\Omega_e \in \Omega^p$ is said to be an internal element of $P^p$, and when $A_e{ext} \ne \O$ is said to be an interface element of $P^p$.An element $\Omega_e \in \Omega \setminus \Omega^p$ is said to be an external element of $P^p$.
-For internal elements of $P^p$ all the values of $U_i^n$ required to calcualte $U_i^{n+1}$ are available on the processor $P^p$ from calculations on the previous timestep. However for interface elements values of $U^{n+1}_i$ are required at each timestep prior to communication to ensure an updated value of $U$ is available for computation.
+Introduce regular partitioning $\bar{\Omega} = \cup_{e} \bar{\Omega}_e$
 
+Introduce $\Gamma^{PEC}$ and $\Gamma^{ABC}$
 
-%We define the adjoining processor of the processor $P^p$ as $J^p =... shares edge but is NOT P$. For any element we define its adjacent elements as $A_{adj}^e = ...$
+define internal faces $\Gamma^{I}$
 
-% MAYBE - define what an adjoining processor is?? so that I can use for example $P^n$ to refer to another processor.
+divide load by assign to $\Omega^p$ -  define partitioning of $\Omega^p$
 
-% mention when U_out need to be available? Prior to compution. U_out calc prev time step.
+Parallelisation is achieved by assigning computation of the values $U^{n+1}_i$ from $U^{n}$ for each element $\Omega_e \in \Omega^p$ to a processor $P^p$.
 
-%For each partition $\Omega^p$ we refer to its internal and external interface elements respectively as $L^p_{int} = \{ \Omega_e \subset \Omega \setminus \Omega^p | \partial \bar{\Omega}_e \cap \partial \bar{\Omega}^P \setminus\partial \bar{\Omega}\ne \O \}$ and $L^p_{ext} = \{ \Omega_e \subset \Omega^p | \partial \bar{\Omega}_e \cap \bar{\Omega}^P \ne \O \}$. Calculations for elements in $L^p_{ext}$ and $L^p_{int}$ are performed respectively on this processor and adjoining processors. For an element $\Omega_e \in L^p_{in}$ we define its adjacent external elements as $K_{e} = \{ \Omega_e \subset \Omega \ \Omega^p | \partial \bar{\Omega}_e \cap \partial \bar{\Omega}_e \}$.
-% BETTER TO DEFINE INTERNAL AND EXTERNAL ADJOINING ELEMENTS
+Define internal + external adjacent elements & internal, external and interface elements
+
+% *****mention converse relationship internal/external ??
+
+Calculations on internal elements can happen easily...
+
+Cals on external elements needs communication....
+
+Since cals require values from A_int and A_ext and only A_int are up to date on this proc. Values for A_ext are calculated on one or more processors to be made available. These will be stored on processor P and communicated from the processor containing eelements in A_ext communication at each time step.
 
 Calculating $U^{n+1}_i$ for the element $\Omega_e \in \Omega^p$, requires values of $U_i^{n}$ from $\Omega_e$ as well as values from each element $A_{adj}^e$. $A_{adj}^e$ may contain some elements in $L^p_{ext}$, in which case values of $U_i^n$ should be made available by communication on this processor. $\Omega_i \in \Omega^{p} \cup L^p_{ext}$. For all elements in $\Omega^p$ these values are readily available on $P^p$ from calculations in the previous time step, however for elements in $L^p_{ext}$, $U^{n}_i$ will be calculated on an adjoining processor, and should be duplicated on this processor.
 % I've not mentioned (really) any correspondence between L^p_{out} and L^p_{in}
