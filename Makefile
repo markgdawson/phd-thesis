@@ -1,5 +1,6 @@
-open: Thesis.pdf
-	open Thesis.pdf
+open: /tmp/thesisbuild/Thesis.pdf
+	open /tmp/thesisbuild/Thesis.pdf
 
-Thesis.pdf: Chapters/
-	pdflatex Thesis.tex
+/tmp/thesisbuild/Thesis.pdf: Chapters/
+	mkdir -p /tmp/thesisbuild 2>/dev/null
+	pdflatex -output-directory /tmp/thesisbuild Thesis.tex
