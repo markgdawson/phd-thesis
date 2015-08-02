@@ -1,35 +1,43 @@
 Intro...
 
-\section{Domain Decomposition}
+\section{Update Equations in parallel}
 
-consider calc of updated $U^{n+1}_i$, from $U^{n}_i$ for $\Omega_i$. 
+- consider calc of updated $U^{n+1}_i$, from $U^{n}_i$ for $\Omega_i$. 
 
-Introduce regular partitioning $\bar{\Omega} = \cup_{e} \bar{\Omega}_e$
+- Introduce regular partitioning $\bar{\Omega} = \cup_{e} \bar{\Omega}_e$
 
-Introduce $\Gamma^{PEC}$ and $\Gamma^{ABC}$
+- Introduce $\Gamma^{PEC}$ and $\Gamma^{ABC}$
 
-define internal faces $\Gamma^{I}$
+- define internal faces $\Gamma^{I}$
 
-divide load by assign to $\Omega^p$ -  define partitioning of $\Omega^p$
+- divide load by assign to $\Omega^p$ -  define partitioning of $\Omega^p$
 
-Parallelisation is achieved by assigning computation of the values $U^{n+1}_i$ from $U^{n}$ for each element $\Omega_e \in \Omega^p$ to a processor $P^p$.
+- Parallelisation is achieved by assigning computation of the values $U^{n+1}_i$ from $U^{n}$ for each element $\Omega_e \in \Omega^p$ to a processor $P^p$.
 
-Define internal + external adjacent elements & internal, external and interface elements
+- Define internal + external adjacent elements & internal, external and interface elements
 
 % *****mention converse relationship internal/external ??
 
-Calculations on internal elements can happen easily...
+- Calculations on internal elements can happen easily...
 
-Cals on external elements needs communication....
+Cals on external elements needs communication....say how
 
-Since cals require values from A_int and A_ext and only A_int are up to date on this proc. Values for A_ext are calculated on one or more processors to be made available. These will be stored on processor P and communicated from the processor containing eelements in A_ext communication at each time step.
+We communicate all the values
 
-Calculating $U^{n+1}_i$ for the element $\Omega_e \in \Omega^p$, requires values of $U_i^{n}$ from $\Omega_e$ as well as values from each element $A_{adj}^e$. $A_{adj}^e$ may contain some elements in $L^p_{ext}$, in which case values of $U_i^n$ should be made available by communication on this processor. $\Omega_i \in \Omega^{p} \cup L^p_{ext}$. For all elements in $\Omega^p$ these values are readily available on $P^p$ from calculations in the previous time step, however for elements in $L^p_{ext}$, $U^{n}_i$ will be calculated on an adjoining processor, and should be duplicated on this processor.
-% I've not mentioned (really) any correspondence between L^p_{out} and L^p_{in}
-% talk about types of these elements and illustrate further with examples (figures)
-
-% this could also be done as \Omega_i \subset L^p_{out} ?? How to I say that 
-The values of $U_i^{n}$ for each element $\Omega_i$ are sent to all processors which containing one of more elements in $K_{i}$.  Conversely each processor $P^p$ recieves values of each $\Omega_e \in L^p_{ext}$ from the processor to which $\Omega_e$ was assigned.
+**** HOW DO WE MINIMISE COMMUNICATION
+    -> partitioning
+    -> sending all at once
+**** HOW WE DO PREPROCESSING ON PARALLEL CODE
+    -> how to establish lists of elements to send (need to do some comms here)
+    -> establish lists of indexes in preprocessor
+    -> contiguous buffers
+    -> sendtoall (advantages of this)
+    -> use processor numbering - and how does this work?
+        ->
+**** Identifying faces/elements in large meshes
+**** HOW DO WE COMMUNICATE THESE VALUES
+**** WHAT INDEXING DO WE NEED TO USE (i.e. how do we list these)
+**** ANYTHING ELSE (?)
 
 \subsubsection{Implementation detail}
 
