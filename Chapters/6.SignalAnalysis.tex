@@ -2,9 +2,11 @@
 \label{Chapter2}
 \lhead{Chapter 6. \emph{Signal Analysis}} % Write in your own chapter title to set the page header
 
+Resonance is an important phenomena in a number of engineering applications, characterised by quantities such as resonant frequencies, quality factors and mode shapes. The advantage of time domain simulations is that a broadband frequency response can be obtained in a single run. However the the frequency content isn't readily available and needs to be extracted from the obtained time domain evolution of the system. In this chapter we will discuss the fourier decomposition of the time domain solution using parametric and non-parametric methods and the errors associated with this transformation.
+
 \section{Fourier Decomposition}
 
-Fourier transform is a techniques which permits decomposition of any time-domain signal into its frequency domain representation. Based on the Fourier series in which a period time domain signal $s(t)$, with a period $T$ such that $s(x)=s(x+nT)$ for $n=1,2,3 ...$ can be written on the interval $(-l,l)$ as
+Fourier transform is a techniques which permits decomposition of any time-domain signal into its frequency domain representation. Based on the Fourier series in which a periodic time domain signal $s(t)$, with a period $T$ such that $s(x)=s(x+nT)$ for $n=1,2,3 ...$ can be written on the interval $(-l,l)$ as
 
 $$
 s(t) = a_0 + \sum_{n=1}^{\infty} a_n cos(\frac{n\pi x}{l}) + b_n sin(\frac{n\pi x}{l})
@@ -30,13 +32,13 @@ $$
 s(x) = \sum_{n=-\infty}{\infty} c_n e^{\frac{i n \pi x}{l}}
 $$
 
-In order to deal with functions on the interval $(\infty,\infty)$ the interval is extended such that the functions is considered periodic with an infinite period. If $s(x)$ is absolutely integrable over the interval $(-\infty,\infty)$ a change of variable $\omega = n \pi / l$ and allowing $l \lim \infty$ results in the summation becoming an integral and $s(x)$ in the interval $(0,\infty)$ can be expressed as 
+In order to deal with functions on the interval $(\infty,\infty)$ the interval is extended such that the functions is considered periodic with an infinite period. If $s(x)$ is absolutely integrable over the interval $(-\infty,\infty)$ a change of variable $\omega = n \pi / l$ and allowing $l \lim \infty$ results in the summation becoming an integral and $s(x)$ in the interval $(0,\infty)$ can be expressed as
 
 $$
 s(x) = \int_{0}^{\infty} \left( A(\omega) cos(\omega x) + B(\omega) sin(\omega x) \right) d\omega
 $$
 
-where 
+where
 
 $$
 A(\omega) = \frac{1}{\pi} \int_{-\infty}^{+\infty} f(u) cos(\omega u) du
@@ -66,11 +68,12 @@ $$
 \hat{s}(\omega) = \sqrt{\frac{1}{2 \pi}} \int_{-\infty}^{+\infty} f(x) e^{- i \omega x} dx
 $$
 
-The Fourier transform of $s(t)$, denoted as $\hat{s}(f)$, is a complex function of frequency whos magnitude and complex argument represent respectively the amplitude and phase offset of the infinite series of sinosoidal functions of which $s(t)$ is composed. The Fourier transform of a continuous signal can be denoted as:
+The Fourier transform of $s(t)$, denoted as $\hat{s}(f)$, is a complex function of frequency whos magnitude and complex argument represent respectively the amplitude and phase offset of the infinite series of sinosoidal functions of which $s(t)$ is composed. The Fourier transform of a continuous signal can be denoted as
 
 $$
 \hat{s}(f) = \int_{-\infty}^{+\infty} s(t) e^{-2 \pi i t f} dx
 $$
+.
 
 If the signal $s(t)$ is known only at a discrete number of times $t_k$ such that $s_k = s(t_k)$, we can rewrite the fourier transform as
 
@@ -78,16 +81,153 @@ $$
 \hat{s}_k = \sum_{k=0}^{N-1} s_k e^{-2 \pi i n k / N} dx
 $$
 
+The Fourier transform in this form is known as the discrete Fourier transform (DFT).
+
 A correctly scaled fourier transform of a time domain signal is known as the power spectrum of the signal.
 
 The continuous fourier transform requires that integration is preformed between $\-infty$ and $\infty$, or over an integer multiple of the periodicity of the signal, $T$. For most sampled signal with multiple frequency components it is not possible in general to measure signals which would be repeated periodically in $T$. That is signals where $s(T) = s(0)$. Such signals extended to infinity would exhibit discontinuities. These discontinuities give rise to a phenomena known as spectral leakage[], in order to capture these discontinuities, which intoduces noise into the system. This is clearly not desirable, and can be reduced by using a window function, such as the Blackman window. The signal is multiplied by and envelope which ensures the discontinuity is eliminated.
 
 A system exhibits resonance if frequency components at the resonant frequencies of the system oscillate with larger amplitudes than away from these resonant frequencies. In this case peaks in power spectrum will be seen at the corresponding resonant frequencies. Resonant frequency values can be recovered by peak fitting. [ mention Lorentz fitting here? compare to spline fitting? ]
 
+*** Fast Fourier Transform ***
+
+The widely used Fast Fourier transform [***] algorith which reduces the computational of the DFT from an $\bigO(n^2)$ operation to an $\bigO(n log n)$ operation.
+
+A discrete fourier transform of a time domain signal leads to a frequency domain spectrum, where an amplitude is associated with evenly spaced, discrete points in a frequency interval. This frequency domain representation of the signal is exact provided that the number of point...***
+
+This frequency amplitude is a complex number denoting the coefficient a given frequency in the discrete fourier series expansion.  This can be convieniently plotted in an amplitude against frequency plot known as a power spectrum, where the peaks of the spectrum corrispond to the resonant frequencies of the system.
+
+The frequency resolution of the spectrum, that is the spacing of the discrete points in frequency space, is given by
+
+$$
+\Delta f = \frac{1}{T}
+$$
+
+where $T$ is the final time of the simulation. Care should be taken to ensure that the final time of the simulation is sufficiently long to account for the desired simulation error.
+
+% *** I can show this by showing in the results section how closely this matches the actual error found
+
+
+The maximum frequency, $f_{max}$, which can be resolved by a fourier transform is given by the Niquist-Shannon theorem which states
+$$
+f_{max} \leq \frac{1}{2 \Delta t_s}
+$$
+
+where $\Delta t_s$ is the time between sampling points of the signal, the sampling interval. A time domain signal in which the highest frequency component has a frequency less that $f_{max}$ is represented fully by the frequency domain spectrum. For time domain signals containing components of higher frequency that $f_{max}$ *** aliasing ***.
+% what happens here...!?
+Clearly the simulation time step, $\Delta t$, gives an upper limit on the sampling interval - therefore care should be taken to choose the $\Delta t$ of the simulation to be sufficiently small to allow the desired $f_{max}$ and also to allow for a sufficiently small error in the time domain signal. Which of these criteria is limiting factor will in general depend on the frequencies of interests.
+
 \section{Resonant Frequencies}
 \section{Mode Shapes}
+
+The fourier transform can be thought of as a factorisation of the signal into a temporal and spatial part. For a single point the spatial part will simply be a complex amplitude. However when the entire domain is considered each point has an associated complex amplitude for each frequency, which forms a spatial envelope which when multipled by the temporal part defines the oscillations associated with that frequency. When the frequency considered is a resonant frequency, then the envelope is known as the mode shape associated with that frequency.
+
 \section{Quality Factors}
+
+The quality factor is a widely used in engineering to describe the damping of an oscillating system. The qaulity factor, $Q$, indicates the rate at which energy is dissipated in the system. In applications where resonance is required, engineering a system with a high-Q is usually desirable. In a high-Q system resonant frequency oscillations will have a longer lifetime and less energy need be provided to the system to maintain an oscillation. The Q-factor at a resonant frequency, $f_{res}$ commonly written as the ratio
+
+$$
+Q = f_{res}/\B_{FWHM}
+$$
+
+where $B_{FWHM}$ is the bandwith of the resonant oscillation at half of its amplitude, commonly known as the full-width-half-maximum (FWHM) value. An equivalent definition can be given in terms of the ratio of energy stored in the oscillator at resonant frequency to the rate of energy loss per cycle
+
+In a resonant optical cavity the quality factor, $Q$, for a given resonant frequency, $f_{res}$, is given by
+
+$$
+Q = 2 \pi f_{res} \frac{\Epsilon}{P}
+$$
+
+where $\Epsilon$ is the energy stored in the system and $P$, the dissipated power, is given by $-\frac{d \Epsilon}{dt}$.
+
+In resonant system with a high quality factor, resonant frequency oscillations with have a long lifetime. Whilst oscillations away from the resonant frequency will die out quickly. Conversely in a system with a lower Q-factor the resonant oscillations will die out quickly and the resonant peak will have a larger bandwidth. Figure \ref{fig:signal-analysis-low-vs-high-q-spectrum} shows the resonant peaks of a circular PEC cavity, with a high quality factor, and the same signal with dissipation introduced, that is a low quality factor.
+
+\begin{figure}
+\begin{center}
+    \includegraphics[scale=]{Figures/SignalAnalysis/lowVsHighQualitySpectrum}
+\end{center}
+\caption{}
+\label{fig:signal-analysis-low-vs-high-q-spectrum}
+\end{figure}
+
+For a dispersive system this will manifest itself in a wider spectrum line width [], and consequentially a larger error in the quality factor. Note that dispersion could be either physical or could be a non-physical dispersion introduced by a numerical method.
+
+A system with PEC boundaries and no material loss with no numerical errors is expected to have a zero linewidth and infinite quality factor.
+
+%WWWIIK
+
+% *** maybe mention Q-switching - how does Q-switching work? Am I going to research it?
+
+\section{Envelopes}
+Since the signals being considered are of finite length, the periodic repetition of a finite signal results in a discontinuity, unless the final and initial values of the signal match exactly. This gives rise to a phenomena called spectral leakage, where non-physical non-zero spectral amplitudes are observed. For example consider a signal consisting of a single frequency
+
+$$
+f(x) = sin(i2 \pi f_{res} x)
+$$
+.
+
+Then taking a discrete Fourier transform of the signal over a finite interval leads to spectral leakage as illustrated in figure \ref{fig:signal-analysis-speactral-leakage-sine-wave}. Note that for longer periods, less leackage occurs. Also note that figure {***} has significant lower leakage than figure {***} with a similar signal length. This is due to the signal in figure {***} having an integer multiple of cycles, resulting in a signal which can be repeated periodically exactly.
+
+\begin{figure}
+\begin{center}
+    \includegraphics[scale=]{Figures/SignalAnalysis/spectralLeakageSineWave}
+\end{center}
+\caption{Fourier transform of a number of sine waves with different intervals}
+\label{fig:signal-analysis-speactral-leakage-sine-wave}
+\end{figure}
+
+
+These non-physical frequencies due to a finite interval can be reduced by multiplying the signal by a suitable window function prior to performing the DFT. This ensures that the initial and final values are zero.
+% This will introduce an additional periodicity the length of the signal...
+There are a number of choices of window, which should be selected according to the expected frequency content of the time domain signal.  We use the popular Blackman envelope [***] prior to Fourier transforms in all examples in this work, unless specified otherwise. The Blackman envelope is given by
+% REF: Blackman, R. B. and Tukey, J. W. "Particular Pairs of Windows." In The Measurement of Power Spectra, From the Point of View of Communications Engineering. New York: Dover, pp. 98-99, 1959.
+$$
+A(x) = \frac{21}{50} \frac{1}{2} cos ( \frac{\pi x}{a} ) + \frac{2}{25} cos ( \frac{2 \pi x }{a} ) 
+$$
+
+A short sample signal with a filter applied is shown for illustration in figure \ref{fig:signal-analysis-blackman-envelope}, alongside examples of spectra obtained from the same signal with and without the filter to illustrate the spectral leackage effect.
+
+\begin{figure}
+\begin{center}
+    \includegraphics[scale=]{Figures/SignalAnalysis/blackmanEnvelope}
+\end{center}
+\caption{Blackman envelope applied to a superposition of two sin waves + the spectrum of the superpositionof two sine waves of frequencies *** and *** with and without a blackman filter applied }
+\label{fig:signal-analysis-blackman-envelope}
+\end{figure}
+
+Figure \ref{fig:signal-analysis-comparison-of-envelopes} show the spectrum of the same time domain signal alongside the spectrum shown after applying a number of popularly used filters and the shape of these filters.
+
+\begin{figure}
+\begin{center}
+    \includegraphics[scale=]{Figures/SignalAnalysis/comparisonOfEnvelopes}
+\end{center}
+\caption{}
+\label{fig:signal-analysis-comparison-of-envelopes}
+\end{figure}
+
+\section{Need to explain the whole end to end process}
+
+%% : possible comparison of different
+\section{Zero frequency}
+If the frequency does not osciallate about zero, this will manifest itself in the spectrum as a peak centered on zero. This will occur of example when in a non-dissipative case the signal is sampled near a point where the cavity was excited. It is therefore advisable when possible to pick a point to sample a signal which is far from the source point.
+
+\section{Fitting Parameters}
+
+Lorenzian fitting assume a shape of the wave as
+
+$$
+e^{.../\tau}
+$$
+
+transformed into frequency space. We can use a Lorenzian fitting with a least squares approach to obtain a good fit for a peak - provided that the peak is isolated. However if the peak is near other peaks this can become a problem.
+
+%some solution would be required to fit the lorenzian to the peak.
+
 \section{Parametric Methods}
+
+Parametric methods such as the filter diagonalisation method (FDM) use an assumption of the shape of the signal to find the resonant frequencies by solving an eigenvalue problem. This method can be used to significantly reduce the error in the number time steps required to reach a solution. In numerical experiements a increase of an order of mangnitude was observed for FDM over FFT.
+
+However parametric methods are sensitive to dispersion which can degrade the signal amplitude for signals which are of a considerable length, and therefore while a better result can be obtained for a short run, for longer runs required to obtain a high accuracy the method is unsuitable.
 
 \begin{itemize}
   \item present the basis of the FFT method

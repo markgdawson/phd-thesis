@@ -1,0 +1,53 @@
+In the drude model the expression for permittivity is given in a medium which is electrically dispersive in the frequency domain by:
+
+$$
+\epsilon(\omega) = \epsilon_0 ( 1 - \frac{\omega_0^2}{\omega(\omega + i \gamma )})
+$$,
+
+where $$\omega_0$$ is the electric plasma frequency and $$\gamma$$ is the electric damping frequency.
+
+REF: Waters, J. (2013). Discontinuing Galerkin Finite Element Methods for Maxwell's Equations in Dispersive and Metamaterials Media.
+
+In dimensionless parameters $$\epsilon_0 = 1$$ and for silver we set $$\omega_0 = 0.793333$$ and $\gamma = 0.076$
+
+Figure \ref{fig:dispersiveCavity-real-part-epsilon_r} shows the real parts of $\epsilon_r$ and the change in the real part of $\epsilon_r$ compared with the free space case.
+
+note: is $\epsilon_0$ here the same as free space? Shouldn't this be $\epsilon_{inf}$ ?
+
+
+Another reference [ Schmitt, N., Scheid, C., Lanteri, S., Viquerat, J., & Moreau, A. (2015). A DGTD method for the numerical modeling of the interaction of light with nanometer scale metallic structures taking into account non-local dispersion effects.] gives the expression:
+
+$$
+\epsilon(\omega) = \epsilon_{\infty} - \frac{\omega_p^2}{\omega^2 + i \gamma \omega}
+$$
+
+where $\epsilon_{infty}$ is $ 1 + \Cai_b $ and
+
+$$
+\mathbf{D} = \epsilon_0 \epsilon_{\infty} \mathbf{E} + \mathbf{P} == \epsilon_0 \epsilon(\omega) \mathbf{E}
+$$
+
+which implies that $\epsilon_{\infty}$ is the value of $\epsilon$ in the absence of polarisation $P$ ?
+
+This then means we can write
+
+$$
+\epsilon(\omega) = \epsilon_r(\omega) + \epsilon_i (\omega)
+$$
+
+with
+
+$$
+\epsilon_r(\omega) = \epsilon_{\infty} - \frac{\omega_p^2 }{\omega^2 + \gamma^2}
+$$
+
+which is equal $\epsilon_{\infty}$ when $\omega = \sqrt{ \omega_p^2 - \gamma^2 }$
+
+and with
+
+$$
+\epsilon_i(\omega) = \frac{\gamma \omega_p}{\omega(\omega^2 + \gamma^2}
+$$
+
+We expect that in the dispersive region the resonant frequencies will shift as required by absorbtion, and far from this region there will be very little change. For the drude model the absorbtion region is centered on the zero frequency, therefore we expect that the largest shift is observed in the fundamental frequency.
+

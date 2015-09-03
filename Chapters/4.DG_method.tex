@@ -16,14 +16,16 @@ $$
 \label{strong-form-DG}
 $$
 
-We assume that the domain on which we wish to solve the equations, $\Omega$ can be discretised by an unstructured mesh of $K$ element such that
+Consider that the problem is defined on a physical domain, $\Omega$, which can be discretised by an unstructured mesh of $K$ element such that
 
 \begin{equation}
   \Omega \approx \Omega_h = \mathop{\bigcup}_{k=1}^{K} \Omega_e^k
 \end{equation}
-where $\Omega_e^k$ are the elements in the discretisation.  *** discuss the discretisation more - discontinuous elements etc ***
+where $\Omega_e^k$ are the elements in the discretisation.  
 
-Following the method of weighted residuals the \eqref{strong-form-DG} is multiplied by a vector of test functions $\mathbf{W}$ and integrated over an element $\Omega_e^k$. Following integration by parts the following weak form is obtained
+% discuss the discretisation more - discontinuous elements etc
+
+Following the method of weighted residuals the \eqref{strong-form-DG} is multiplied by a vector of test functions $\mathbf{W}$ and integrated over an element $\Omega_e^k$. The following weak form is obtained by integration by parts
 
 $$
 \int_{\Omega_e^k} \mathbf{W} \ut d\Omega_e^k  - \int_{\Omega_e^k} \frac{\partial \mathbf{W}}{ \partial x_k} \mathbf{F}_k(\mathbf{U}) d\Omega + \int_{\partial \Omega_e^k} \mathbf{W} \cdot \mathbf{F_n}(\mathbf{U_e}) d\Gamma = \int_{\Omega_e^k} \mathbf{W} \cdot \mathbf{S}(\mathbf{U_e}) d\Omega
@@ -58,6 +60,8 @@ $$
 
 where $\mathbf{U}$ is a vector of the coefficients $u_{i}$, $M$ is the mass matrix which is block diagonal and $\mathbf{R}$ is the residual vector.
 
+*** RK4 Stability condition
+
 \subsubsection{Local Element Equations}
 \begin{itemize}
   \item problem in conservation form -> GMWR -> weak form
@@ -80,16 +84,45 @@ where $\mathbf{U}$ is a vector of the coefficients $u_{i}$, $M$ is the mass matr
 	\item justify high-order time integration
 \end{itemize}
 
+The solution is advanced in time with an explicit fourth order Runge-Kutta (RK4) method. Implicit schemes which allow larger time steps may be employed to solve the system of equations in a shorter computational time. However as detailed in section [ ***section ref *** ] the transient system behaviour at closely spaced intervals is required in order to reduce the accuracy in time. Thus an upper limit on timestep length is imposed by the frequencies of interest and the computation accuracy required.
+
 \subsection{Implementing Boundary Conditions}
 \begin{itemize}
 	\item material interfaces (PEC,ABC)
   \item will need to mention PML -> another section
 \end{itemize}
+
+For interfaces which intersect the domain boundary, $\partial \Omega$, the not all components of $\mathbf{U}^{out}$ are determined by the boundary conditions on the interface. For a system of conservation laws Rankine-Hugoniot jump conditions of the form
+
+$$
+\left[[ \mathbf{F}_n \right]] = \lambda_j \left[[ \mathbf{U} \right]]
+$$
+
+where $\lambda_j$ are the eigenvalues of the jacobian matrix $\mathbf{A}_n$. For the 3-dimensional case
+
+$$
+\lambda_1 = \lambda_2 = \frac{1}{\sqrt{\epsilon_L \mu_L}}
+$$
+
+$$
+\lambda_3 = \lambda_4 = 0
+$$
+
+and
+
+$$
+\lambda_5 = \lambda_6 = \frac{1}{\epsilon_R \mu_R}
+$$
+where the subscripts  $L$ and $R$ on the material parameters $\epsilon$ and $\mu$ denote the left and right side of the interface respectively.
+
+are applied at the interfaces
+
 \subsubsection{Spatial Discretisation}
 \begin{itemize}
 	\item discuss types of element - (non-)affine, planar, different shapes etc.
 	\item condition number of a matrix - moving nodes around %reference!
 \end{itemize}
+
 \subsection{Errors and convergence}
 \begin{itemize}
   \item expected rates of convergence for time-domain (interpolation error) and freq domain (dispersion error)
