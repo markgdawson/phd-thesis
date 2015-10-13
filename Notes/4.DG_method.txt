@@ -1,0 +1,21 @@
+general-purpose method (as opposed to specialised) - unstuctured mesh represents geometry
+approximate any geom
+curvilinear elements -> elements with curved faces (Hesthaven reference?)
+however "highest computational efficiency is achieved for planar-faced elements" - really!??
+arbitrary order shape functions
+FDTD is bound to 2nd order accuracy when dealing with material interfaces [Taflov]
+Method of lines
+    discretisation in space i.e. PDE spatial derivatices ---> matrix operators
+    no discretisation in space
+    =implies=> loads of freq and time domain options available [niegemann reference]
+
+TD => "SHORT TD PULSES" give a broadband freq response in a single run
+final time important => easy parallelisation
+    high-order planar faces reference [ nodal high-order methods on unstructured grids - J S Hesthaven ]
+    for high-order curvilinear faces reference [ Warbunton...!? ]
+
+-----
+
+** TESSELATION OF DOMAIN **
+computation domain omega divided into "K non-overlapping body conforming simplices D^i" where i is the index i \in { 1,...,K }
+Ref 21 (i.e. HEsthaven + Warbunton = Nodal High-Order methods on unstructured ....) ==> simplices can be curvilinear - but assume planar face
