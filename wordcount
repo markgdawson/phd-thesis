@@ -1,0 +1,25 @@
+#!/bin/bash
+CHAP=Latex/Chapters
+EPOCH=`date +"%s"`
+EPOCH_IN_DAYS=$(( EPOCH / 86400 ))
+WCFILENAME=wc-${EPOCH_IN_DAYS}
+WCFILE=count/${WCFILENAME}
+PREVCOUNT=`( cd count/ 1>/dev/null 2>/dev/null; ls -tr | grep -v "$WCFILENAME" | sort -n | tail -1 | xargs -n1 cat | sed -n 's/Total:\s*//p' )`
+
+date '+DATE %d-%m-%y %H:%M' > $WCFILE
+
+for x in $CHAP/[1-9].*.tex
+do
+  texcount $x | sed -n "s&.*in text:&$x&p"
+done | awk '
+  {
+    print $2, $1;
+    a=a+$2
+  }
+  END {
+    print "Total: ", a
+  }' >> $WCFILE
+
+cat $WCFILE
+TOTAL=` sed -n 's/Total:\s*//p' $WCFILE`
+echo "INCREMENT: $(( $TOTAL - $PREVCOUNT ))"
