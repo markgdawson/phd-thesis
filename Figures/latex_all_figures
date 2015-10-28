@@ -1,0 +1,22 @@
+#!/bin/bash
+
+function usage() {
+  echo "latex_all_figures <from-directory>"
+  exit
+}
+
+if [[ "$#" -ne 1 ]]
+then
+  echo "must have exactly one argument"
+  usage
+elif [[ ! -d "$1" ]]
+then
+  echo "must be a directory"
+  usage
+fi
+
+DIR=${1##./}
+
+find "$DIR" -name '[a-zA-Z0-9]*.png' | \
+grep -v syncplay | \
+sed 's/^\(.*\)$/\n\\begin{figure}\n\\includegraphics[width=\\textwidth]{Figures\/\1}\n\\end{figure}/'

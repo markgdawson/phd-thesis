@@ -1,0 +1,30 @@
+iComp=2;
+sigs=1:2;
+for iSig=sigs
+    nTS = find(sig{iSig}.time>200,1,'first');
+    plotLine(iSig).time=sig{iSig}.time(1:nTS);
+    plotLine(iSig).amplitude=sig{iSig}.amplitude(1:nTS,iComp);
+end
+
+close all
+figure
+
+labels=textread('names','%s');
+
+for iSig=1:2
+    label=strrep(labels{iSig},'_',' ');
+    plot(plotLine(iSig).time,plotLine(iSig).amplitude,'displayName',label,'LineWidth',2)
+    hold on
+end
+
+for iSig=1:2
+    label=strrep(labels{iSig},'_',' ');
+    plot(plotLine(iSig).time,plotLine(iSig).amplitude,'displayName',label,'LineWidth',2)
+    hold on
+end
+
+xlim([0,150])
+xlabel('time')
+ylabel('amplitude')
+
+legend show
