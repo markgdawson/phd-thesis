@@ -1,0 +1,86 @@
+% Chapter 1
+
+\chapter{2D Plate} % Write in your own chapter title
+%\label{Chapter3}
+\lhead{Chapter 3. \emph{Results}} % Write in your own chapter title to set the page header
+
+\section{fake wave}
+
+\begin{figure}
+\includegraphics[width=\textwidth]{Figures/2D_FEM_Propagation_MPI/errorSignal_0_5x100_domain}
+\caption{Error for shorter domain - 0.5x100 - with envelope IC and no evelope - PEC on all sides except LHS with dirichlet boundary. BC=100 and 106(with envelope)}
+\end{figure}
+
+\section{Signal and error in Signal - 0.5x100 domain}
+
+\begin{figure}
+\includegraphics[width=\textwidth]{Figures/2D_FEM_Propagation_MPI/errorSignal_0_5x100_domain}
+\caption{Error for shorter domain - 0.5x100 - with envelope IC and no evelope - PEC on all sides except LHS with dirichlet boundary. BC=100 and 106(with envelope)}
+\end{figure}
+
+\begin{figure}
+\includegraphics[width=\textwidth]{Figures/2D_FEM_Propagation_MPI/FDM_forAnalyticalWave}
+\caption{Error in the frequency calculated by FDM for an analytical wave of the same shape as the wave being studied sampled at a point [0.25,0.25]}
+\end{figure}
+
+\begin{figure}
+\includegraphics[width=\textwidth]{Figures/2D_FEM_Propagation_MPI/PeriodConvFreq}
+\caption{Convergence of error in frequency with period. Measure at point [1.0000,0.2500] in 10x0.5 domain. Signals with no initial condition were sampled from t=4}
+\end{figure}
+
+\begin{figure}
+\includegraphics[width=\textwidth]{Figures/2D_FEM_Propagation_MPI/signalValueWithoutInitialCondition}
+\includegraphics[width=\textwidth]{Figures/2D_FEM_Propagation_MPI/signalAnalyticalVsCalculatedValue}
+\caption{Top: Wave solution sampled at 3 points in the domain with no initial condition (shows propagation speed and shape of solution) Bottom: 1280x2 mesh with IC=100 and dirichlet boundary on LHS, PEC top and bottom and ABC on the RHS. Measured at point [0.25,0.25] }
+\end{figure}
+
+\begin{figure}
+  \begin{centering}
+\includegraphics[width=0.7\textwidth]{Figures/2D_FEM_Propagation_MPI/errorInSignalWithTimeStep}
+\caption{Error in signal propagation with time for the initial period T=0->50 at point [0.25,0.25]. Error remains fixed after convergence.}
+\end{centering}
+\end{figure}
+
+\section{Signal and error in Signal - 0.5x300 domain}
+
+Problem: wave propagation, BC=100 in a long cavity length 320.
+
+\begin{figure}
+  \begin{centering}
+\includegraphics[width=0.7\textwidth]{Figures/2D_FEM_Propagation_MPI/convWithPeriod_variableDT_skipStep1}
+\includegraphics[width=0.7\textwidth]{Figures/2D_FEM_Propagation_MPI/convWithPeriod_variableDT_skipStep10}
+\includegraphics[width=0.7\textwidth]{Figures/2D_FEM_Propagation_MPI/convWithPeriod_variableDT_skipStep50}
+\caption{Error in the frequency calculated by FDM for a signal sampled at a point [0.25,0.25] and for varying periods. Three plots show (top to bottom) signal sampled every 1,10 and 50 timesteps. timesteps are
+0.0164,0.0059 and 0.0021 (respectively for refinements 2->4 elements across).
+}
+\end{centering}
+\end{figure}
+
+\begin{figure}
+\includegraphics[width=\textwidth]{Figures/2D_FEM_Propagation_MPI/errorInFrequncyWithDt}
+\caption{Error in frequency with changing sampling rate after simulation (for a fixed simulation timestep) using a fixed length period (5000)}
+\end{figure}
+
+\begin{figure}
+    \begin{centering}
+\includegraphics[width=0.5\textwidth]{Figures/2D_FEM_Propagation_MPI/maxErrorPerCycle_zoomIn_1280x2}
+\includegraphics[width=0.5\textwidth]{Figures/2D_FEM_Propagation_MPI/maxErrorPerCycle_zoomIn_2560x4}
+\includegraphics[width=0.5\textwidth]{Figures/2D_FEM_Propagation_MPI/maxErrorPerCycle_zoomIn_8x5120}
+\caption{Maximum error per cycle for a 2560x2, 2560x4 and 8x5120 element mesh respectively of a 0.5x320 domain.}
+\end{centering}
+\end{figure}
+
+\begin{figure}
+    \begin{centering}
+\includegraphics[width=0.5\textwidth]{Figures/2D_FEM_Propagation_MPI/maxErrorPerCycle_zoomIn_2x1280_500_to_5000}
+\includegraphics[width=0.5\textwidth]{Figures/2D_FEM_Propagation_MPI/maxErrorPerCycle_zoomIn_4x2560_500_to_5000}
+\caption{Maximum error per cycle for a 2560x2, 2560x4 and 8x5120 element mesh respectively of a 0.5x320 domain (x range 500 to 5000)}
+\end{centering}
+\end{figure}
+
+% NOTE: the names might be wrong for these files!??
+
+\begin{figure}
+\includegraphics[width=\textwidth]{Figures/2D_FEM_Propagation_MPI/PeriodConvFreq_zoomIn_4x2560_2000_to_5000}
+\caption{The second mesh refinement (2560x4) shows an increase in the error after 2000. No such increase can be seen in the coarser mesh}
+\end{figure}

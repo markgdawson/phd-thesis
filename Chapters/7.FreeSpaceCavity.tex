@@ -1,0 +1,27 @@
+\chapter{Free Space Cavity} % Write in your own chapter title
+\label{Chapter3}
+\lhead{Chapter 3. \emph{Free Space Cavity}} % Write in your own chapter title to set the page header
+
+\begin{itemize}
+	\item Problem setup
+  \item Convergence of error with simulation period
+  \item dt study
+  \item Scheme convergence results
+\end{itemize}
+
+In this chapter we validate our results using a 2-dimensional rectangular free space cavity ($\epsilon=\mu=1$). For such a cavity the resonant frequencies are discrete due to confinement of the wave and can be shown [***ref***] to be given by the expression
+
+$$
+f_nm = \frac{1}{2 \sqrt{\mu \epsilon}}\sqrt{ ( \frac{m}{a}) ^ 2 +  ( \frac{n}{b}) ^ 2 +  ( \frac{p}{l}) ^ 2 }
+$$
+
+where $n$,$m$ and $l$ are any positive integer indicies whos total is greated that 2 and $a$,$b$ and $c$ are the dimensions of the cavity in the $x$, $y$ and $z$ directions respectively.
+
+The cavity considered is of unit length by height 0.5 %% *** check this
+and surrounded by a PEC boundary.
+
+Using a uniform mesh of quadrilateral, square elements with a uniform mesh refinement the convergence of the solution with element size is verified. The time domain solution was verified to converge at the optimal convergence rate of $p + 1$ as expected, as shown in figure ***. The convergence of the error in the fundamental frequencies obtained was found to be ***, the ***dispersion*** error, as shown in figure ***.
+
+For this cavity with prefectly conducting walls the resonant frequencies should be delta function.
+%what does this mean in terms of quality factor
+% "Finite Element Based Eigenanalysis for the Study of Electrically Large Lossy Cavities and Reverberation Chambers"

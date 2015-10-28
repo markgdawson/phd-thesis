@@ -1,0 +1,125 @@
+\chapter{MPI Profiling} % Write in your own chapter title
+\label{Chapter8}
+\lhead{Chapter 8. \emph{MPI Profiling}} % Write in your own chapter title to set the page header
+
+\section{Solution comparions at a point}
+
+\subsection{Scattering}
+
+\begin{figure}[!htb]
+\includegraphics[width=0.4\textwidth]{Figures/MPI/collectedResults/Scattering_TRI_all_figs/UElem40Err/h1_pml1.png}
+\includegraphics[width=0.4\textwidth]{Figures/MPI/collectedResults/Scattering_TRI_all_figs/UElem40Err/h1_pml3.png}
+\includegraphics[width=0.4\textwidth]{Figures/MPI/collectedResults/Scattering_TRI_all_figs/UElem40Err/h1_pml0.png}
+\includegraphics[width=0.4\textwidth]{Figures/MPI/collectedResults/Scattering_TRI_all_figs/UElem40Err/h1_pml2.png}
+
+\caption{Error in solution for all PMLs with mesh H1}
+\end{figure}
+
+\begin{figure}[!htb]
+\includegraphics[width=0.4\textwidth]{Figures/MPI/collectedResults/Scattering_TRI_all_figs/UElem40Err/h2_pml0.png}
+\includegraphics[width=0.4\textwidth]{Figures/MPI/collectedResults/Scattering_TRI_all_figs/UElem40Err/h2_pml1.png}
+\includegraphics[width=0.4\textwidth]{Figures/MPI/collectedResults/Scattering_TRI_all_figs/UElem40Err/h2_pml2.png}
+\includegraphics[width=0.4\textwidth]{Figures/MPI/collectedResults/Scattering_TRI_all_figs/UElem40Err/h2_pml3.png}
+\caption{Error in solution for all PMLs with mesh H2}
+\end{figure}
+
+
+\begin{figure}[!htb]
+\includegraphics[width=0.4\textwidth]{Figures/MPI/collectedResults/Scattering_TRI_all_figs/UElem40Err/h3_pml0.png}
+\includegraphics[width=0.4\textwidth]{Figures/MPI/collectedResults/Scattering_TRI_all_figs/UElem40Err/h3_pml1.png}
+\includegraphics[width=0.4\textwidth]{Figures/MPI/collectedResults/Scattering_TRI_all_figs/UElem40Err/h3_pml2.png}
+\includegraphics[width=0.4\textwidth]{Figures/MPI/collectedResults/Scattering_TRI_all_figs/UElem40Err/h3_pml3.png}
+\caption{Error in solution for all PMLs with mesh H3}
+\end{figure}
+
+\clearpage
+\subsection{Unit Cube (PYR)}
+
+\begin{figure}[!htb]
+\includegraphics[width=0.4\textwidth]{Figures/MPI/checkUElem40_unitCube/pOption_1-inputFileDAT_dat_unitCubePYR_H1-UElem40.png}
+\includegraphics[width=0.4\textwidth]{Figures/MPI/checkUElem40_unitCube/pOption_1-inputFileDAT_dat_unitCubePYR_H2-UElem40.png}
+\includegraphics[width=0.4\textwidth]{Figures/MPI/checkUElem40_unitCube/pOption_1-inputFileDAT_dat_unitCubePYR_H3-UElem40.png}
+\caption{Value of solution checked at a given node for a unit cube for PYR H1-3, p1}
+\end{figure}
+
+
+\begin{figure}[!htb]
+\includegraphics[width=\textwidth]{Figures/MPI/collectedResults/unitCubeAll.figs/unitCubeConv.png}
+\caption{figure}
+\end{figure}
+
+\begin{figure}[!htb]
+\includegraphics[width=\textwidth]{Figures/MPI/collectedResults/unitCubeAll.figs/unitCubeConvNDOF.png}
+\caption{figure}
+\end{figure}
+
+
+\begin{figure}[!htb]
+\begin{tabular}{| l || c | c | c |}
+\hline
+\multicolumn{4}{|c|}{PYR p = 1} \\
+\hline
+U1 & 1.53 & 2.26 & 2.22 \\
+U2 & 1.60 & 2.34 & 2.28 \\
+U3 & 1.53 & 2.26 & 2.22 \\
+U4 & 1.59 & 2.33 & 2.27 \\
+U5 & 1.10 & 1.99 & 2.05 \\
+U6 & 1.59 & 2.33 & 2.27 \\
+\hline
+\hline
+\multicolumn{4}{|c|}{PYR p = 2} \\
+\hline
+U1 & 3.05 & 2.93 & \\
+U2 & 3.31 & 3.00 & \\
+U3 & 3.05 & 2.93 & \\
+U4 & 3.27 & 2.99 & \\
+U5 & 2.52 & 2.84 & \\
+U6 & 3.27 & 2.99 & \\
+\hline   
+\end{tabular}
+\end{figure}
+
+\clearpage
+\section{CPU times}
+\subsection{Scattering Example}
+
+\begin{figure}[!htb]
+\includegraphics[width=\textwidth]{Figures/MPI/collectedResults/Scattering_TRI_all_figs/cpuTimeComparison_pml0.png}
+\caption{CPU time comparison against previous serial code for 2D circle scattering for 4-nodes. Example shows pml=0 but same result obtained for other PMLs}
+\end{figure}
+
+\begin{figure}[!htb]
+\includegraphics[width=\textwidth]{Figures/MPI/timing-progressive/timingSameProblem/absolute-time.png}
+\caption{figure}
+\end{figure}
+
+\begin{figure}[!htb]
+\includegraphics[width=\textwidth]{Figures/MPI/timing-progressive/timingSameProblem/fraction-of-single-node-time.png}
+\caption{figure}
+\end{figure}
+
+
+\begin{figure}[!htb]
+\includegraphics[width=\textwidth]{Figures/MPI/timing-progressive/timingSameProblem/multiple-of-single-node-time.png}
+\caption{figure}
+\end{figure}
+
+
+\begin{figure}[!htb]
+\includegraphics[width=\textwidth]{Figures/MPI/timing-progressive/timingSameProblem/single-node-time-over-time-per-cycle.png}
+\caption{figure}
+\end{figure}
+
+\clearpage
+\subsection{Unit Cube}
+
+\begin{figure}[!htb]
+\includegraphics[width=\textwidth]{Figures/MPI/collectedResults/unitCubeAll.figs/cpuTimeComparison.png}
+\caption{Unit cube cpu for each cycle (compared to original serial code) for 5-nodes}
+\end{figure}
+
+\begin{figure}[!htb]
+\includegraphics[width=\textwidth]{Figures/MPI/collectedResults/unitCubeAll.figs/unitCubeConvCPU.png}
+\caption{figure}
+\end{figure}
+
