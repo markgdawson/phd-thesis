@@ -23,13 +23,13 @@ In this chapter, Maxwell's equations of classical electrodynamics in both integr
 The classical theory of electrodynamics decribes the behaviour evolution of electromagnetic radiation using James Clerk Maxwell's unification of the equations of electrodynamics \cite{Maxwell:1863ur}, for a more detailed discussion of Maxwell's equations see \cite{Balanis:ui,Jackson:490457}. The resulting coupled equations which govern the time evolution of electromagnetic waves in a medium, are known collectively as Maxwell's equations and expressed in integral form in SI units as
 \begin{subequations}
 \begin{align}
-    \int_{\partial S} \E(\xbf,t) \cdot \mathrm{d}\boldsymbol{\ell}  &= - \frac{d}{dt} \int_{S} \B(\xbf,t) \cdot \mathrm{d}\mathbf{S}, \label{eq:maxwell-faraday-integral} \\
-    \int_{\partial S} \B(\xbf,t) \cdot \mathrm{d}\boldsymbol{\ell} &= \mu_0 \varepsilon_0 \frac{d}{dt} \int_{S} \E(\xbf,t) \cdot \mathrm{d}\mathbf{S} +  \mu_0 \int_{S} \J(\xbf,t) \cdot \mathrm{d}\mathbf{S}, \label{eq:maxwell-ampere-integral} \\
-    \int_{\partial V} \D(\xbf,t)\cdot\mathrm{d}\mathbf{S} &= \int_V \rho \,\mathrm{d}V, \label{maxwell-gauss-integral} \\
-    \int_{\partial V} \B(\xbf,t)\cdot\mathrm{d}\mathbf{S} &= 0, \label{maxwell-gauss-magnetism-integral}
+    \int_{\partial S} \Etilde(\xbftilde,\ttilde) \cdot \mathrm{d}\boldsymbol{\ell}  &= - \frac{d}{dt} \int_{S} \Btilde(\xbftilde,\ttilde) \cdot \mathrm{d}\mathbf{S}, \label{eq:maxwell-faraday-integral} \\
+    \int_{\partial S} \Btilde(\xbftilde,\ttilde) \cdot \mathrm{d}\boldsymbol{\ell} &= \mu_0 \varepsilon_0 \frac{d}{dt} \int_{S} \Etilde(\xbftilde,\ttilde) \cdot \mathrm{d}\mathbf{S} +  \mu_0 \int_{S} \Jtilde(\xbftilde,\ttilde) \cdot \mathrm{d}\mathbf{S}, \label{eq:maxwell-ampere-integral} \\
+    \int_{\partial V} \Dtilde(\xbftilde,\ttilde)\cdot\mathrm{d}\mathbf{S} &= \int_V \rho \,\mathrm{d}V, \label{maxwell-gauss-integral} \\
+    \int_{\partial V} \Btilde(\xbftilde,\ttilde)\cdot\mathrm{d}\mathbf{S} &= 0, \label{maxwell-gauss-magnetism-integral}
 \end{align}
 \end{subequations}
-where $\xbf$ is the position vector, $t$ is time in seconds, $\epsilon_0$ is the permittivity of free space in farads per meter, $\mu_0$ is the permeability of free space in henries per meter and the 3-dimensional vector quantities $\E$, $\H$, $\D$ and $\B$ denote respectively the electric field, magnetic field, electric displacement and magnetic induction. The quantities $\epsilon_0$ and $\mu_0$ are related by $c_0 = 1/ \sqrt{\epsilon_0 \mu_0}$, where $c_0$ is the speed of light in vacuum.
+where $\xbftilde$ is the position vector, $\ttilde$ is time in seconds, $\epsilon_0$ is the permittivity of free space in farads per meter, $\mu_0$ is the permeability of free space in henries per meter and the 3-dimensional vector quantities $\Etilde$, $\Htilde$, $\Dtilde$ and $\Btilde$ denote respectively the electric field, magnetic field, electric displacement and magnetic induction. The quantities $\epsilon_0$ and $\mu_0$ are related by $c_0 = 1/ \sqrt{\epsilon_0 \mu_0}$, where $c_0$ is the speed of light in vacuum.
 % QUOTE: both denote sources due to free charges in the system
 $V$ denotes any closed volume while the infinitesimal integration elements $\mathrm{d}\mathbf{l}$, $\mathrm{d}\mathbf{S}$ and $\mathrm{d}V$ are respectively a line element, vector surface element and volume element.
 % "In regions where the material parameters are differentiable"... -> but hang on! The material parameters are not involved here. What restrictions are the for using Stokes' Theorem?
@@ -37,10 +37,10 @@ By applying Stokes' Theorem to \eqref{eq:maxwell-faraday-integral} and \eqref{eq
 \begin{subequations}
 \label{maxwells-equations-diff}
 \begin{align}
-    \nabla \times \E(\xbf,t) + \dpartt{\B(\xbf, t)}&= \mathbf{0}, \label{maxwell-faraday} \\
-    \nabla \times \H(\xbf,t) - \dpartt{\D(\xbf, t)}&= \J(\xbf,t), \label{maxwell-ampere} \\
-    \nabla \cdot \D (\xbf,t) &= \rho(\xbf,t), \label{maxwell-gauss-1}, \\
-    \nabla \cdot \B (\xbf,t) &= 0, \label{maxwell-gauss-2} .
+    \nabla \times \Etilde(\xbftilde,\ttilde) + \dpartttilde{\Btilde(\xbftilde, \ttilde)}&= \mathbf{0}, \label{maxwell-faraday} \\
+    \nabla \times \Htilde(\xbftilde,\ttilde) - \dpartttilde{\Dtilde(\xbftilde, \ttilde)}&= \Jtilde(\xbftilde,\ttilde), \label{maxwell-ampere} \\
+    \nabla \cdot \Dtilde (\xbftilde,\ttilde) &= \rho(\xbftilde,\ttilde), \label{maxwell-gauss-1}, \\
+    \nabla \cdot \Btilde (\xbftilde,\ttilde) &= 0, \label{maxwell-gauss-2} .
 \end{align}
 \end{subequations}
 The four equations in \eqref{maxwells-equations-diff} are known respectively as Ampere's law with Maxwell's correction, Faraday's law, Gauss' law and Gauss' law for magnetism. Maxwell's curl equations, \eqref{maxwell-ampere} and \eqref{maxwell-faraday}, determine the evolution of the vector fields in time, and Maxwell's divergence conditions, \eqref{maxwell-gauss-1} and \eqref{maxwell-gauss-2}, are constraints on the vector fields which must be satisfied at all times.
@@ -54,29 +54,29 @@ Conservation of charge can be derived directly from Maxwell's equations. The vec
 \end{equation}
 which holds for any vector field $\mathbf{A}$, is substituted into the expression obtained by taking the divergence of both sides of Ampere's law, \eqref{maxwell-ampere}, giving:
 $$
-- \dpartt{( \nabla \cdot \D(\xbf,t) ) } = \nabla \cdot \J(\xbf,t) .
+- \dpartttilde{( \nabla \cdot \Dtilde(\xbftilde,\ttilde) ) } = \nabla \cdot \Jtilde(\xbftilde,\ttilde) .
 $$
 By substituting Gauss' law, \eqref{maxwell-gauss-1}, into this equation we obtain the following conservation equation for charge
 \begin{equation}
 \label{eq:maxwell-charge-conservation-2}
-\nabla \cdot \J(\xbf,t) + \dpartt{\rho (\xbf,t) } = 0 .
+\nabla \cdot \Jtilde(\xbftilde,\ttilde) + \dpartttilde{\rho (\xbftilde,\ttilde) } = 0 .
 \end{equation}
 Taking the divergence of Amperes law, \eqref{maxwell-ampere}, and removing the curl term by recalling the identity \eqref{eq:vector-identity-1}, results in
 
 $$
-\nabla \cdot \dpartt{ \D(\xbf, t)} = - \nabla \cdot \J(\xbf,t),
+\nabla \cdot \dpartttilde{ \Dtilde(\xbftilde, \ttilde)} = - \nabla \cdot \Jtilde(\xbftilde,\ttilde),
 $$
 
 which can be rewritten using the conservation of charge equation, \eqref{eq:maxwell-charge-conservation-2}, as
 
 $$
-\nabla \cdot \dpartt{\D(\xbf, t)} = - \dpartt{ \rho (\xbf,t)}.
+\nabla \cdot \dpartttilde{\Dtilde(\xbftilde, \ttilde)} = - \dpartttilde{ \rho (\xbftilde,\ttilde)}.
 $$
 
 Following a similar procedure using \eqref{maxwell-faraday} results in
 
 $$
-\nabla \cdot \dpartt{ \B(\xbf, t)} = 0
+\nabla \cdot \dpartttilde{ \Btilde(\xbftilde, \ttilde)} = 0
 $$
 
 Thus provided the initial conditions satisfy equation Maxwell's divergence conditions, \eqref{maxwell-gauss-1} and \eqref{maxwell-gauss-2}, and the conservation of charge equation, \eqref{eq:maxwell-charge-conservation-2}, is satisfied at all times then if the system is evolved in time using Maxwell's curl equations alone the divergence conditions will be implicitly satisfied at all times.
@@ -87,18 +87,18 @@ Maxwell's equations in differential form, \eqref{maxwells-equations-diff}, are u
 \begin{subequations}
     \label{constitutive-general}
     \begin{align}
-        \D(\xbf,t) &= \epsilon_0 \E(\xbf,t) + \mathbf{P} \label{constitutive-general-E} \\
-        \B(\xbf,t) &= \mu_0 \H(\xbf,t) + \mathbf{M}
+        \Dtilde(\xbftilde,\ttilde) &= \epsilon_0 \Etilde(\xbftilde,\ttilde) + \mathbf{P} \label{constitutive-general-E} \\
+        \Btilde(\xbftilde,\ttilde) &= \mu_0 \Htilde(\xbftilde,\ttilde) + \mathbf{M}
     \end{align}
 \end{subequations}
-where $\mathbf{P}$ is the polarisation density and $\mathbf{M}$ is the magnetisation density. $\mathbf{P}$ and $\mathbf{M}$ may each depend on any of the quantities $\E$, $\H$, $\xbf$ and $t$. However, for a given material the dependence may be non-local in space, non-local in time, non-linear, and/or anisotropic. Despite this, the response of many materials can be accurately approximated as linear, isotropic and non-dispersive. In this case the relationship between $\mathbf{P}$ and $\E$ and that between $\mathbf{M}$ and $\H$ is linear, and the constitutive equations, \eqref{constitutive-general}, can be rewritten in the simple form
+where $\mathbf{P}$ is the polarisation density and $\mathbf{M}$ is the magnetisation density. $\mathbf{P}$ and $\mathbf{M}$ may each depend on any of the quantities $\Etilde$, $\Htilde$, $\xbftilde$ and $\ttilde$. However, for a given material the dependence may be non-local in space, non-local in time, non-linear, and/or anisotropic. Despite this, the response of many materials can be accurately approximated as linear, isotropic and non-dispersive. In this case the relationship between $\mathbf{P}$ and $\Etilde$ and that between $\mathbf{M}$ and $\Htilde$ is linear, and the constitutive equations, \eqref{constitutive-general}, can be rewritten in the simple form
 %, are respectively the electric and magnetic dipole moment per unit volume in the medium. The polarisation and magnetisation densitites
 %
 \begin{subequations}
     \label{constitutive-linear}
     \begin{align}
-        \D(\xbf,t) = \epsilon_0 \epsilon_r(\xbf) \E(\xbf,t), \label{constitutive-linear-D} \\
-        \B(\xbf,t) = \mu_0 \mu_r(\xbf) \H(\xbf,t),
+        \Dtilde(\xbftilde,\ttilde) = \epsilon_0 \epsilon_r(\xbftilde) \Etilde(\xbftilde,\ttilde), \label{constitutive-linear-D} \\
+        \Btilde(\xbftilde,\ttilde) = \mu_0 \mu_r(\xbftilde) \Htilde(\xbftilde,\ttilde),
     \end{align}
 \end{subequations}
 %
@@ -122,18 +122,18 @@ These cases neccessitate a more sophisticated model of polarisation of a medium 
 %   \item Lorentz + more sophisticated models
 % \end{itemize}
 %% *** ## "Polarization density also describes how a material responds to an applied electric field as well as the way the material changes the electric field, and can be used to calculate the forces that result from those interactions."
-In this model the medium is composed of a lattice of fixed-position, positively charged ions bound by a delocalised sea of valence band free electrons \cite{Ashcroft:2005wp,Bandyopadhyay:1503732}. The free electrons, following the kinetic theory of ideal gases, are non-interacting, independent particles, described by Newtonian mechanics. In the presence of the electric field, $\E$, the ions are fixed and only the valence electrons are displaced from their zero-field equilibrium positions.
+In this model the medium is composed of a lattice of fixed-position, positively charged ions bound by a delocalised sea of valence band free electrons \cite{Ashcroft:2005wp,Bandyopadhyay:1503732}. The free electrons, following the kinetic theory of ideal gases, are non-interacting, independent particles, described by Newtonian mechanics. In the presence of the electric field, $\Etilde$, the ions are fixed and only the valence electrons are displaced from their zero-field equilibrium positions.
 %*** "The induced polarisation due to frequency-dependent electron movement leads to a frequency-dependent polarisation (dispersion)" - ref Maier
 %
 %Electron-ion collisions are random events, with a probability $dt / \tau$ (tau is the inv of gamma) - following which the electron velocities are independent of velocities prior to collision.
 
 In the Drude model, $\mathbf{P}$ arises from two independent contributions, $\mathbf{P} = \mathbf{P}_{\infty} + \mathbf{P}_e$. The background polarisation, $\mathbf{P}_{\infty}$, is due to the fixed-position ions and is frequency independent. The subscript in this quantity indicates that $\mathbf{P}$ goes to $\mathbf{P}_{\infty}$ in the limit of $\omega$ tending to $\infty$. The free electron polarisation, $\mathbf{P}_e$, is due to the delocalisation of free electrons in the presence of an electric field.
 
-Since the ions are fixed in the Drude model, $\mathbf{P}_{\infty}$ is expected to be independent of frequency. This can be expressed in the frequency domain as a direct proportionality between $\mathbf{P}_{\infty}$ and $\E$, therefore \eqref{constitutive-general-E} can be rewritten as
+Since the ions are fixed in the Drude model, $\mathbf{P}_{\infty}$ is expected to be independent of frequency. This can be expressed in the frequency domain as a direct proportionality between $\mathbf{P}_{\infty}$ and $\Etilde$, therefore \eqref{constitutive-general-E} can be rewritten as
 %
 \begin{equation}
 \label{eq:constitutive_equations_drude_model}
-\hat{\D}(\xbf,\omega) = \epsilon_0 \epsilon_{\infty}  \hat{\E}(\xbf, \omega) + \hat{\mathbf{P}}_e(\xbf,\omega) ,
+\hat{\Dtilde}(\xbftilde,\omega) = \epsilon_0 \epsilon_{\infty}  \hat{\Etilde}(\xbftilde, \omega) + \hat{\mathbf{P}}_e(\xbftilde,\omega) ,
 \end{equation}
 %
 where $\epsilon_{\infty}$ is the permittivity in the infinite frequency limit, and $\omega$ is the frequency variable. Here, and for the remainder of this section, a circumflex is used to denote the frequency domain representation of a time domain quantity.
@@ -141,60 +141,60 @@ where $\epsilon_{\infty}$ is the permittivity in the infinite frequency limit, a
 Transforming \eqref{eq:constitutive_equations_drude_model} directly to the time domain would lead to a convolution integral, which would be difficult to solve numerically. First multiplying \eqref{eq:constitutive_equations_drude_model} by $ -i \omega$ gives
 \begin{equation}
 \label{eq:constitutive_equations_drude_model_derivative_FD}
-- i \omega \hat{\D} = -i \omega \epsilon_0 \epsilon_{\infty} \hat{\E} + \Jphat,
+- i \omega \hat{\Dtilde} = -i \omega \epsilon_0 \epsilon_{\infty} \hat{\Etilde} + \Jtildephat,
 \end{equation}
-where the current due to free electron polarisation, $\Jphat$, is given by
+where the current due to free electron polarisation, $\Jtildephat$, is given by
 \begin{equation}
 \label{eq:drude-free-elect-current-defn}
-\Jphat(\omega) = i \omega \hat{\mathbf{P}}_e(\omega) .
+\Jtildephat(\omega) = i \omega \hat{\mathbf{P}}_e(\omega) .
 \end{equation}
 Transforming \eqref{eq:constitutive_equations_drude_model_derivative_FD} to the time domain results in the ordinary differential
 \begin{equation}
 \label{eq:constitutive_equations_drude_model_derivative_TD}
-\dpartt{ \D (\xbf,t) }= \epsilon_0 \epsilon_{\infty} \dpartt{ \E (\xbf, t) } + \J^p .
+\dpartttilde{ \Dtilde (\xbftilde,\ttilde) }= \epsilon_0 \epsilon_{\infty} \dpartttilde{ \Etilde (\xbftilde, \ttilde) } + \Jtildep .
 \end{equation}
 By substitution into \eqref{eq:constitutive_equations_drude_model_derivative_TD} into Ampere's law, \eqref{maxwell-ampere}, we obtain the expressions
 \begin{subequations}
 \label{eq:drude-ampere}
     \begin{align}
-        \nabla \times \H(\xbf,t) - \dpartt{\D_{\infty}(\xbf, t)} &= \J(\xbf,t) + \J^p(\xbf,t) , \\
-        \D_{\infty}(\xbf, t) &= \epsilon_0 \epsilon_{\infty} \E(\xbf, t),
+        \nabla \times \Htilde(\xbftilde,\ttilde) - \dpartttilde{\Dtilde_{\infty}(\xbftilde, \ttilde)} &= \Jtilde(\xbftilde,\ttilde) + \Jtildep(\xbftilde,\ttilde) , \\
+        \Dtilde_{\infty}(\xbftilde, \ttilde) &= \epsilon_0 \epsilon_{\infty} \Etilde(\xbftilde, \ttilde),
     \end{align}
 \end{subequations}
-where $\D_{\infty}$ has been introduced to maintain a consistent form with Maxwell's equations, as given in \eqref{maxwells-equations-diff}.
+where $\Dtilde_{\infty}$ has been introduced to maintain a consistent form with Maxwell's equations, as given in \eqref{maxwells-equations-diff}.
 
-To close the system of equations an expression for $\J^p$ is required. Since this is the current due to movement of free electrons, we begin by writing the Newtonian equation of motion of a free electron in the presence of an applied electric field, as
+To close the system of equations an expression for $\Jtildep$ is required. Since this is the current due to movement of free electrons, we begin by writing the Newtonian equation of motion of a free electron in the presence of an applied electric field, as
 \begin{equation}
-\frac{d^2 \xbf(t) }{dt^2}+ \gamma \frac{d \xbf(t) }{dt}= \frac{q}{m_e}\E(\xbf(t),t),
+\frac{d^2 \xbftilde(\ttilde) }{dt^2}+ \gamma \frac{d \xbftilde(\ttilde) }{dt}= \frac{q}{m_e}\Etilde(\xbftilde(\ttilde),\ttilde),
 \label{equations-of-motion-electron}
 \end{equation}
-where $\gamma$ is a damping coefficient or collision frequency, $m_e$ is the mass of an electron, $q$ is the charge of an electron, $\E(\xbf,t)$ is the applied electric field and $\xbf$ is the displacement of the electron from its zero-field equilibrium position. Given that the polarisation field due to electron movement is given by $ \mathbf{P}_e(t) = - n q \xbf(t)$, where $n$ is the electron density in the medium, then \eqref{equations-of-motion-electron} can be rewritten as
+where $\gamma$ is a damping coefficient or collision frequency, $m_e$ is the mass of an electron, $q$ is the charge of an electron, $\Etilde(\xbftilde,\ttilde)$ is the applied electric field and $\xbftilde$ is the displacement of the electron from its zero-field equilibrium position. Given that the polarisation field due to electron movement is given by $ \mathbf{P}_e(\ttilde) = - n q \xbftilde(\ttilde)$, where $n$ is the electron density in the medium, then \eqref{equations-of-motion-electron} can be rewritten as
 \begin{equation}
 \label{polarisation-from-P}
-\frac{d^2 \mathbf{P}_e(t) }{dt^2} + \gamma \frac{d \mathbf{P}_e(t) }{dt} = \epsilon_0 \plasfreq^2 \E(\xbf(t),t),
+\frac{d^2 \mathbf{P}_e(\ttilde) }{dt^2} + \gamma \frac{d \mathbf{P}_e(\ttilde) }{dt} = \epsilon_0 \plasfreq^2 \Etilde(\xbftilde(\ttilde),\ttilde),
 \end{equation}
 where $\plasfreq = \sqrt{\frac{n q^2}{m_e \epsilon_0}}$ is known as the plasma frequency.
 %We consider a single frequency in the frequency domain by selecting a monochromatic field of the form
 %$$
-%\E(\xbf,t) = \hat{\mathbf{E_0}} e^{- i \omega t}
+%\Etilde(\xbftilde,\ttilde) = \hat{\mathbf{E_0}} e^{- i \omega \ttilde}
 %$$
-%with a known angular frequency $w$ and constant amplitude $\hat{\E}$.
+%with a known angular frequency $w$ and constant amplitude $\hat{\Etilde}$.
 %
 Transforming \eqref{polarisation-from-P} to the frequency domain we obtain the following:
 \begin{equation}
 \label{polarisation-from-P-FD}
-( i \omega )^2 \hat{\mathbf{P}}_e(\omega) + \gamma (i \omega) \hat{\mathbf{P}}_e(\omega) = \epsilon_0 \plasfreq^2 \hat{\E}(\xbf,\omega),
+( i \omega )^2 \hat{\mathbf{P}}_e(\omega) + \gamma (i \omega) \hat{\mathbf{P}}_e(\omega) = \epsilon_0 \plasfreq^2 \hat{\Etilde}(\xbftilde,\omega),
 \end{equation}
-where $i$ is the imaginary unit and $\hat{\E}$ is a harmonic electric field given by $\E(\xbf,t) = \hat{\E}(\xbf) e^{- i \omega t }$.
+where $i$ is the imaginary unit and $\hat{\Etilde}$ is a harmonic electric field given by $\Etilde(\xbftilde,\ttilde) = \hat{\Etilde}(\xbftilde) e^{- i \omega \ttilde }$.
 
 Substituting equation \eqref{eq:drude-free-elect-current-defn} into \eqref{polarisation-from-P-FD} gives
 \begin{equation}
     \label{eq:pol-current-freq-domain}
-  i \omega \Jphat(\omega) + \gamma \Jphat(\omega) = \epsilon_0 \plasfreq^2 \hat{\E}(\omega) ,
+  i \omega \Jtildephat(\omega) + \gamma \Jtildephat(\omega) = \epsilon_0 \plasfreq^2 \hat{\Etilde}(\omega) ,
 \end{equation}
 which, when transformed to the time domain, results in the following ordinary differential equation:
 \begin{equation}
-  \frac{d \J^p(\xbf)}{dt} + \gamma \J^p(\xbf) = \epsilon_0 \plasfreq^2 \E(\xbf,t).
+  \frac{d \Jtildep(\xbftilde)}{dt} + \gamma \Jtildep(\xbftilde) = \epsilon_0 \plasfreq^2 \Etilde(\xbftilde,\ttilde).
   \label{pol-current-ADE}
 \end{equation}
 
@@ -202,26 +202,26 @@ The complete set of coupled equations for a Drude model of dispersive material, 
 \begin{subequations}
     \label{eq:dispersive-maxwell-system}
     \begin{align}
-        \nabla \times \E(\xbf,t) + \dpartt{ \B(\xbf, t)}&= 0, \\
-        \nabla \times \H(\xbf,t) - \dpartt{ \D_{\infty}(\xbf, t) }&= \J(\xbf,t) + \J^p(\xbf,t), \\
-        \D_{\infty}(\xbf,t) &= \epsilon_0 \epsilon_{\infty}(\xbf) \E(\xbf,t), \\
-        \B(\xbf,t) &= \mu_0 \mu_r(\xbf) \H(\xbf,t), \\
-        \frac{d \J^p(\xbf)}{dt} + \gamma \J^p(\xbf) &= \epsilon_0 \plasfreq^2 \E(\xbf, t) . \label{eq:maxwell-dispersive-ADE}
+        \nabla \times \Etilde(\xbftilde,\ttilde) + \dpartttilde{ \Btilde(\xbftilde, \ttilde)}&= 0, \\
+        \nabla \times \Htilde(\xbftilde,\ttilde) - \dpartttilde{ \Dtilde_{\infty}(\xbftilde, \ttilde) }&= \Jtilde(\xbftilde,\ttilde) + \Jtildep(\xbftilde,\ttilde), \\
+        \Dtilde_{\infty}(\xbftilde,\ttilde) &= \epsilon_0 \epsilon_{\infty}(\xbftilde) \Etilde(\xbftilde,\ttilde), \\
+        \Btilde(\xbftilde,\ttilde) &= \mu_0 \mu_r(\xbftilde) \Htilde(\xbftilde,\ttilde), \\
+        \frac{d \Jtildep(\xbftilde)}{dt} + \gamma \Jtildep(\xbftilde) &= \epsilon_0 \plasfreq^2 \Etilde(\xbftilde, \ttilde) . \label{eq:maxwell-dispersive-ADE}
     \end{align}
 \end{subequations}
 %
-We note that the dispersive equations, \eqref{eq:dispersive-maxwell-system}, reduce to the non-dispersive form of Maxwell's curl equations, \eqref{maxwell-ampere} and \eqref{maxwell-faraday}, and the constitutive equations for a non-dispersive dielectric given by \eqref{constitutive-linear}, when $\mathbf{\epsilon}_r = \mathbf{\epsilon}_{\infty}$ and $\J^p = 0$. Dispersive behaviour is accounted for by the addition of an auxiliary differential equation (ADE) \cite{Taflove:1989ds,Niegemann:2009uv,Ji:2007dl}, given by \eqref{eq:maxwell-dispersive-ADE}, coupled to Maxwell's equations by an additional polarisation current, $\J^p$.
+We note that the dispersive equations, \eqref{eq:dispersive-maxwell-system}, reduce to the non-dispersive form of Maxwell's curl equations, \eqref{maxwell-ampere} and \eqref{maxwell-faraday}, and the constitutive equations for a non-dispersive dielectric given by \eqref{constitutive-linear}, when $\mathbf{\epsilon}_r = \mathbf{\epsilon}_{\infty}$ and $\Jtildep = 0$. Dispersive behaviour is accounted for by the addition of an auxiliary differential equation (ADE) \cite{Taflove:1989ds,Niegemann:2009uv,Ji:2007dl}, given by \eqref{eq:maxwell-dispersive-ADE}, coupled to Maxwell's equations by an additional polarisation current, $\Jtildep$.
 
 Some insight into the behaviour of Drude metals can be obtained by looking at the relative permittivity obtained in the frequency domain. First, \eqref{polarisation-from-P-FD} can be rearranged to obtain the polarisation due to free electrons in the frequency domain,
 \begin{equation}
-\hat{\mathbf{P}}_e = - \frac{\epsilon_0 \plasfreq^2}{\omega^2 - i \omega \gamma } \hat{\E}(\omega) .
+\hat{\mathbf{P}}_e = - \frac{\epsilon_0 \plasfreq^2}{\omega^2 - i \omega \gamma } \hat{\Etilde}(\omega) .
   \label{eq:polarization-field-freq-domain}
 \end{equation}
 Using this expression, \eqref{eq:constitutive_equations_drude_model} may be rewritten explicitly in the frequency domain as
 \begin{equation}
     \begin{split}
-    \hat{\D}(\xbf,\omega) &= \epsilon_0 \left( \epsilon_{\infty} - \frac{\plasfreq^2 }{\omega^2 - i \omega \gamma } \right) \hat{\E}(\omega) \\
-                                        &= \epsilon_0 \hat{\epsilon}_r (\omega) \hat{\E}(\omega) ,
+    \hat{\Dtilde}(\xbftilde,\omega) &= \epsilon_0 \left( \epsilon_{\infty} - \frac{\plasfreq^2 }{\omega^2 - i \omega \gamma } \right) \hat{\Etilde}(\omega) \\
+                                        &= \epsilon_0 \hat{\epsilon}_r (\omega) \hat{\Etilde}(\omega) ,
     \end{split}
 \end{equation}
 where $\hat{\epsilon}_r(\omega)$ is the effective permittivity of the metal. Figure \ref{fig:read-and-imag-effective-permittivity} shows the real and imaginary parts of $\hat{\epsilon}_r$, given by
@@ -248,25 +248,25 @@ plotted against normalised angular frequency $\omega / \plasfreq$. We observe th
 %
 %TODO  - direct quote - IntriaPaper DGTD dispersive
 %
-%  When subjected to a constant external electric field $\E$ the displacement of the heavy valence ions from their equilibtrium position is assume to be negligable whilst the electrons move significantly from their equilibrium position in response to an externally applied field. This results in an additional electric field $\mathbf{P}$ due to material response to the applied field $\E$ orientated in the opposite direction resulting in a total field given by the electric displacement field $\D$ where:
+%  When subjected to a constant external electric field $\Etilde$ the displacement of the heavy valence ions from their equilibtrium position is assume to be negligable whilst the electrons move significantly from their equilibrium position in response to an externally applied field. This results in an additional electric field $\mathbf{P}$ due to material response to the applied field $\Etilde$ orientated in the opposite direction resulting in a total field given by the electric displacement field $\Dtilde$ where:
 % 
 %  $$
-%  \D = \epsilon_0 \E + \mathbf{P}
+%  \Dtilde = \epsilon_0 \Etilde + \mathbf{P}
 %  $$
 % 
-%  Note that usually the signs of $\mathbf{P}$ and $\E$ will be opposite - resulting in an induced field that opposes the applied field and consequentially a reduced field in the medium.
+%  Note that usually the signs of $\mathbf{P}$ and $\Etilde$ will be opposite - resulting in an induced field that opposes the applied field and consequentially a reduced field in the medium.
 % 
 %  % TODO: Is it accurate to describe the displacement electric field as the total electric field....?
 % 
 %  For a constant or slow-varying field with respect to the material response time $\tau$ the polarisation of the material $\mathbf{P}$ will be proportional to the applied electric field and can be described as a constant of proportionality $\chi$, known as the electric susceptibility which describes how susceptible the material is to polarisation. $\mathbf{P}$ can be written as:
 % 
 %  $$
-%  \mathbf{P} = \chi \E
+%  \mathbf{P} = \chi \Etilde
 %  $$
 % 
 %  $\chi$ is not always constant - and in general is a tensor.
 % 
-%  Furthermore the movement of electrons from their zero-field equlibrium positions to the equilibrium positions under the applied field $\E$ could take some finite time $\tau$ (characteristic time). For an applied electric field $\E$ which is changing sufficiently quickly this time needs to be accounted for and $\chi$ may not be described as simply by a constant since it clearly depends on the history of the mediums polarisation.
+%  Furthermore the movement of electrons from their zero-field equlibrium positions to the equilibrium positions under the applied field $\Etilde$ could take some finite time $\tau$ (characteristic time). For an applied electric field $\Etilde$ which is changing sufficiently quickly this time needs to be accounted for and $\chi$ may not be described as simply by a constant since it clearly depends on the history of the mediums polarisation.
 % 
 %  TODO - derivation from equations of motion to conservation form....find a nice way of doing this....
 %
@@ -274,16 +274,16 @@ plotted against normalised angular frequency $\omega / \plasfreq$. We observe th
 %
 %      Even More Dude Model Stuff
 %%%
-%%%   Consider a medium under a constant external electric field $\E$. Free charged particles or charge dipoles in a material are subject to an applied force. The equilibrium position of positive and negative charges will be different to zero-field equilibrium positions and a net dipole moment, and consequentially an electric field, is established. The electric displacement, $D$, has a contribution due to polarisation of the material, $P$, and \eqref{contitutive-linear-non-dispersive-1} is modified as
+%%%   Consider a medium under a constant external electric field $\Etilde$. Free charged particles or charge dipoles in a material are subject to an applied force. The equilibrium position of positive and negative charges will be different to zero-field equilibrium positions and a net dipole moment, and consequentially an electric field, is established. The electric displacement, $D$, has a contribution due to polarisation of the material, $P$, and \eqref{contitutive-linear-non-dispersive-1} is modified as
 %%%
 %%%   $$
-%%%   \D(\mathbf{r},t) = \epsilon \E(\mathbf{r},t) + \mathbf{P}(\mathbf{r},t) ,
+%%%   \Dtilde(\mathbf{r},\ttilde) = \epsilon \Etilde(\mathbf{r},\ttilde) + \mathbf{P}(\mathbf{r},\ttilde) ,
 %%%   $$
 %%%
 %%%   In a changing applied field the movement of charges from a previous equlibrium state to a subsequent equilibrium state could take some finite time. Since this depends on the current state of polarisation the time required to reach a new polarisation state is dependent not only on the current applied field but also the history of the polarisation of the medium. The material polarisation field $P$ can be written as
 %%%
 %%%   \begin{equation}
-%%%   \mathbf{P}(\mathbf{r},t) = \epsilon_0 \int_{-\infty}^{+\infty} d \mathbf{r}' \int_{-\infty}^{t} dt' \chi (\mathbf{r} - \mathbf{r}', t - t') \cdot \E(\mathbf{r}', t')
+%%%   \mathbf{P}(\mathbf{r},\ttilde) = \epsilon_0 \int_{-\infty}^{+\infty} d \mathbf{r}' \int_{-\infty}^{\ttilde} dt' \chi (\mathbf{r} - \mathbf{r}', \ttilde - \ttilde') \cdot \Etilde(\mathbf{r}', \ttilde')
 %%%   \label{dispersive-convolution-integral}
 %%%   \end{equation}
 %%%
@@ -291,7 +291,7 @@ plotted against normalised angular frequency $\omega / \plasfreq$. We observe th
 %%%   In the time domain the constitutive equations for dispersive materials become non-local in time. The problem can be treated more naturally in the frequency domain, where the material response depends on the applied frequency. Then \eqref{contitutive-linear-non-dispersive-1} can be written as:
 %%%
 %%%   \begin{equation}
-%%%     \D(\omega) = \epsilon(\omega) \E
+%%%     \Dtilde(\omega) = \epsilon(\omega) \Etilde
 %%%   \end{equation}
 %%%
 %%%
@@ -302,32 +302,31 @@ Maxwell's equations are not invariant under change of units, with the constants 
 In particular, for numerical simulations, a dimensionless unit system is commonly used to avoid rounding errors in floating point arithmetic. Maxwell's equations can be obtained in dimensionless form by scaling length and time by an arbitrary characteristic length, $L$. The following changes of variable are introduced:
     \begin{align}
         \label{eq:dimensionless-scaling-1}
-        \xbftilde &= \frac{\xbf}{L}, &  \
-        \ttilde &= \frac{ct}{L}, &  \
-        \omegatilde_p &= \frac{\plasfreq L}{c}, & \
-        \gammatilde &= \frac{\gamma L}{c},
+        \xbf &= \frac{\xbftilde}{L}, &  \
+        t &= \frac{c \ttilde}{L}, &  \
+        \plasfreq &= \frac{\plasfreqtilde L}{c}, & \
+        \gamma &= \frac{\gammatilde L}{c},
     \end{align}
-where $c_0 = ( \epsilon_0 \mu_0 )^{-\frac{1}{2}}$ is the speed of light in vacuum in SI units, and the quantities $\xbftilde$ and $\ttilde$ have been chosen such that the dimensionless speed of light in vacuum is unity. Additionally, electromagnetic field strengths and currents may be scaled by a characteristic field strength, $\E_0$, by introducing the following dimensionless variables:
+where $c_0 = ( \epsilon_0 \mu_0 )^{-\frac{1}{2}}$ is the speed of light in vacuum in SI units, and the quantities $\xbf$ and $\t$ have been chosen such that the dimensionless speed of light in vacuum is unity. Additionally, electromagnetic field strengths and currents may be scaled by a characteristic field strength, $\E_0$, by introducing the following dimensionless variables:
     \begin{align}
         \label{eq:dimensionless-scaling-2}
-        \Etilde &= \frac{\E}{\E_0}, &  \
-        \Htilde &= \eta_0 \frac{\H}{\E_0}, &  \
-        \Jtilde &= \eta_0 L \frac{\J}{\E_0}, & \
-        \Jtilde_p &= \eta_0 L \frac{\J^p}{\E_0},
+        \E &= \frac{\Etilde}{\E_0}, &  \
+        \H &= \eta_0 \frac{\Htilde}{\E_0}, &  \
+        \J &= \eta_0 L \frac{\Jtilde}{\E_0}, & \
+        \J_p &= \eta_0 L \frac{\Jtilde_p}{\E_0},
     \end{align}
     where $\eta_0 = \sqrt{\mu_0 / \epsilon_0}$ is the intrinsic impedence of free space. By substitution of \eqref{eq:dimensionless-scaling-1} and \eqref{eq:dimensionless-scaling-2} into Maxwell's curl equations, \eqref{maxwell-ampere} and \eqref{maxwell-faraday}, we obtain the curl equations modified for dispersive materials in dimensionless form:
 \begin{subequations}
     \label{eq:dimensionless-maxwell}
     \begin{align}
-        \nablatilde \times \Etilde(\xbftilde,\ttilde) + \dparttildet{\Btilde(\xbftilde, \ttilde) } &= 0, \\
-        \nablatilde \times \Htilde(\xbftilde,\ttilde) - \dparttildet{ \Dtilde_{\infty}(\xbftilde, \ttilde) } &= \Jtilde(\xbftilde,\ttilde) + \Jtilde_p(\xbftilde,\ttilde), \\
-        \Dtilde_{\infty}(\xbftilde,\ttilde) &= \epsilon_{\infty}(\xbftilde) \Etilde(\xbftilde,\ttilde), \\
-        \Btilde(\xbftilde,\ttilde) &= \mu_r(\xbftilde) \Htilde(\xbftilde,\ttilde), \\
-        \frac{d \Jtilde_p(\xbftilde,\ttilde)}{d\ttilde} + \gammatilde \Jtilde_p(\xbftilde,\ttilde) &= \omegatilde_p^2 \Etilde(\xbftilde,\ttilde),
+        \nabla \times \E(\xbf,\t) + \dpartt{\B(\xbf, \t) } &= 0, \\
+        \nabla \times \H(\xbf,\t) - \dpartt{ \D_{\infty}(\xbf, \t) } &= \J(\xbf,\t) + \J_p(\xbf,\t), \\
+        \D_{\infty}(\xbf,\t) &= \epsilon_{\infty}(\xbf) \E(\xbf,\t), \\
+        \B(\xbf,\t) &= \mu_r(\xbf) \H(\xbf,\t), \\
+        \frac{d \J_p(\xbf,\t)}{d\t} + \gamma \J_p(\xbf,\t) &= \omega_p^2 \E(\xbf,\t),
     \end{align}
 \end{subequations}
-where $\Dtilde_{\infty}$ and $\Btilde$ are the appropriately scaled values of $\mathbf{D}_{\infty}$ and $\B$. The operator $\nablatilde \times$ denotes the curl with respect to the dimensionless position $\xbftilde$. Note that a similar procedure may be conducted for non-dispersive Maxwell's equations, \eqref{maxwells-equations-diff}, to obtain the equivalent non-dispersive dimensionless form.
-In the remainder of this work, dimensionless units will be used exclusively for all forms of Maxwell's equations. For convenience of notation, unless explicitly stated otherwise, dimensionless quantities such as $\xbftilde$, $\ttilde$, $\Etilde$ will be referred to without tilde superscripts, simply as $\xbf$, $t$ and $\E$.
+where $\D_{\infty}$ and $\B$ are the appropriately scaled values of $\mathbf{D}_{\infty}$ and $\B$. The operator $\nabla \times$ denotes the curl with respect to the dimensionless position $\xbf$. Note that a similar procedure may be conducted for non-dispersive Maxwell's equations, \eqref{maxwells-equations-diff}, to obtain the equivalent non-dispersive dimensionless form.
 
 \section{Conservation form}
 
