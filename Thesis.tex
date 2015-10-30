@@ -13,35 +13,8 @@
 \usepackage{pdfsync}
 \hypersetup{urlcolor=blue, colorlinks=true}  % Colours hyperlinks in blue, but this can be distracting if there are many links.
 
-\newcommand{\E}{\mathbf{E}}
-\newcommand{\B}{\mathbf{B}}
-\newcommand{\EMH}{\mathbf{H}}
-\newcommand{\D}{\mathbf{D}}
-\newcommand{\F}{\mathbf{F}}
-\newcommand{\weightfunc}{\mathbf{W}}
-\newcommand{\R}{\mathbf{R}}
-\newcommand{\pder}[2][]{\frac{\partial#1}{\partial#2}}
-\newcommand{\pdert}[1]{\frac{\partial#1}{\partial t}}
-\newcommand{\figref}[1]{figure \ref{#1}}
-\newcommand{\ut}{\frac{\partial \mathbf{U}}{\partial t}}
-\newcommand{\fk}{\frac{\partial \mathbf{F_k (\mathbf{U})} }{\partial x_k}}
-\newcommand{\bigO}{\mathcal{O}}
-\newcommand{\Epsilon}{\mathcal{E}}
-\newcommand{\myFig}[3]{
-\begin{figure}[hbtp]
- \includegraphics[width=\textwidth]{./Figures/#1}
- \caption{#2}
- \label{#3}
-\end{figure}
-}
-\newcommand{\figHere}[3]{
-\begin{figure}[H!]
- \includegraphics[width=\textwidth]{./Figures/#1}
- \caption{#2}
- \label{#3}
-\end{figure}
-}
 
+\input{./newCommands.tex}
 
 %% ----------------------------------------------------------------
 \begin{document}
@@ -92,10 +65,10 @@
 % Just uncomment the lines as you write the chapters
 
 %\input{./Chapters/1.Introduction.tex}
-%\input{./Chapters/2.Physical_Problem.tex}
+\input{./Chapters/2.Physical_Problem.tex}
 %\input{./Chapters/3.Numerical_Methods.tex}
 %\input{./Chapters/4.DG_method.tex}
-\input{./Chapters/Results}
+%\input{./Chapters/Results}
 %\input{./Chapters/5.Parallelisation.tex}
 %\input{./Chapters/6.SignalAnalysis.tex}
 % \input{./Chapters/Appendix.AnalyticalWaves}
