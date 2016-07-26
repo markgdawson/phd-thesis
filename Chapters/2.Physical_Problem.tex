@@ -7,7 +7,8 @@
 In this chapter, Maxwell's equations of classical electrodynamics are introduced, both integral and differential forms. The wavelengths of interest of radiation is sufficiently large, with respect to atomic scale variations in the medium, that a macroscopic approach is justified and quantum mechanical effects can be neglected. Constitutive equations will be introduced for linear, isotropic material both with and without dispersive effects. Following this, the Drude model will be used to incorporate the constitutive equations for dispersive media into Maxwell's equations in a formulation suitable for efficient numerical calculations. The conditions which must be satisfied at material interfaces will be derived and various forms of Maxwell's equations discussed.
 
 \section{Maxwell's equations}
-The classical theory of electrodynamics decribes the behaviour evolution of electromagnetic radiation using James Clerk Maxwell's unification of the equations of electrodynamics~\cite{Maxwell:1863ur}, for a more detailed discussion of Maxwell's equations see~\cite{Balanis:ui,Jackson:490457}. The resulting coupled equations which govern the time evolution of electromagnetic waves in a medium, are known collectively as Maxwell's equations and expressed in integral form in SI units as
+The classical theory of electrodynamics decribes the behaviour evolution of electromagnetic radiation using James Clerk Maxwell's unification of the equations of electrodynamics~\cite{Maxwell:1863ur}, for a more detailed discussion of Maxwell's equations see~\cite{Balanis:ui,Jackson:490457}. The resulting coupled equations which govern the time evolution of electromagnetic waves in a medium, are known collectively as Maxwell's equations and expressed in integral form and standard units as
+% TODO: Ruben questioned the SI units - should they be specified - I'm not sure
 \begin{subequations}
 \begin{align}
     \int_{\partial S} \Etilde(\xbftilde,\ttilde) \cdot \vectdl  &= - \frac{d}{dt} \int_{S} \Btilde(\xbftilde,\ttilde) \cdot \vectdS, \label{eq:maxwell-faraday-integral} \\
@@ -20,7 +21,7 @@ where $\xbftilde$ is the position vector, $\ttilde$ is time in seconds, $\epsilo
 % QUOTE: both denote sources due to free charges in the system
 $\Vol$ denotes any closed volume while the infinitesimal integration elements $\vectdl$, $\vectdS$ and $\dV$ are respectively a line element, vector surface element and volume element.
 % "In regions where the material parameters are differentiable"... -> but hang on! The material parameters are not involved here. What restrictions are the for using Stokes' Theorem?
-By applying Stokes' Theorem to~\eqref{eq:maxwell-faraday-integral} and~\eqref{eq:maxwell-ampere-integral} and Gauss's law to~\eqref{maxwell-gauss-integral} and~\eqref{maxwell-gauss-magnetism-integral}, the equations in differential form are readily obtained as
+By applying Stokes' Theorem to~\eqref{eq:maxwell-faraday-integral} and~\eqref{eq:maxwell-ampere-integral} and Gauss' law to~\eqref{maxwell-gauss-integral} and~\eqref{maxwell-gauss-magnetism-integral}, the equations in differential form are readily obtained as
 \begin{subequations}
 \label{maxwells-equations-diff}
 \begin{align}
@@ -70,7 +71,8 @@ Thus provided the initial conditions satisfy equation Maxwell's divergence condi
 
 \section{Constitutive equations}
 
-Maxwell's equations in differential form,~\eqref{maxwells-equations-diff}, are underdetermined, since the set of 4 equations describe the behaviour of 6 unknowns. The system of equations is closed by macroscopic constitutive laws, which characterise the interaction between the medium and the electromagnetic fields. In general, for materials which do not exhibit ferromagnetic or ferroelectric behaviour the consitutive laws take the form
+Maxwell's equations in differential form,~\eqref{maxwells-equations-diff}, are an underdetermined system of equations, with 4 equations and 6 unknowns. The system of equations is closed by suitable macroscopic constitutive laws, which characterise the interaction between the media and the electromagnetic fields. In general, for materials which do not exhibit ferromagnetic or ferroelectric behaviour the consitutive laws take the form
+% TODO - do I need to explain what this means
 \begin{subequations}
     \label{constitutive-general}
     \begin{align}
@@ -79,8 +81,7 @@ Maxwell's equations in differential form,~\eqref{maxwells-equations-diff}, are u
     \end{align}
 \end{subequations}
 where $\mathbf{P}$ is the polarisation density and $\mathbf{M}$ is the magnetisation density. $\mathbf{P}$ and $\mathbf{M}$ may each depend on any of the quantities $\Etilde$, $\Htilde$, $\xbftilde$ and $\ttilde$. However, for a given material the dependence may be non-local in space, non-local in time, non-linear, and/or anisotropic. Despite this, the response of many materials can be accurately approximated as linear, isotropic and non-dispersive. In this case the relationship between $\mathbf{P}$ and $\Etilde$ and that between $\mathbf{M}$ and $\Htilde$ is linear, and the constitutive equations,~\eqref{constitutive-general}, can be rewritten in the simple form
-%, are respectively the electric and magnetic dipole moment per unit volume in the medium. The polarisation and magnetisation densitites
-%
+% TODO - the following equation should be rewritten as in Rubens paper - it isn't clear how these arrise from previous equation
 \begin{subequations}
     \label{constitutive-linear}
     \begin{align}
@@ -88,26 +89,16 @@ where $\mathbf{P}$ is the polarisation density and $\mathbf{M}$ is the magnetisa
         \Btilde(\xbftilde,\ttilde) = \mu_0 \mu_r(\xbftilde) \Htilde(\xbftilde,\ttilde),
     \end{align}
 \end{subequations}
-%
 where the material response is completely characterised by two dimensionless scalars: the relative permittivity, $\epsilon_r$, and the relative permeability, $\mu_r$.
 
 Several metals of interest in photonics, such as gold, silver and aluminum, have relative permittivites which vary significantly as a function of frequency in the visible and infra-red regions of the electromagnetic spectrum~\cite{Ordal:1983bg}.
-% cite{Maier:5SXqSjV8} -> copied
+% TODO - cite{Maier:5SXqSjV8} -> copied
 This frequency dependence of permittivity is manifested in the time domain as a convolution integral in time, which appears in the constitutive equations~\eqref{constitutive-general}~\cite{Jackson:490457}.
 This phenomenum, known as dispersion, occurs in all materials due to the finite time required for charged particles in a material to reach new equilibrium position in the presence of an applied electric field.
 These cases neccessitate a more sophisticated model of polarisation of a medium in response to an electric field. For metals where the effects of interband electron transitions are negligible, the Drude of model of solids, proposed in 1900~\cite{Drude:1900hg} based on the kinetic theory of gases, is sufficient to provide accurate results. In cases where interband transitions are significant a more sophisticated model such as the Drude-Lorentz model may be required~\cite{Fox:2001wm,Taflove:1989ds}.
 
 \subsection{Drude model}
 \label{sub:The Drude Model}
-
-% \begin{itemize}
-% 	\item what is dispersion
-% 	\item materials with free electrons exhibit strong dispersion
-%   \item required for fast-varying fields in comparison to material response time (causal effects of polarisaiont)
-% 	\item approaches - convolution intergral vs ADE
-% 	\item Derivation [ Drude model in Freq domain -> Polarisaion -> FFT -> ADE -> coupled ODEs ]
-%   \item Lorentz + more sophisticated models
-% \end{itemize}
 %% *** ## "Polarization density also describes how a material responds to an applied electric field as well as the way the material changes the electric field, and can be used to calculate the forces that result from those interactions."
 In this model the medium is composed of a lattice of fixed-position, positively charged ions bound by a delocalised sea of valence band free electrons~\cite{Ashcroft:2005wp,Bandyopadhyay:1503732}. The free electrons, following the kinetic theory of ideal gases, are non-interacting, independent particles, described by Newtonian mechanics. In the presence of the electric field, $\Etilde$, the ions are fixed and only the valence electrons are displaced from their zero-field equilibrium positions.
 %*** "The induced polarisation due to frequency-dependent electron movement leads to a frequency-dependent polarisation (dispersion)" - ref Maier
@@ -124,6 +115,7 @@ Since the ions are fixed in the Drude model, $\mathbf{P}_{\infty}$ is expected t
 \end{equation}
 %
 where $\epsilon_{\infty}$ is the permittivity in the infinite frequency limit, and $\omega$ is the frequency variable. Here, and for the remainder of this section, a circumflex is used to denote the frequency domain representation of a time domain quantity.
+% TODO - explicit mathematical relationship for circumflex, and how it relates to Fourier transform
 
 Transforming~\eqref{eq:constitutive_equations_drude_model} directly to the time domain would lead to a convolution integral, which would be difficult to solve numerically. First multiplying~\eqref{eq:constitutive_equations_drude_model} by $ -i \omega$ gives
 \begin{equation}
@@ -148,6 +140,7 @@ By substitution into~\eqref{eq:constitutive_equations_drude_model_derivative_TD}
         \Dtilde_{\infty}(\xbftilde, \ttilde) &= \epsilon_0 \epsilon_{\infty} \Etilde(\xbftilde, \ttilde),
     \end{align}
 \end{subequations}
+% TODO - Ruben put a note on this equation saying 'the norm is that as soon as a variable is introduced it must be defined' - is that not done here? Is there anything which is not previously defined?
 where $\Dtilde_{\infty}$ has been introduced to maintain a consistent form with Maxwell's equations, as given in~\eqref{maxwells-equations-diff}.
 
 To close the system of equations an expression for $\Jtildep$ is required. Since this is the current due to movement of free electrons, we begin by writing the Newtonian equation of motion of a free electron in the presence of an applied electric field, as
@@ -181,7 +174,7 @@ Substituting equation~\eqref{eq:drude-free-elect-current-defn} into~\eqref{polar
 \end{equation}
 which, when transformed to the time domain, results in the following ordinary differential equation:
 \begin{equation}
-  \frac{d \Jtildep(\xbftilde)}{dt} + \gamma \Jtildep(\xbftilde) = \epsilon_0 \plasfreq^2 \Etilde(\xbftilde,\ttilde).
+\dpartttilde{\Jtildep(\xbftilde,\ttilde)} + \gamma \Jtildep(\xbftilde) = \epsilon_0 \plasfreq^2 \Etilde(\xbftilde,\ttilde).
   \label{pol-current-ADE}
 \end{equation}
 
@@ -198,6 +191,7 @@ The complete set of coupled equations for a Drude model of dispersive material, 
 \end{subequations}
 %
 We note that the dispersive equations,~\eqref{eq:dispersive-maxwell-system}, reduce to the non-dispersive form of Maxwell's curl equations,~\eqref{maxwell-ampere} and~\eqref{maxwell-faraday}, and the constitutive equations for a non-dispersive dielectric given by~\eqref{constitutive-linear}, when $\mathbf{\epsilon}_r = \mathbf{\epsilon}_{\infty}$ and $\Jtildep = 0$. Dispersive behaviour is accounted for by the addition of an auxiliary differential equation (ADE)~\cite{Taflove:1989ds,Niegemann:2009uv,Ji:2007dl}, given by~\eqref{eq:maxwell-dispersive-ADE}, coupled to Maxwell's equations by an additional polarisation current, $\Jtildep$.
+% TODO - Ruben commented on the ADE acronym - I think this is fine
 
 Some insight into the behaviour of Drude metals can be obtained by looking at the relative permittivity obtained in the frequency domain. First,~\eqref{polarisation-from-P-FD} can be rearranged to obtain the polarisation due to free electrons in the frequency domain,
 \begin{equation}
@@ -289,20 +283,28 @@ Maxwell's equations are not invariant under change of units, with the constants 
 In particular, for numerical simulations, a dimensionless unit system is commonly used to avoid rounding errors in floating point arithmetic. Maxwell's equations can be obtained in dimensionless form by scaling length and time by an arbitrary characteristic length, $L$. The following changes of variable are introduced:
     \begin{align}
         \label{eq:dimensionless-scaling-1}
-        \xbf &= \frac{\xbftilde}{L}, &  \
-        t &= \frac{c \ttilde}{L}, &  \
-        \plasfreq &= \frac{\plasfreqtilde L}{c}, & \
-        \gamma &= \frac{\gammatilde L}{c},
+        \xbf &= \frac{\xbftilde}{\charLen}, &  \
+        t &= \frac{c \ttilde}{\charLen}, &  \
+        \plasfreq &= \frac{\plasfreqtilde \charLen}{\czero}, & \
+        \gamma &= \frac{\gammatilde \charLen}{\czero},
     \end{align}
-where $c_0 = ( \epsilon_0 \mu_0 )^{-\frac{1}{2}}$ is the speed of light in vacuum in SI units, and the quantities $\xbf$ and $\t$ have been chosen such that the dimensionless speed of light in vacuum is unity. Additionally, electromagnetic field strengths and currents may be scaled by a characteristic field strength, $\E_0$, by introducing the following dimensionless variables:
+where $\czero = ( \epsilon_0 \mu_0 )^{-\frac{1}{2}}$ is the speed of light in vacuum in SI units, and the quantities $\xbf$ and $\t$ have been chosen such that the dimensionless speed of light in vacuum is unity. Additionally, electromagnetic field strengths and currents may be scaled by a characteristic field strength, $\E_0$, by introducing the following dimensionless variables:
     \begin{align}
         \label{eq:dimensionless-scaling-2}
         \E &= \frac{\Etilde}{\E_0}, &  \
         \H &= \eta_0 \frac{\Htilde}{\E_0}, &  \
-        \J &= \eta_0 L \frac{\Jtilde}{\E_0}, & \
-        \J_p &= \eta_0 L \frac{\Jtilde_p}{\E_0},
+        \J &= \eta_0 \charLen \frac{\Jtilde}{\E_0}, & \
+        \J_p &= \eta_0 \charLen \frac{\Jtilde_p}{\E_0},
     \end{align}
-    where $\eta_0 = \sqrt{\mu_0 / \epsilon_0}$ is the intrinsic impedence of free space. By substitution of~\eqref{eq:dimensionless-scaling-1} and~\eqref{eq:dimensionless-scaling-2} into Maxwell's curl equations,~\eqref{maxwell-ampere} and~\eqref{maxwell-faraday}, we obtain the curl equations modified for dispersive materials in dimensionless form:
+where $\eta_0 = \sqrt{\mu_0 / \epsilon_0}$ is the intrinsic impedence of free space. Derivatives with respect to $\ttilde$ and $\xbftilde$ transform assume
+
+
+    \begin{align}
+        \label{eq:dimensionless-scaling-3}
+        \dpartttilde{1} &= \frac{\czero}{\charLen}\dpartt \\
+        \dpartxtilde{1} &= \frac{1}{\charLen}\dpartx 
+    \end{align}
+ By substitution of~\eqref{eq:dimensionless-scaling-1} and~\eqref{eq:dimensionless-scaling-2} into Maxwell's curl equations,~\eqref{maxwell-ampere} and~\eqref{maxwell-faraday}, we obtain the curl equations modified for dispersive materials in dimensionless form:
 \begin{subequations}
     \label{eq:dimensionless-maxwell}
     \begin{align}
@@ -438,12 +440,6 @@ where $E_k$, $H_k$ and $J^p_k$ are the $k$th spatial components of the dimension
 % \mathbf{S} = \begin{pmatrix} \beta sin(\omega t - \beta x_3) \\ \beta sin(\omega t - \beta x_3) \\ 0 \\ \beta sin(\omega t - \beta x_3) \\ \beta sin(\omega t - \beta x_3) \\ 0 \end{pmatrix}
 % $$
 
-
-%\begin{itemize}
-%	\item Interface Boundary constraints + obtaining from integral form of maxwells equations
-  % \item Radiation BCs (not really appropriate for me - only used in scattering - don't mention)
-%	\item initial conditions + effect on solution. e.g. modal initial conditions, delta function IC etc
-%\end{itemize}
 
 \section{Interfaces}
 
@@ -608,18 +604,7 @@ where the fields $E_k'$, $H_k'$ do not contain any dependence on $z$.
 
 Note that when $\beta_z = 0$ this decouples into the $TE_z$ and $TM_z$ modes as expected since in this case there is no $z$-dependence.
 
-%\begin{itemize}
-  %\item Mention beta for z-dependence
-  %\item Obtain formulation from 3D. Mention B=0 -> equations decouple into TE/TM mode
-%\end{itemize}
-
 \section{Relation to wave equation and Helmholtz equation}
-%\begin{itemize}
-%  \item discuss Freq vs Time domain - broadband response
-%  \item justify TD
-%  % conclude why, never touch again.
-%\end{itemize}
-%
 \subsection{Wave equation}
 
 Within a homogenous medium, where material parameters are constant and no free currents or charges are present, Maxwell's equations can be written in wave equation form, for which plane wave analytical solutions can be obtained~\cite{Jackson:490457}. By combining Faraday's law in SI form,~\eqref{maxwell-ampere}, with the appropriate constitutive equations for non-dispersive media,~\eqref{constitutive-linear}, we obtain the expression
