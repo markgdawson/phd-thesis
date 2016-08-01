@@ -11,11 +11,16 @@
 \usepackage{verbatim}  % Needed for the "comment" environment to make LaTeX comments
 \usepackage{vector}  % Allows "\bvec{}" and "\buvec{}" for "blackboard" style bold vectors in maths
 \usepackage{pdfsync}
+\usepackage{amsmath}
+\usepackage{refcheck}
 \hypersetup{urlcolor=blue, colorlinks=true}  % Colours hyperlinks in blue, but this can be distracting if there are many links.
 
 
 \input{./newCommands.tex}
 
+% enable previewing in emacs
+\usepackage[displaymath,textmath,sections,graphics,floats]{preview}
+\PreviewEnvironment{subequations}
 %% ----------------------------------------------------------------
 \begin{document}
 \frontmatter	  % Begin Roman style (i, ii, iii, iv...) page numbering
@@ -105,3 +110,8 @@
 
 \end{document}  % The End
 %% ----------------------------------------------------------------
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:

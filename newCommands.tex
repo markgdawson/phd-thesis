@@ -12,28 +12,50 @@
 \newcommand{\xbf}{\mathbf{x}}
 
 \newcommand{\xbftilde}{\tilde{\mathbf{x}}}
+\newcommand{\nablatilde}{\tilde{\nabla}}
 \newcommand{\Etilde}{\tilde{\mathbf{E}}}
 \newcommand{\Btilde}{\tilde{\mathbf{B}}}
 \newcommand{\Htilde}{\tilde{\mathbf{H}}}
 \newcommand{\Dtilde}{\tilde{\mathbf{D}}}
-\newcommand{\Jtildephat}{\hat{\tilde{\mathbf{J}}}^p}
 \newcommand{\Jtilde}{\tilde{\mathbf{J}}}
-\newcommand{\Jtildep}{\tilde{\mathbf{J}}}
+\newcommand{\Jtildep}{\tilde{\mathbf{J}}_P}
 \newcommand{\ttilde}{\tilde{t}}
 \renewcommand{\t}{t}
 \newcommand{\omegatilde}{\tilde{\omega}}
 \newcommand{\gammatilde}{\tilde{\gamma}}
 \newcommand{\nablatilde}{\tilde{\nabla}}
 
-\newcommand{\F}{\mathbf{F}}
+\newcommand{\bigO}{\mathcal{O}}
+\newcommand{\Epsilon}{\mathcal{E}}
+
 \newcommand{\weightfunc}{\mathbf{W}}
 \newcommand{\R}{\mathbf{R}}
 \newcommand{\ut}{\frac{\partial \mathbf{U}}{\partial t}}
 \newcommand{\fk}{\frac{\partial \mathbf{F_k (\mathbf{U})} }{\partial x_k}}
-\newcommand{\bigO}{\mathcal{O}}
-\newcommand{\Epsilon}{\mathcal{E}}
 
-% Physical Problem - integral formulation of Maxwell's equations
+% --------------------------------------------------------------------------------------------- %
+% General
+% --------------------------------------------------------------------------------------------- %
+
+\newcommand{\Real}{\mathbb{R}}
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+\newcommand{\zerov}{\mathbf{0}_3}
+\newcommand{\IdentityVect}{\mathbf{I}_3}
+\newcommand{\nsd}{\textrm{nsd}}
+
+% --------------------------------------------------------------------------------------------- %
+% Physical Problem
+% --------------------------------------------------------------------------------------------- %
+
+% conservation form maxwells
+\newcommand{\USoltn}{\mathbf{U}}
+\newcommand{\Flux}{\mathbf{F}}
+\newcommand{\maxwellSource}{\mathbf{S}}
+\newcommand{\eps}{\varepsilon}
+\newcommand{\AQuasiLinear}{\mathbf{A}}
+\newcommand{\RQuasiL}{\mathbf{R}}
+
+% integral formulation of Maxwell's equations
 \newcommand{\vectdl}{\mathrm{d}\boldsymbol{\ell}}
 \newcommand{\vectdS}{\mathrm{d}\mathbf{S}}
 \newcommand{\Vol}{V}
@@ -41,12 +63,50 @@
 
 % Physical Problem - dimensionless units
 \newcommand{\czero}{c_0}
-\newcommand{\charLen}{L}
+\newcommand{\charLen}{l}
+\newcommand{\intImpFS}{\sqrt{\frac{\mu_0}{\eps_0}}} % ininsic impedence free space (\eta_0)
 
-\newcommand{\dpart}[2][]{\frac{\partial#1}{\partial#2}}
-\newcommand{\dpartt}[1]{\frac{\partial #1}{\partial t}}
-%\newcommand{\dblpartt}[1][]{\frac{\partial#1}{\partial^2 t}}
-\newcommand{\dpartttilde}[1]{\frac{\partial#1}{\partial \tilde{t}}}
+% Constitutive equations
+\newcommand{\ElecSuccept}{\chi}
+\newcommand{\MagSuccept}{\chi^{M}}
+\newcommand{\Ptilde}{\tilde{\mathbf{P}}}
+\newcommand{\Mtilde}{\tilde{\mathbf{M}}}
+
+% Drude model
+\newcommand{\PtildeInf}{\tilde{\mathbf{P}}_{\infty}}
+\newcommand{\PtildeElec}{\tilde{\mathbf{P}}_P}
+\newcommand{\PtildeInfFreq}{\hat{\tilde{\mathbf{P}}}_{\infty}}
+\newcommand{\PtildeElecFreq}{\hat{\tilde{\mathbf{P}}}_P}
+\newcommand{\ElecSucceptInf}{\chi_{\infty}}
+\newcommand{\DInf}{\D_{\infty}}
+\newcommand{\DtildeInf}{\tilde{\D}_{\infty}}
+
+% Helmholtz
+\newcommand{\EHelm}{\E_0}
+\newcommand{\HHelm}{\H_0}
+
+
+% --------------------------------------------------------------------------------------------- %
+% PDEs and ODEs
+% --------------------------------------------------------------------------------------------- %
+
+\newcommand{\dpart}[2][]{\frac{\partial}{\partial#2} #1}
+\newcommand{\dpartt}[1]{\frac{\partial}{\partial t} #1}
+\newcommand{\ddpartt}[1][]{\frac{\partial^2}{\partial t^2} #1}
+\newcommand{\dpartttilde}[1]{\frac{\partial}{\partial \tilde{t} } #1}
+\newcommand{\dpartx}[1]{\frac{\partial}{\partial x} #1}
+\newcommand{\dpartxtilde}[1]{\frac{\partial}{\partial \tilde{x}} #1}
+
+\newcommand{\dode}[2][]{\frac{d}{d#2} #1}
+\newcommand{\dodet}[1]{\frac{d}{d t} #1}
+\newcommand{\dodett}[1][]{\frac{d^2}{d t^2} #1}
+\newcommand{\dodettilde}[1]{\frac{d}{d \tilde{t}} #1}
+\newcommand{\dodex}[1]{\frac{d}{d x} #1}
+\newcommand{\dodextilde}[1]{\frac{d}{d \tilde{x}} #1}
+% --------------------------------------------------------------------------------------------- %
+% Figures
+% --------------------------------------------------------------------------------------------- %
+
 \newcommand{\figref}[1]{figure \ref{#1}}
 \newcommand{\myFig}[3]{
 \begin{figure}[hbtp]

@@ -9,3 +9,12 @@ Thesis.out
 Thesis.pdf
 Thesis.pdfsync
 Thesis.toc
+_region*
+*.dvi
+*.prv
+*.log
+*.gz
+*.fdb_latexmk
+*.aux
+*.fls
+auto/
