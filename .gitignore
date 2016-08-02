@@ -18,3 +18,4 @@ _region*
 *.aux
 *.fls
 auto/
+.#prv_*
