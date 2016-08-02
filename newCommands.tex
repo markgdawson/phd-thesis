@@ -187,12 +187,17 @@
  }
 \cs_new_protected:Nn \__davs_image:nnn
  {
-  \begin{subfigure}{0.495\textwidth}
+  \begin{subfigure}{0.45\textwidth}
     \centering
     \includegraphics[width=\textwidth]{Figures/#1}
     %\caption{#2}
     %\label{ris:#1}
   \end{subfigure} %
+  \hfill
   \penalty0 % we provide a break point
  }
 \ExplSyntaxOff
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:
