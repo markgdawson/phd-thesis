@@ -6,6 +6,8 @@
 
 \newcommand{\J}{\mathbf{J}}
 \newcommand{\Jphat}{\hat{\J}_p}
+\newcommand{\Jpol}{\J^p}
+\newcommand{\JpolScalar}{J^p}
 \newcommand{\plasfreq}{\omega_p}
 \newcommand{\plasfreqtilde}{\tilde{\omega}_p}
 
@@ -23,7 +25,6 @@
 \renewcommand{\t}{t}
 \newcommand{\omegatilde}{\tilde{\omega}}
 \newcommand{\gammatilde}{\tilde{\gamma}}
-\newcommand{\nablatilde}{\tilde{\nabla}}
 
 \newcommand{\bigO}{\mathcal{O}}
 \newcommand{\Epsilon}{\mathcal{E}}
@@ -52,8 +53,20 @@
 \newcommand{\Flux}{\mathbf{F}}
 \newcommand{\maxwellSource}{\mathbf{S}}
 \newcommand{\eps}{\varepsilon}
+
+% Quasilinear form
 \newcommand{\AQuasiLinear}{\mathbf{A}}
 \newcommand{\RQuasiL}{\mathbf{R}}
+\newcommand{\RTot}{\mathbf{R}^{*}}
+\newcommand{\AQuasiLinearComb}{\AQuasiLinear^{*}}
+
+% Quasilinear form TE/TM
+\newcommand{\Jnormalised}[1]{J_{#1}^*} % scalar
+
+% Compact Form
+\newcommand{\waveNumberVectZ}{\mathbf{k}_z}
+\newcommand{\waveNumberZ}{k_z}
+\newcommand{\phase}{\phi}
 
 % integral formulation of Maxwell's equations
 \newcommand{\vectdl}{\mathrm{d}\boldsymbol{\ell}}
@@ -68,11 +81,11 @@
 
 % Constitutive equations
 \newcommand{\ElecSuccept}{\chi}
-\newcommand{\MagSuccept}{\chi^{M}}
+\newcommand{\MagSuccept}{\chi^{m}}
 \newcommand{\Ptilde}{\tilde{\mathbf{P}}}
 \newcommand{\Mtilde}{\tilde{\mathbf{M}}}
 
-% Drude model
+% Drude model - ADE
 \newcommand{\PtildeInf}{\tilde{\mathbf{P}}_{\infty}}
 \newcommand{\PtildeElec}{\tilde{\mathbf{P}}_P}
 \newcommand{\PtildeInfFreq}{\hat{\tilde{\mathbf{P}}}_{\infty}}
@@ -80,6 +93,10 @@
 \newcommand{\ElecSucceptInf}{\chi_{\infty}}
 \newcommand{\DInf}{\D_{\infty}}
 \newcommand{\DtildeInf}{\tilde{\D}_{\infty}}
+
+% Drude Model - mechanical
+\newcommand{\xdispelecvect}{\tilde{\mathbf{x}}_e}
+\newcommand{\EappliedDrude}{\tilde{\mathbf{E}}_{app}}
 
 % Helmholtz
 \newcommand{\EHelm}{\E_0}
