@@ -57,8 +57,8 @@
 % Quasilinear form
 \newcommand{\AQuasiLinear}{\mathbf{A}}
 \newcommand{\RQuasiL}{\mathbf{R}}
-\newcommand{\RTot}{\mathbf{R}^{*}}
-\newcommand{\AQuasiLinearComb}{\AQuasiLinear^{*}}
+\newcommand{\RTot}{\mathbf{R}^{s}}
+\newcommand{\AQuasiLinearComb}{\AQuasiLinear^{s}}
 
 % Quasilinear form TE/TM
 \newcommand{\Jnormalised}[1]{J_{#1}^*} % scalar
@@ -124,18 +124,75 @@
 % Figures
 % --------------------------------------------------------------------------------------------- %
 
-\newcommand{\figref}[1]{figure \ref{#1}}
-\newcommand{\myFig}[3]{
-\begin{figure}[hbtp]
- \includegraphics[width=\textwidth]{./Figures/#1}
- \caption{#2}
- \label{#3}
+\newcommand{\singleFigure}[3]{
+\begin{figure}[htbp!]
+  \begin{center}
+    \includegraphics[width=\textwidth]{Figures/#1}
+  \end{center}
+  \caption{#2}
+  \label{fig:#3}
 \end{figure}
 }
-\newcommand{\figHere}[3]{
-\begin{figure}[H!]
- \includegraphics[width=\textwidth]{./Figures/#1}
- \caption{#2}
- \label{#3}
+
+\newcommand{\FigTwoByOne}[6]{
+\centering
+\begin{subfigure}{0.495\textwidth}
+  \centering
+  \includegraphics[width=\textwidth]{Figures/#1}
+  \caption{#3}
+  \label{fig:#5}
+\end{subfigure} %
+\begin{subfigure}{0.495\textwidth}
+  \centering
+  \includegraphics[width=\textwidth]{Figures/#2}
+  \caption{#4}
+  \label{fig:#6}
+\end{subfigure}
+}
+
+\newcommand{\seperateFiguresSetSideBySide}[3]{
+\begin{figure}
+\centering
+\begin{minipage}{.45\linewidth}
+  \includegraphics[width=\linewidth]{Figures/Chapters/PhysicalProblem/drudePermittivityReal}
+  \captionof{figure}{First caption}
+  \label{img1}
+\end{minipage}
+\hspace{.05\linewidth}
+\begin{minipage}{.45\linewidth}
+  \includegraphics[width=\linewidth]{Figures/Chapters/PhysicalProblem/drudePermittivityImag}
+  \captionof{figure}{Second caption}
+  \label{img2}
+\end{minipage}
 \end{figure}
 }
+
+
+\usepackage{xparse}
+
+\ExplSyntaxOn
+% Usage:
+% \twoimages{
+%     {Chapters/figure/path}{figure caption},
+%     {Chapters/figure/path}{another caption}
+% }
+\NewDocumentCommand{\twoimages}{ >{ \SplitList {,} } m }
+ {
+  \centering
+  \ProcessList { #1 } { \__davs_process_argument:n }
+ }
+\cs_new_protected:Nn \__davs_process_argument:n
+ {
+  \__davs_image:nnn #1
+ }
+\cs_new_protected:Nn \__davs_image:nnn
+ {
+  \begin{subfigure}{0.495\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{Figures/#1}
+    %\caption{#2}
+    %\label{ris:#1}
+  \end{subfigure} %
+  \penalty0 % we provide a break point
+ }
+\ExplSyntaxOff

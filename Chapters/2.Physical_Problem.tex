@@ -1,8 +1,8 @@
 \chapter{Physical Problem}
 \label{PhysicalProblemChapter}
 \lhead{Chapter 2. \emph{Physical Problem}} In this chapter, Maxwell's equations
-of classical electrodynamics are introduced, both in integral and differential
-forms. The wavelengths of interest are sufficiently large, with respect to
+of classical electrodynamics are introduced, both in integral and in differential
+forms. The wavelengths considered are assumed to be sufficiently large, with respect to
 atomic scale variations in the medium, that a macroscopic approach is justified
 and quantum mechanical effects are neglected. Constitutive equations will be
 introduced for linear, isotropic material both with and without dispersive
@@ -13,7 +13,7 @@ satisfied at material interfaces will be derived and alternative forms of
 Maxwell's equations discussed.
 
 \section{Maxwell's equations}
-The classical theory of electrodynamics decribes the behaviour evolution of
+The classical theory of electrodynamics decribes the behaviour of
 electromagnetic radiation using Maxwell's unification of the equations of
 electrodynamics\cite{Balanis:ui,Jackson:490457}. The resulting coupled
 equations, which govern the time evolution of electromagnetic waves, are known
@@ -32,18 +32,15 @@ permeability of free space in henries per meter and the vectors $\Etilde$,
 $\Htilde$, $\Dtilde$ and $\Btilde$ are used to denote respectively the electric
 field intensity in volts per meter, magnetic field intensity in amps per meter,
 electric displacement in coulombs per meter squared, and magnetic induction in
-weber per meter squared. $\rho$ denotes volume charge density in coloumb per
+weber per meter squared. $\rho$ denotes volume charge density in coloumbs per
 meter cubed and $\Jtilde$ denotes electric current density in ampere per meter
 squared.
-% VIVA: these are BOTH due to EXTERNAL charge only, this means not due to
-% induced effects (e.g polarisation) QUOTE: both denote sources due to free
-% charges in the system
+% VIVA: these are BOTH due to EXTERNAL charge only, this means not due to induced effects (e.g polarisation) QUOTE: both denote sources due to free charges in the system
+% TODO: maybe I should mention these are free charges? is that the correct terminology
 $\Vol$ denotes any closed volume while the infinitesimal integration elements
 $\vectdl$, $\vectdS$ and $\dV$ are respectively a line element, vector surface
 element and volume element.
-% "In regions where the material parameters are differentiable"... -> but hang
-% on! The material parameters are not involved here. What restrictions are the
-% for using Stokes' Theorem?
+% "In regions where the material parameters are differentiable"... -> but hang on! The material parameters are not involved here. What restrictions are the for using Stokes' Theorem?
 By applying Stokes' Theorem to~\eqref{eq:maxwell-faraday-integral}
 and~\eqref{eq:maxwell-ampere-integral} and Gauss' law
 to~\eqref{eq:maxwell-gauss-integral}
@@ -58,17 +55,16 @@ form are obtained as
     \nablatilde \cdot \Btilde (\xbftilde,\ttilde) &= 0, \label{eq:maxwell-gauss-2} .
   \end{align}
 \end{subequations}
-Where the operator $\nablatilde \times$ and $\nablatilde \cdot$ denote
-respectively taking the curl and taking the divergence, both with respect to the
+Where the operator $\nablatilde \times$ and $\nablatilde \cdot$, denote the curl
+and divergence respectively, both with respect to the
 position vector $\xbftilde$. The four equations
 in~\eqref{eq:maxwells-equations-diff} are known respectively as Ampere's law
 with Maxwell's correction, Faraday's law, Gauss' law and Gauss' law for
 magnetism. These are classified as Maxwell's curl
-equations,in~\eqref{eq:maxwell-ampere} and~\eqref{eq:maxwell-faraday}, which
+equations, in~\eqref{eq:maxwell-ampere} and~\eqref{eq:maxwell-faraday}, which
 determine the evolution of the vector fields in time, and Maxwell's divergence
-conditions,in~\eqref{eq:maxwell-gauss-1} and~\eqref{eq:maxwell-gauss-2}, which
-are constraints on $\Dtilde$ and $\Btilde$, which should be satisfied at each
-point in time.
+conditions, in~\eqref{eq:maxwell-gauss-1} and~\eqref{eq:maxwell-gauss-2}, which
+are constraints to be satisfied at each point in time.
 
 \subsection{Conservation of charge}
 Conservation of charge can be derived directly from Maxwell's equations. The
@@ -107,18 +103,18 @@ $$
 \nablatilde \cdot \dpartttilde{ \Btilde(\xbftilde, \ttilde)} = 0
 $$
 
-Thus provided the initial conditions satisfy equation Maxwell's divergence
-conditions,~\eqref{eq:maxwell-gauss-1} and~\eqref{eq:maxwell-gauss-2}, and the
-conservation of charge equation,~\eqref{eq:maxwell-charge-conservation-2}, is
-satisfied at all times then if the system is evolved in time using Maxwell's
-curl equations alone the divergence conditions will be implicitly satisfied at
-all times.
+Thus given initial conditions which satisfy both Maxwell's divergence
+conditions,~\eqref{eq:maxwell-gauss-1} and~\eqref{eq:maxwell-gauss-2}, and given
+that conservation of charge,~\eqref{eq:maxwell-charge-conservation-2}, is
+satisfied at all times, then solutions to Maxwell's curl equations 
+implicitly satisfy the divergence conditions at all times.
 
 \section{Constitutive equations}
 \label{Ch:PhysicalProblem:ConstitutiveEquations}
 Maxwell's equations in differential form,~\eqref{eq:maxwells-equations-diff},
-are an underdetermined system of equations, with 4 equations and 6 unknowns. The
-system of equations is closed by macroscopic constitutive laws, written as
+are an underdetermined system of equations, in which 4 equations describe 6 unknowns. The
+system of equations is closed by a set of macroscopic constitutive laws, which
+account for the behaviour of the medium, and are written as
 % VIVA: this is not true for materials which exhibit ferromagnetic or
 % ferroelectric behaviour - but this is a quantum effect, so outside of our
 % classical scope. what are the constitutive laws in this case?
@@ -129,12 +125,11 @@ system of equations is closed by macroscopic constitutive laws, written as
   \end{align}
 \end{subequations}
 where $\Ptilde$, the polarisation density, and $\Mtilde$, the magnetisation
-density, quantify the change in $\D$ and $\B$ resulting from the interaction
-between the applied electromagnetic fields and the medium.
+density, are vectors describing the induced fields in the medium.
 % However, for a given material the dependence may be non-local in space,
 % non-local in time, non-linear, and/or anisotropic.
-The polarisation and magnetisation densities for linear, isotropic and media
-with frequency-independent material properties are described as
+The polarisation and magnetisation densities for linear, isotropic media with 
+a frequency-independent medium response are described by
 \begin{subequations}
   \begin{align}
     \Ptilde &= \ElecSuccept(\xbftilde) \Etilde(\xbftilde,\ttilde), \label{eq:elec-susceptibilities-definition-E} \\
@@ -142,12 +137,12 @@ with frequency-independent material properties are described as
   \end{align}
 \end{subequations}
 where $\ElecSuccept$, the electric suceptibility, and $\MagSuccept$, the
-electric susceptibility, are a measure of polarisation or magnetisation of the
-medium in response and applied fields.
-Using~\eqref{eq:elec-susceptibilities-definition-E}
-and~\eqref{eq:elec-susceptibilities-definition-H}, the constitutive equations,
+magnetic susceptibility, are proportionality constants
+between the applied and induced fields.
+In this case~\eqref{eq:elec-susceptibilities-definition-E}
+and~\eqref{eq:elec-susceptibilities-definition-H}, the constitutive equations
 shown in~\eqref{eq:constitutive-general-E}
-and~\eqref{eq:constitutive-general-H}, can be rewritten in the simple form
+and~\eqref{eq:constitutive-general-H}, can be written in the simple form
 \begin{subequations}
   \label{eq:constitutive-linear}
   \begin{align}
@@ -155,32 +150,29 @@ and~\eqref{eq:constitutive-general-H}, can be rewritten in the simple form
     \Btilde(\xbftilde,\ttilde) = \mu_0 \mu_r(\xbftilde) \Htilde(\xbftilde,\ttilde),\label{eq:constitutive-linear-B}
   \end{align}
 \end{subequations}
-where the material response is completely characterised by two dimensionless
+where the material response is characterised completely by two dimensionless
 scalars $ \eps_r, \mu \in \Real$, known respectively as the permittivity and the
-relative permeability, given by $\eps_r \equiv 1 + \ElecSuccept $ and $\mu_r
+relative permeability, and given by $\eps_r \equiv 1 + \ElecSuccept $ and $\mu_r
 \equiv 1 + \MagSuccept $.
 % TODO - cite{Maier:5SXqSjV8} -> copied
 
 \subsection{Dispersive Drude Media}
-Most media exhibits frequency dependence of both $\eps_r$ and $\mu_r$, a
-phenomena known as dispersion, which arises due to the finite time the medium
-needs to repond to changes in applied electromagnetic fields. Whilst dispersive
-effects are generally neglected in simulations of dielectrics, many metals of
+Most media exhibit some variation of both $\eps_r$ and $\mu_r$ with frequency. This
+phenomena, known as dispersion, arises due to the finite time charged particles
+need to reach equilibrium states in the persence of changing electromagnetic fields.
+Whilst dispersive effects are generally neglected in simulations of dielectrics, many metals of
 interest in photonics, such as gold, silver and aluminum, have strongly
 frequency dependent relative permittivities in the visible and infra-red regions
-of the electromagnetic spectrum\cite{Ordal:1983bg}. This is a consequence of the
-finite time required for charged particles in the medium to reach a equilibrium
-positions in the presence of a changing applied electromagnetic field. In these
+of the electromagnetic spectrum\cite{Ordal:1983bg}. In these
 cases, the electric susceptibility can no longer be written as a function of
-$\xbftilde$ only, but is expressed as convolution integrals in
-time\cite{Jackson:490457}.
+$\xbftilde$ only, but is expressed as convolution integrals in time\cite{Jackson:490457}.
 % VIVA: article - A comparison of numerical techniques for modeling well
 For metals where the effects of interband electron transitions are negligible, a
 mechanical model based on the Drude model of solids is
 sufficient\cite{taflove2013advances}. For more complex material interactions
 however, a more sophisticated model such as the Drude-Lorentz
 model\cite{Fox:2001wm,Taflove:1989ds} or approaches based on the
-$Z$-transform\cite{sullivan1996z} may be used. We restrict the follow discussion
+$Z$-transform\cite{sullivan1996z} may be used. We consider only
 to media and frequency ranges where magnetisation effects are
 frequency-independent, and thus~\eqref{eq:constitutive-linear-B} remains valid,
 and where polarisation can be approximated by a single-pole Drude model.
@@ -220,11 +212,13 @@ $$
 e^{-i \omega t} dt
 $$
 where the real-valued function $\Box$ of the temporal variable, $\ttilde \in
-\Real$, has been written as the complex valued function $\hat{\Box}$ of angular
-frequency, $\omega \in \Real$, which is related to frequency, $f$, by $\omega =
-2 \pi f$. Note in particular that $- i \omega \hat{\Box}(\xbftilde,\omega) =
-\dpartt{ \Box(\xbftilde,\ttilde) }$. Since $\PtildeInfFreq$ is
-frequency-independent, following the procedure
+\Real$, is written as the complex valued function $\hat{\Box}$ of angular
+frequency, $\omega \in \Real$.
+%, which is related to frequency, $f$, by $\omega = 2 \pi f$.
+Note in particular that $- i \omega \hat{\Box}(\xbftilde,\omega) =
+\dpartt{ \Box(\xbftilde,\ttilde) }$.
+
+Since $\PtildeInfFreq$ is frequency-independent, following the procedure
 from~\autoref{Ch:PhysicalProblem:ConstitutiveEquations}, we
 rewrite~\eqref{eq:constitutive_equations_drude_model} as
 \begin{equation}
@@ -236,9 +230,8 @@ infinite frequency limit, and $\ElecSucceptInf$ is defined by $\PtildeInfFreq
 Transforming~\eqref{eq:constitutive_equations_drude_model} directly to the time
 domain would lead to a convolution integral, which presents challenges for
 numerical simulation\cite{kelley1996piecewise}. We instead follow the so called
-Auxiliary Differential Equation (ADE)
-approach\cite{Taflove:1989ds,Niegemann:2009uv,Ji:2007dl,okoniewski1997simple,kashiwa1990treatment}.
-First we define the current due to free electron polarisation, $\Jtildep$, as
+auxiliary differential equation (ADE)
+approach\cite{Taflove:1989ds,Stannigel:09, Ji:2007dl,okoniewski1997simple,kashiwa1990treatment}. First we define the current due to free electron polarisation, $\Jtildep$, as
 \begin{align}
   \Jtildep(\xbftilde,\ttilde) =  \dpartt{\Ptilde}_e(\xbftilde,\ttilde). \label{eq:polarisation-current-definition}
 \end{align}
@@ -249,17 +242,13 @@ the form of an ordinary differential equation
   \label{eq:constitutive_equations_drude_model_derivative_TD}
   \dodettilde{ \Dtilde (\xbftilde,\ttilde) }= \eps_0 \eps_{\infty} \dodettilde{ \Etilde (\xbftilde, \ttilde) } + \Jtildep(\xbftilde,\ttilde) .
 \end{equation}
-% TODO - check that the - is correct in this definition, and that J is defined
-% in the opposite direction to P
 By substitution into Ampere's law,~\eqref{eq:maxwell-ampere}, we obtain the
 expression
 \begin{align}
   \nablatilde \times \Htilde(\xbftilde,\ttilde) - \dpartttilde{\Dtilde_{\infty}(\xbftilde, \ttilde)} &= \Jtilde(\xbftilde,\ttilde) + \Jtildep(\xbftilde,\ttilde) , \label{eq:drude-ampere}
 \end{align}
-where, to maintain consistency with dispersion-free form of Maxwell's
-equations~\eqref{eq:maxwells-equations-diff} we have defined $\Dtilde_{\infty}
-\equiv \eps_0 \eps_{\infty} \Etilde$, as the electric displacement in the
-infinite frequency limit.
+where we the electric displacement in the
+infinite frequency limit is defined as $\Dtilde_{\infty} \equiv \eps_0 \eps_{\infty} \Etilde$.
 
 Motivated by the Drude model, and recalling that that the motion of each
 electron is independent, we derive an expression for $\Jtildep$ from the
@@ -284,15 +273,15 @@ mass of an electron, $q$ is the charge of an electron, and $\plasfreq \equiv
 % \Etilde(\xbftilde,\ttilde) = \hat{\mathbf{E_0}} e^{- i \omega \ttilde} TODO -
 % what is the plasma frequency physically
 From the definition of $\Jtildep$ given
-in~\eqref{eq:polarisation-current-definition}, we
-~\eqref{eq:polarisation-from-P} can be written as
+in~\eqref{eq:polarisation-current-definition},~\eqref{eq:equations-of-motion-electron} 
+can be written as
 \begin{equation}
   \dpartttilde{\Jtildep(\xbftilde,\ttilde)} + \gamma \Jtildep(\xbftilde) = \eps_0 \plasfreq^2 \Etilde(\xbftilde,\ttilde).
   \label{eq:pol-current-ADE}
 \end{equation}
 
 Maxwell's curl equations and constitutive equations in a Drude dispersive
-medium, are given by
+medium, are thus given by
 \begin{subequations}
   \label{eq:dispersive-maxwell-system}
   \begin{align}
@@ -305,50 +294,50 @@ medium, are given by
 \end{subequations}
 We note that these equations reduce to the non-dispersive case, given
 in~\eqref{eq:maxwell-ampere},~\eqref{eq:maxwell-faraday}
-and~\eqref{constitutive-linear} in the infinite frequency limit.
+and~\eqref{eq:constitutive-linear} in the infinite frequency limit.
 
 Some insight into the behaviour of Drude metals can be obtained by looking at
 the relative permittivity obtained in the frequency domain.
-First,~\eqref{eq:polarisation-from-P-FD} can be rearranged to obtain the
-polarisation due to free electrons in the frequency domain,
+By transforming~\eqref{eq:equations-of-motion-electron} to the frequency
+domain and rearranging,
 \begin{equation}
   \hat{\Ptilde}_e = - \frac{\eps_0 \plasfreq^2}{\omega^2 - i \omega \gamma } \hat{\Etilde}(\omega) .
   \label{eq:polarisation-field-freq-domain}
 \end{equation}
-Using this expression,~\eqref{eq:constitutive_equations_drude_model} may be
-rewritten explicitly in the frequency domain as
+Thus, from ~\eqref{eq:constitutive_equations_drude_model}, we 
+write an explicit constitutive relationship directly in the frequency domain as
 \begin{equation}
   \begin{split}
     \hat{\Dtilde}(\xbftilde,\omega) &= \eps_0 \left( \eps_{\infty} - \frac{\plasfreq^2 }{\omega^2 - i \omega \gamma } \right) \hat{\Etilde}(\omega) \\
     &= \eps_0 \hat{\eps}_r (\omega) \hat{\Etilde}(\omega) ,
   \end{split}
 \end{equation}
-where $\hat{\eps}_r(\omega)$ is the effective permittivity of the metal. Figure
-\ref{fig:read-and-imag-effective-permittivity} shows the real and imaginary
-parts of $\hat{\eps}_r$, given by
+where $\hat{\eps}_r(\omega)$ is the effective permittivity of the medium. The real and imaginary
+parts of $\hat{\eps}_r$, are given by
 \begin{subequations}
   \begin{align}
+    \label{eq:real_imag_parts_of_epsilon}
     Re\{ \hat{\eps}_r \} &= \eps_{\infty} - \frac{\plasfreq^2}{\omega^2 + \gamma^2}, \\
     Im\{ \hat{\eps}_r \} &= \frac{\gamma \plasfreq}{\omega ( \omega^2 + \gamma^2) } ,
   \end{align}
 \end{subequations}
-plotted against normalised angular frequency $\omega / \plasfreq$. We observe
-that at higher frequencies, due to reduced electron motion, the non-dispersive
-dielectric behaviour is recovered as $Re\{\hat{\eps}_r\} \to \eps_{\infty}$ and
-$Im\{\hat{\eps}_r\} \to 0$. For frequencies below $\plasfreq$ however, the real
-and imaginary parts of the permittivity diverge significantly from the
-dispersive values. The positive values of the imaginary part result in an
-attenuation of the electric field amplitude in this region.
 
 \begin{figure}[htbp!]
-  \begin{center}
-    \includegraphics[scale=0.7]{Figures/Chapters/PhysicalProblem/drudePermittivity}
-  \end{center}
-  \caption{The real (left) and imaginary (right) parts of the dispersive
-    frequency domain relative permittivity, $\hat{\eps}_r$, as obtained from
-    Drude model.}
   \label{fig:read-and-imag-effective-permittivity}
+  \twoimages{
+    {Chapters/PhysicalProblem/drudePermittivityReal}{},
+    {Chapters/PhysicalProblem/drudePermittivityImag}{}
+  }
+  \caption{The real (left) and imaginary (right) parts of the single-pole
+    Drude model dispersive relative permittivity, $\hat{\eps}_r$, as a function
+    of angular frequency $\omega$.}
 \end{figure}
+Figure \ref{fig:read-and-imag-effective-permittivity} show real and imaginary
+values from ~\eqref{eq:real_imag_parts_of_epsilon} plotted
+against angular frequency $\omega$. We observe
+that, as expected $\hat{\eps}_r$ tends to the $\eps_{\infty} \in \Real$ in the high frequency limit,
+and diverges from this value at lower frequencies.
+Large $Im\{\eps_r\}$ corresponds to an attenuation of the electric field amplitude.
 
 \section{Dimensionless form}
 % "\eps_0 and \mu_0 introduces an arbitraryness of dimension which we exploit
@@ -358,7 +347,7 @@ $\eps_0$, $\mu_0$ and changing value and position. Unit systems in common use
 include the SI units used above, Gaussian units, Lorentz-Heaviside units and
 Planck units. In particular, for numerical simulations, dimensionless unit
 systems are useful to avoid rounding errors in floating point arithmetic. Maxwell's equations can be obtained in dimensionless form by scaling length and
-time by an arbitrary characteristic length, $L$. The following changes of
+time by an arbitrary characteristic length, $\charLen$. The following changes of
 variable are introduced:
 \begin{align}
   \label{eq:dimensionless-scaling-1}
@@ -381,14 +370,8 @@ $\E_0$, by introducing the following dimensionless variables:
 \end{align}
 % note - could also scale all of these values with E_0
 where $\eta_0 = \sqrt{\mu_0 / \eps_0}$ is the intrinsic impedence of free space. Derivatives with respect to $\ttilde$ and $\xbftilde$ are transformed as
-\begin{align}
-  \label{eq:dimensionless-scaling-3}
-  \dpartttilde{\Box} &= \frac{\czero}{\charLen}\dpartt{\Box}, & \
-                                                                \dpartxtilde{\Box} &= \frac{1}{\charLen}\dpartx{\Box}
-\end{align}
-By substitution of~\eqref{eq:dimensionless-scaling-1} and~\eqref{eq:dimensionless-scaling-2} into Maxwell's curl
-equations,~\eqref{eq:maxwell-ampere} and~\eqref{eq:maxwell-faraday}, we obtain
-the curl equations modified for dispersive materials in dimensionless form:
+\begin{align} \label{eq:dimensionless-scaling-3} \dpartttilde{\Box} &= \frac{\czero}{\charLen}\dpartt{\Box}, & \ \dpartxtilde{\Box} &= \frac{1}{\charLen}\dpartx{\Box} \end{align}
+By substitution of~\eqref{eq:dimensionless-scaling-1},~\eqref{eq:dimensionless-scaling-2} and~\eqref{eq:dimensionless-scaling-3} into Maxwell's curl equations,~\eqref{eq:maxwell-ampere} and~\eqref{eq:maxwell-faraday}, we obtain the curl equations modified for dispersive materials in dimensionless form:
 \begin{subequations}
   \label{eq:dimensionless-maxwell}
   \begin{align}
@@ -401,18 +384,18 @@ the curl equations modified for dispersive materials in dimensionless form:
 \end{subequations}
 where $\DInf$ and $\B$ are the appropriately scaled values of $\DtildeInf$ and
 $\Btilde$. Note that the non-dispersive form may be recovered in the infinite
-frequency limit, where $\J_p = 0$, $\eps_{\infty} = \eps_r$ and $\DInf = \D$
-equations,~\eqref{eq:maxwells-equations-diff}, to obtain the equivalent
-non-dispersive dimensionless form.
+frequency limit, where $\J_p$ tends to zero, $\eps_{\infty}$ tends to $\eps_r$
+and $\DInf$ tends to $\D$.
 
 \section{Conservation form}
-
+\label{sec:conservation-form}
 % *** EVERYTHING WRITTEN AS FREE SPACE - \mu = 1 probably ok for my examples but
 % \eps != 1 ***
 The dispersive form of Maxwell's equations in dimensionless
 form,~\eqref{eq:dimensionless-maxwell}, can be conveniently rewritten as a
 linear, hyperbolic conservation law\cite{Godlewski:2013tj,LeVeque:2002vc}
-% TODO - Ruben: need to show that system is hyperbolic (and linear?)
+% VIVA : how do I show that the system is hyperbolic? How do I show its diagonalisable
+% TODO : show that the system is diagonalisable (when the DRUDE equations are included)
 \begin{equation}
   \dpartt{ \, \USoltn} + \sum_{k=1}^{nsd} \frac { \partial \, \Flux_k(\USoltn) }{ \partial x_k } = \maxwellSource\,(\USoltn) \: ,
   \label{eq:maxwell-curl-equations-conservation-form}
@@ -507,7 +490,11 @@ with
       &
 \end{align}
 
-A system written in quasilinear form,~\eqref{eq:quasilinear-form}, is said to be hyperbolic if all the eigenvalue of the linear combination $ \AQuasiLinearComb \equiv \sum_{k} a_{k} \AQuasiLinear_k $ are real for any $a_{k} \in \Real$ and the matrix $\AQuasiLinearComb$ is diagonalisable. In $3$-dimensions the matrix $\AQuasiLinearComb$ is given by
+A system written in quasilinear form,~\eqref{eq:quasilinear-form}, is said to be
+hyperbolic if all the eigenvalue of the linear combination $ \AQuasiLinearComb
+\equiv \sum_{k} a_{k} \AQuasiLinear_k $ are real for any $a_{k} \in \Real$ and
+the matrix $\AQuasiLinearComb$ is diagonalisable. In $3$-dimensions the matrix
+$\AQuasiLinearComb$ can be written as
 $$
   \AQuasiLinearComb =
   \begin{pmatrix}
@@ -516,7 +503,7 @@ $$
  & \zerov & \zerov & \zerov 
  & \end{pmatrix}
 $$
-with
+where,
 $$
   \RTot =
   \begin{pmatrix}
@@ -525,7 +512,7 @@ $$
 & a_2 & -a_1 & 0 
  & \end{pmatrix} .
 $$
-By writing the characteristic equation,
+From the characteristic equation,
 
 $$
   \begin{vmatrix}
@@ -533,16 +520,20 @@ $$
  & -\RTot & -\lambda \IdentityVect & \zerov \\
  & \zerov & \zerov & -\lambda \IdentityVect
  & \end{vmatrix}
-= 0
+= 0 ,
 $$
-it can be easily shown that the eigenvalues, $\lambda_{i}$, take the values $0$ and $\pm \sqrt{a_1^2 + a_2^2 + a_3^2}$.
-
+it can be easily shown that the nine eigenvalues, $\lambda_{i}$, of $\AQuasiLinearComb$ are given by
+\begin{align}
+\lambda_{1,2} = + \sqrt{a_1^2 + a_2^2 + a_3^2} \\
+\lambda_{3,4} = - \sqrt{a_1^2 + a_2^2 + a_3^2} \\
+\lambda_{5...9} = 0 \\
+\end{align}
+and that $\AQuasiLinearComb$ is diagonalisable.
 % or equivalently as
 % $$
 % \lambda^5 (a_{1}^2 + a_{2}^2 + a_{3}^2 - \lambda^2)^2 = 0
 % 
 % $$
-% TODO - quasilinear form for TE and TM
 
 \section{Reduction to 2 dimensions}
 \subsection{TE and TM modes}
@@ -637,9 +628,19 @@ and quasilinear form as
   \end{pmatrix}
 \end{align*}
 
-In particular, radiation which is quantised by confinement to a waveguide can be described by the $TE_z$ or $TM_z$ modes.
+In particular, radiation which is quantised by confinement to a waveguide can be
+described by the $TE_z$ or $TM_z$ modes. Following the same procedure as 
+in~\autoref{sec:conservation-form} it can be shown that the eigenvalues,
+$\lambda_{i} \in \Real$ of the $n \times n$ matrix $\AQuasiLinearComb$ are given by
+\begin{align}
+  \lambda_{1} &= + \sqrt{a_1^2 + a_2^2} \\
+  \lambda_{2} &= - \sqrt{a_1^2 + a_2^2} \\
+  \lambda_{3...n} &= 0 .
+\end{align}
+Similarily, the matrix $\AQuasiLinearComb$ can also be shown to be diagonalisable.
 
 \section{Interfaces}
+% TODO - reread this section and check the maths
 % $$
 % \mathbf{n} \times \mathbf{E^L} = \mathbf{n} \times \mathbf{E^R} \mathbf{n}
 % \times \mathbf{H^L} = \mathbf{n} \times \mathbf{H^R}
@@ -760,20 +761,21 @@ Similarily for the magnetic field we obtain
 $$
 \H_L \times \hat{\mathbf{n}} = \J_s ,
 $$
+where $\J_s$ is the surface current.
 % TODO - what about the other two conditions i.e. divergence conditions - should
 % I specify those too?
-where $\J_s$ is the surface current.
 
 \subsection{Radiation condition}
 Solution of many problems of interest require computation of phenomena occuring
-in a physical domain of infinite extent. In such a domain, electromagnetic
-sources should scatter energy to infinity. The inverse process, where radiation
-transfers energy from infinity to location of the sources is non-physical. To
-ensure uniqueness of solutions in an infinite domain, the following condition,
-known as the Silver-M\"uller radiation condition, should be satisfied
+in a physical domain of infinite extent. In such an infinite domain, electromagnetic
+sources are all considered to be at the origin, and to scatter energy to infinity.
+A condition is required to prevent the non-physical inverse process, where energy
+is transferred by radiation from infinity to the origin, and ensure uniqueness of
+the solution in an infinite domain. We require that the following condition,
+known as the Silver-M\"uller radiation condition, is satisfied
 \begin{align}
-  \lim{ r \to \infty } \left( \xbf \times \left( \nabla \times \E \right) + \norm{\xbf} \dpartt{\E} \right) = 0, \\
-  \lim{ r \to \infty } \left( \xbf \times \left( \nabla \times \H \right) + \norm{\xbf} \dpartt{\H} \right) = 0.
+  \lim_{ r \to \infty } \left( \xbf \times \left( \nabla \times \E \right) + \norm{\xbf} \dpartt{\E} \right) = 0, \\
+  \lim_{ r \to \infty } \left( \xbf \times \left( \nabla \times \H \right) + \norm{\xbf} \dpartt{\H} \right) = 0.
 \end{align}
 
 \section{Relation to wave equation and Helmholtz equation}
@@ -838,9 +840,9 @@ where $k^2 =\omega^2/c^2$, is known as the propagation constant.
 
 In this form the equations for $\E$ and $\H$ can be solved independently for
 each angular frequency, $\omega$. This approached is best suited to problems
-with a small number of frequencies of interest, for example a system which is
-being driven at a known frequency. By contrast time domain approaches allow
-solution for a broad band of frequency responses at once.
+with a small, known number of frequencies of interest, for example a system which is
+being driven at a known frequency. By contrast the time domain approach allow
+solution for a broad band of frequencies at once.
 
 
 % TODO Balanis citation is incomplete P Drude - needs to be removed - maybe the
