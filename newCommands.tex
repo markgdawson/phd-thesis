@@ -1,3 +1,4 @@
+\usepackage{stmaryrd}
 
 \newcommand{\E}{\mathbf{E}}
 \newcommand{\B}{\mathbf{B}}
@@ -14,6 +15,7 @@
 \newcommand{\xbf}{\mathbf{x}}
 
 \newcommand{\xbftilde}{\tilde{\mathbf{x}}}
+\newcommand{\xtilde}{\tilde{x}}
 \newcommand{\nablatilde}{\tilde{\nabla}}
 \newcommand{\Etilde}{\tilde{\mathbf{E}}}
 \newcommand{\Btilde}{\tilde{\mathbf{B}}}
@@ -39,10 +41,19 @@
 % --------------------------------------------------------------------------------------------- %
 
 \newcommand{\Real}{\mathbb{R}}
+\newcommand{\RealPart}{\textrm{Re}}
+\newcommand{\ImagPart}{\textrm{Im}}
 \newcommand{\norm}[1]{\left\lVert#1\right\rVert}
 \newcommand{\zerov}{\mathbf{0}_3}
+\newcommand{\zerom}{\mathbf{0}_{3\times3}}
 \newcommand{\IdentityVect}{\mathbf{I}_3}
 \newcommand{\nsd}{\textrm{nsd}}
+
+% --------------------------------------------------------------------------------------------- %
+% General Physics
+% --------------------------------------------------------------------------------------------- %
+
+\newcommand{\speedoflight}{c}
 
 % --------------------------------------------------------------------------------------------- %
 % Physical Problem
@@ -55,10 +66,12 @@
 \newcommand{\eps}{\varepsilon}
 
 % Quasilinear form
-\newcommand{\AQuasiLinear}{\mathbf{A}}
+\newcommand{\A}{\mathbf{A}}
+\newcommand{\Ak}{\A_\mathbf{k}}
+\newcommand{\Asource}{\A_s}
+\newcommand{\Acomb}{\A^{s}}
 \newcommand{\RQuasiL}{\mathbf{R}}
 \newcommand{\RTot}{\mathbf{R}^{s}}
-\newcommand{\AQuasiLinearComb}{\AQuasiLinear^{s}}
 
 % Quasilinear form TE/TM
 \newcommand{\Jnormalised}[1]{J_{#1}^*} % scalar
@@ -98,28 +111,92 @@
 \newcommand{\xdispelecvect}{\tilde{\mathbf{x}}_e}
 \newcommand{\EappliedDrude}{\tilde{\mathbf{E}}_{app}}
 
+% Material interfaces
+\newcommand{\matinterfacedomain}{\Omega}
 % Helmholtz
 \newcommand{\EHelm}{\E_0}
 \newcommand{\HHelm}{\H_0}
 
+% Modes
+\newcommand{\TEz}{\textrm{TE}_{z}}
+\newcommand{\TMz}{\textrm{TM}_{z}}
+
+% --------------------------------------------------------------------------------------------- %
+% DG Method
+% --------------------------------------------------------------------------------------------- %
+
+\newcommand{\TFComp}{W} % test function
+\newcommand{\TF}{\mathbf{\TFComp}}
+\newcommand{\RTotNorm}{\RTot_{\mathbf{n}}}
+
+\newcommand{\Ue}{\mathbf{U}_e}
+\newcommand{\Uout}{\mathbf{U}_e^{\textrm{out}}}
+\newcommand{\elemindex}{n}
+\newcommand{\elemtot}{\MakeUppercase{\elemindex}}
+\newcommand{\elem}{\Omega_e^{\elemindex}}
+\newcommand{\delem}{d\Omega}
+\newcommand{\uet}{\frac{\partial \Ue}{\partial t}}
+\newcommand{\elemtrace}{\partial \elem}
+\newcommand{\delemtrace}{d\Gamma}
+\newcommand{\NormalFlux}{\mathbf{\Flux_n}}
+\newcommand{\outnormalcoeff}{n}
+\newcommand{\outnormalcoeffcomp}{k}
+\newcommand{\outnormalcoeffk}{\outnormalcoeff_{\outnormalcoeffcomp}}
+\newcommand{\outnormalvector}{\hat{\mathbf{\outnormalcoeff}}}
+\newcommand{\NumFlux}{\tilde{\Flux}}
+\newcommand{\NormalFluxPositiveEigenvalues}{\NormalFlux^+}
+\newcommand{\NormalFluxNegativeEigenvalues}{\NormalFlux^-}
+\newcommand{\anyVector}{\mathbf{v}}
+
+% Quasilinear A
+\newcommand{\An}{\A_\mathbf{n}}
+\newcommand{\AnPlus}{\An^{+}}
+\newcommand{\AnMinus}{\An^{-}}
+\newcommand{\AnMinusU}{\AnMinus \JumpU}
+\newcommand{\AnMinusUSymbol}{\Flux^{\textrm{diff}}}
+\newcommand{\AnMod}{\left| \An \right|}
+\newcommand{\modAnSubMatrix}{\mathbf{T}}
+\newcommand{\nvect}{\mathbf{n}}
+
+\newcommand{\bm}[1]{\boldsymbol{#1}}
+
+\newcommand{\Jump}[1]{\llbracket #1 \rrbracket}
+\newcommand{\JumpU}{\Jump{\USoltn}} % TODO - is this USoltn or UVect???
+\newcommand{\JumpE}{\Jump{\E}}
+\newcommand{\JumpH}{\Jump{\H}}
+
+\newcommand{\SF}{N}
+\newcommand{\ucoeff}{u}
+\newcommand{\JumpUCoeff}{\llbracket \ucoeff_i \rrbracket}
+\newcommand{\MassMatrixSymbol}{M}
+\newcommand{\MassMatrixComponent}{\mathit{\MassMatrixSymbol}}
+\newcommand{\MassMatrix}{\bm{\MassMatrixSymbol}}
+\newcommand{\UVect}{\bm{U}}
+\newcommand{\Residual}{\bm{R}}
+\newcommand{\FluxDiv}{\Flux^{\elem}}
+\newcommand{\FluxNumFlux}{\Flux^{\elemtrace}}
+\newcommand{\nbasis}{n_{\textrm{nodes}}}
+
+\newcommand{\speedoflightleft}{\speedoflight_{L}}
+\newcommand{\speedoflightright}{\speedoflight_{R}}
 
 % --------------------------------------------------------------------------------------------- %
 % PDEs and ODEs
 % --------------------------------------------------------------------------------------------- %
 
-\newcommand{\dpart}[2][]{\frac{\partial}{\partial#2} #1}
-\newcommand{\dpartt}[1]{\frac{\partial}{\partial t} #1}
-\newcommand{\ddpartt}[1][]{\frac{\partial^2}{\partial t^2} #1}
-\newcommand{\dpartttilde}[1]{\frac{\partial}{\partial \tilde{t} } #1}
-\newcommand{\dpartx}[1]{\frac{\partial}{\partial x} #1}
-\newcommand{\dpartxtilde}[1]{\frac{\partial}{\partial \tilde{x}} #1}
+\newcommand{\dpart}[2]{\frac{\partial #1}{\partial #2}}
+\newcommand{\dpartt}[1]{\frac{\partial #1}{\partial t}}
+\newcommand{\ddpartt}[1]{\frac{\partial^2 #1}{\partial t^2}}
+\newcommand{\dpartttilde}[1]{\frac{\partial #1}{\partial \tilde{t} }}
+\newcommand{\dpartx}[1]{\frac{\partial #1}{\partial x}}
+\newcommand{\dpartxtilde}[1]{\frac{\partial #1}{\partial \tilde{x}}}
 
-\newcommand{\dode}[2][]{\frac{d}{d#2} #1}
-\newcommand{\dodet}[1]{\frac{d}{d t} #1}
-\newcommand{\dodett}[1][]{\frac{d^2}{d t^2} #1}
-\newcommand{\dodettilde}[1]{\frac{d}{d \tilde{t}} #1}
-\newcommand{\dodex}[1]{\frac{d}{d x} #1}
-\newcommand{\dodextilde}[1]{\frac{d}{d \tilde{x}} #1}
+\newcommand{\dode}[2]{\frac{d #1}{d#2}}
+\newcommand{\dodet}[1]{\frac{d #1}{d t}}
+\newcommand{\dodett}[1]{\frac{d^2 #1}{d t^2}}
+\newcommand{\dodettilde}[1]{\frac{d #1}{d \tilde{t}}}
+\newcommand{\dodex}[1]{\frac{d #1}{d x}}
+\newcommand{\dodextilde}[1]{\frac{d #1}{d \tilde{x}}}
 % --------------------------------------------------------------------------------------------- %
 % Figures
 % --------------------------------------------------------------------------------------------- %
