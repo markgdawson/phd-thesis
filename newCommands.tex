@@ -47,7 +47,9 @@
 \newcommand{\zerov}{\mathbf{0}_3}
 \newcommand{\zerom}{\mathbf{0}_{3\times3}}
 \newcommand{\IdentityVect}{\mathbf{I}_3}
-\newcommand{\nsd}{\textrm{nsd}}
+\newcommand{\nsd}{n_\textrm{sd}}
+\newcommand{\nen}{n_\textrm{en}}
+\newcommand{\nfn}{n_\textrm{fn}}
 
 % --------------------------------------------------------------------------------------------- %
 % General Physics
@@ -149,6 +151,7 @@
 \newcommand{\anyVector}{\mathbf{v}}
 
 % Quasilinear A
+\newcommand{\an}{a_n}
 \newcommand{\An}{\A_\mathbf{n}}
 \newcommand{\AnPlus}{\An^{+}}
 \newcommand{\AnMinus}{\An^{-}}
@@ -168,6 +171,7 @@
 \newcommand{\SF}{N}
 \newcommand{\ucoeff}{u}
 \newcommand{\JumpUCoeff}{\llbracket \ucoeff_i \rrbracket}
+\newcommand{\JumpUCoeffSpecifyIndex}[1]{\llbracket \ucoeff_{#1} \rrbracket}
 \newcommand{\MassMatrixSymbol}{M}
 \newcommand{\MassMatrixComponent}{\mathit{\MassMatrixSymbol}}
 \newcommand{\MassMatrix}{\bm{\MassMatrixSymbol}}
@@ -175,10 +179,17 @@
 \newcommand{\Residual}{\bm{R}}
 \newcommand{\FluxDiv}{\Flux^{\elem}}
 \newcommand{\FluxNumFlux}{\Flux^{\elemtrace}}
-\newcommand{\nbasis}{n_{\textrm{nodes}}}
 
 \newcommand{\speedoflightleft}{\speedoflight_{L}}
 \newcommand{\speedoflightright}{\speedoflight_{R}}
+
+\newcommand{\UFieldComp}{V}}
+\newcommand{\UField}{\mathbf{\UFieldComp}}
+\newcommand{\alphaGeneral}{\alpha}
+\newcommand{\LStar}{L^*}
+\newcommand{\RStar}{R^*}
+\newcommand{\alphaGeneral}{\alpha}
+\newcommand{\micoeff}{c^{*}} % material interface coeff
 
 % --------------------------------------------------------------------------------------------- %
 % PDEs and ODEs

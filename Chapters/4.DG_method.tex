@@ -58,8 +58,7 @@ A choise of an upwind numerical flux [***] corresponds to
 \end{align}
 After integration by parts,~\eqref{eq:weak-form-with-numerical-flux} can be written as
 \begin{align*}
-\int_{\elem} \TF \cdot \uet \delem  + \int_{\elem} \dpart{\TF}{x_k} \cdot
-\Flux_{k}(\Ue) \delem + \int_{\elemtrace} \TF \cdot \left[ \NumFlux(\Ue,\Uout) - \NormalFlux(\Ue) \right] \delemtrace \\
+\int_{\elem} \TF \cdot \uet \delem  + \int_{\elem} \TF \cdot \dpart{\Flux_{k}(\Ue)}{x_k} \delem + \int_{\elemtrace} \TF \cdot \left[ \NumFlux(\Ue,\Uout) - \NormalFlux(\Ue) \right] \delemtrace \\
 = \int_{\elem} \TF  \cdot \maxwellSource(\Ue) \delem,
 % the second term changes from + to - from prev weak form
 \label{eq:weak-form-upwind-splitting-fluxes}
@@ -70,9 +69,7 @@ By substitution of~\eqref{eq:num-flux-splitting} and~\eqref{eq:phys-flux-splitti
 \end{align*}
 where the jump operator has been defined as $\JumpU = \Uout - \USoltn$. By substitution into~\eqref{eq:weak-form-upwind-splitting-fluxes}, the weak form with upwind flux splitting is written as
 \begin{equation}
-\int_{\elem} \TF \cdot \uet \delem  + \int_{\elem} \dpart{\TF}{x_k} \cdot
-\Flux_{k}(\Ue) \delem + \int_{\elemtrace} \TF \cdot \AnMinusU \delemtrace
-= \int_{\elem} \TF \cdot \maxwellSource(\Ue) \delem,
+\int_{\elem} \TF \cdot \uet \delem  + \int_{\elem} \TF \cdot \dpart{\Flux_{k}(\Ue)}{x_k} \delem + \int_{\elemtrace} \TF \cdot \AnMinusU \delemtrace = \int_{\elem} \TF  \cdot \maxwellSource(\Ue) \delem,
 \label{eq:weak-form-with-physical-flux}
 \end{equation}
 % TODO: missing some stuff on diagonalisation of A here....is it necessary, also the form of the
@@ -140,6 +137,7 @@ By noting that for any vector $\RTotNorm \anyVector = \outnormalvector \times \a
   \zerov
 \end{pmatrix} .
 \end{align*}
+% Should I write out A_n for the TEz and TMz modes?
 Similarily, for the $\TEz$ mode we obtain
 \begin{align*}
 \AnMinusU =
@@ -184,10 +182,14 @@ and for the $\TMz$ mode
 \subsection{Spatial Discretisation}
 The system is discretised by approximating the solution using a nodal basis as
 \begin{align}
-U^{k}_e(\xbf,\t) \simeq \sum_{i=1}^{\nbasis} \SF_{i} (\xbf) \ucoeff_{i}(\t) ,
+\USoltn_e(\xbf,\t) \simeq \sum_{j=1}^{\nen} \SF_{j} (\xbf) \mathbf{\ucoeff}_{j}(\t) ,
 \label{eq:nodal-basis-defn}
 \end{align}
-where $N_{i}$ are Lagrangian shape functions, $\nbasis$ is the number of nodal points, $u_{i}$ is the nodal solution at the $i$th node and $U^{k}_e$ denotes the $k$th component of the vector, $\Ue$. Following the Galerkin method, the vector of test functions, $\TF$, is chosen to be the same basis as the shape functions, with components given by
+where $N_{i}$ are Lagrangian shape functions, $\nen$ is the number of nodal
+points, $u_{i}$ is the nodal solution at the $i$th node and $U^{k}_e$ denotes
+the $k$th component of the vector, $\Ue$. Following the Galerkin method, the
+vector of test functions, $\TF$, is chosen to be the same basis as the shape
+functions, with the $k$th component given by
 \begin{align}
 \TFComp^{k} = \sum_{i=1}^{n} \SF_{i}(\xbf).
 \label{eq:test-function-comp-defn}
@@ -195,28 +197,33 @@ where $N_{i}$ are Lagrangian shape functions, $\nbasis$ is the number of nodal p
 By substitution of~\eqref{eq:nodal-basis-defn} and~\eqref{eq:test-function-comp-defn} into~\eqref{eq:weak-form-final} we obtain the discretised weak form
 \begin{align*}
 \sum_{i,j} \left[  \dodet{\ucoeff_i} \int_{\elem} \SF_i \SF_j \delem   +
-\ucoeff_i \Ak \int_{\elem} \dode{\SF_i}{x_k}
+\ucoeff_i \Ak \int_{\elem} \SF_i
   \dode{\SF_j}{x_k} \delem  +
 \AnMinus \JumpUCoeff \int_{\elemtrace} \SF_i \SF_j
   \delemtrace 
 -
 \Asource \int_{\elem} \SF_i \SF_j \delem \right]  = 0,
 \end{align*}
-% TODO - more detail here - also is this correct?
+% TODO - this is wrong...I'm mixing vectors and scalars...
 which can be written as a system of ordinary differential equations
 
 $$
 \MassMatrix \dodet{\UVect} + \FluxDiv + \FluxNumFlux - \Asource \MassMatrix = 0
 $$
 % TODO - are A_s and M in wrong order? order matters heres. Same for A_k. Also matters below.
+% TODO - A_s has nor been defined....!
 where $\UVect$ is a vector of the solution coefficients $u_{i}$. The block diagonal mass matrix, $\MassMatrix$, and the divergence and flux vectors, $\FluxDiv$ and $\FluxNumFlux$, are then given by
 \begin{align*}
 \MassMatrixComponent_{ij} &= \int_{\elem} \SF_i \SF_j \delem \\
-\FluxDiv_{i} &= \ucoeff_i \Ak \int_{\elem} \dode{\SF_i}{x_k}
-  \dode{\SF_j}{x_k} \delem  \\
-\FluxNumFlux_{i} &= \AnMinus \JumpUCoeff \int_{\elemtrace} \SF_i \SF_j
-  \delemtrace  \\
+\FluxDiv_{i} &=  \sum_{k=1}^{\nsd} a_k \sum_{j=1}^{\nen} \int_{\elem} \left( \dpart{\SF_i}{x_k} \dpart{\SF_j}{x_k} \delem \right) \ucoeff_j \\
+\FluxNumFlux_{i} &= \sum_{j=1}^{\nsd} \an^{-}
+\left( 
+\int_{\elemtrace} \SF_i \SF_j
+  \delemtrace
+ \right)
+\JumpUCoeffSpecifyIndex{j} \\
 \end{align*}
+% TODO - can I just use a scalar a_k here? or is this rubbish
 The resulting system of equations can be written as
 $$
 \dodet{\UVect} + \Residual(\UVect) = 0,
@@ -240,9 +247,266 @@ $$
 \Jump{ \mathbf{F}_n } = \lambda_j \Jump{ \mathbf{U} }
 $$
 
-where $\lambda_j$ are the eigenvalues of the jacobian matrix $\mathbf{A}_n$. This condition should be satisfied along the characteristics in the phase plane. For the 3 dimensions these are $ \lambda_{ 1,2 } = - \speedoflightleft $, $ \lambda_{ 3,4 } = \speedoflightright $ and $\lambda_{5..9} = 0 $, where the $\speedoflightleft$ and $\speedoflightright$ are the velocities of the electromagnetic wave in media on the left and right side of the interface respectively.
+where $\lambda_j$ are the eigenvalues of the jacobian matrix $\mathbf{A}_n$.
+This condition should be satisfied along the characteristics in the phase plane.
+For the 3 dimensions these are $ \lambda_{ 1,2 } = - \speedoflightleft $, $
+\lambda_{ 3,4 } = \speedoflightright $ and $\lambda_{5..9} = 0 $, where the
+$\speedoflightleft$ and $\speedoflightright$ are the velocities of the
+electromagnetic wave in media on the left and right side of the interface
+respectively. This condition should be satisfied along the phase plane
+characteristics, as shown in \ref{fig:phase-plane-characteristics}.
+
+\begin{figure}[h]
+  \centering
+  
+  \caption{Phase plane diagram showing the characteristics for Maxwells' equations}
+  \label{fig:phase-plane-characteristics}
+\end{figure}
+
+\subsection{Rankine-Hugoniot Jump Conditions in 2D}
+For the $\TEz$ and $\TMz$ modes, by setting..., the normal physical flux can be
+written in the form
+$$
+\mathbf{F}_n = 
+\begin{pmatrix}
+  - n_2 \UFieldComp_3 \\
+  n_1 \UFieldComp_3 \\
+  \alphaGeneral
+\end{pmatrix}
+$$
+where $ \alphaGeneral = n_1 \UFieldComp_2 - n_2 \UFieldComp_1 $, and the vector $\UField$ is given by $
+\UField = 
+  \begin{pmatrix} 
+    E_1 \; E_2 \; H_3
+  \end{pmatrix}^T
+$ for the $\TEz$ mode, and $
+\UField = 
+  -
+  \begin{pmatrix} 
+    H_1 \; H_2 \; E_3
+  \end{pmatrix}^T
+  $ for the $\TMz$ mode.
+For dispersive media this will be expanded with zeros...
+% TODO - CHECK OUT THE A_n vectors and check that these F_n come nicely from there...
+% TODO - should I have a numbered lambda here? and would that be different for
+% TE and TM modes
+By applying the Rankine-Hugoniot condition along $\frac{\partial x}{\parital t}
+= 0$, with $ \Jump{ \mathbf{F}_n } = 0 $, the normal flux in region $\LStar$
+and $\RStar$ are equal, we denote the flux in these region as
+$$
+\mathbf{F}_n^{out} = 
+\begin{pmatrix}
+  - n_2 \UFieldComp_3^{out} \\
+  n_1 \UFieldComp_3^{out} \\
+  \alphaGeneral^{out}
+\end{pmatrix} .
+$$
+
+Along $\frac{\partial x}{\parital t} = c_R$, the Rankine-Hugoniot condition takes the form
+$$
+\Jump{ \mathbf{F}_n } = \speedoflightright \Jump{ \mathbf{U} }
+$$
+which results in
+\begin{align}
+-n_2 \left(V_3^{R} - V_3^{out} \right) &= \micoeff_R \left( V_1^{R} - V_1^{out} \right) \\ \label{RHR-sys-1}
+n_1 \left(V_3^{R} - V_3^{out} \right) &= \micoeff_R  \left( V_2^{R} - V_2^{out} \right) \\  \label{RHR-sys-2}
+\micoeff_R \left(\alphaGeneral^{R} - \alphaGeneral^{out} \right) &= \left( V_3^{R} - V_3^{out} \right) \label{RHR-sys-3}
+\end{align}
+where $\micoeff = \sqrt{\epsilon/\mu}$ for $\TEz$ mode and $\micoeff =
+\sqrt{\mu/\epsilon}$ for $\TMz$ mode. It can be easily verified that
+\eqref{RHR-sys-1} and \eqref{RHR-sys-2} imply \eqref{RHR-sys-3}.
+
+Along the $\frac{\partial x}{\parital t} = - \speedoflightleft$, the Rankine-Hugoniot condition
+takes the form
+$$
+\Jump{ \mathbf{F}_n } = - \speedoflightleft \Jump{ \mathbf{U} }
+$$
+which results in
+\begin{align}
+-n_2 \left(V_3^{L} - V_3^{out} \left) &= - \micoeff_L \left( V_1^{L} - V_1^{out} \left) \\  \label{RHL-sys-1}
+n_1 \left(V_3^{L} - V_3^{out} \left) &= - \micoeff_L  \left( V_2^{L} - V_2^{out} \left) \\ \label{RHL-sys-2}
+- \micoeff_L \left( \alphaGeneral^{L} - \alphaGeneral^{out} \right) &= \left( V_3^{L} - V_3^{out} \left) \label{RHL-sys-3}
+\end{align}
+As above, \eqref{RHL-sys-1} and \eqref{RHL-sys-2} imply \eqref{RHL-sys-3}.
+For the $\TEz$ and $\TMz$ modes solving the Ranking-Hugoniot condition is equivalent to solving the system
+\begin{align}
+\micoeff_R \left(\alphaGeneral^{R} - \alphaGeneral^{out} \right) &= \left( V_3^{R} - V_3^{out} \right) \\
+- \micoeff_L \left( \alphaGeneral^{L} - \alphaGeneral^{out} \right) &= \left( V_3^{L} - V_3^{out} \left)
+\end{align}
+Solving the linear system results given by \eqref{RHL-sys-3} and
+\eqref{RHR-sys-3} results in
+% divide by c* coeff then 1-2 again
+\begin{equation}
+\UFieldComp_3^{out} = \frac{\micoeff_R^{-1} \UFieldComp_3^R + \micoeff_L^{-1} \UFieldComp_3^L - \left(\alphaGeneral^R - \alphaGeneral^L \right)}{\micoeff_L^{-1} + \micoeff_R^{-1}} \label{eq:interface-bc-V3}
+\end{equation}
+and
+% 1 - 2 and rearrange
+\begin{equation}
+\alphaGeneral^{out} = \frac{\UFieldComp_3^R - \UFieldComp_3^L - \micoeff_R \alphaGeneral^R - \micoeff_L \alphaGeneral^L}{\micoeff_L + \micoeff_R}\label{eq:interfce-bc-alphaGeneral}
+\end{equation}
+
+
+\subsection{Material Interfaces}
+...what is a material interface for 3D...
+%TODO ...
+
+material interfaces for 3D...by solving linear system...
+For the $\TEz$ mode this results in the conditions
+% divide by c* coeff then 1-2 again
+\begin{equation}
+H_3^{out} = \frac{\speedoflightright \mu_R H_3^R + \speedoflightleft \mu_L H_3^L - \left(\alphaGeneral^R - \alphaGeneral^L \right)}{\speedoflightright \mu_R + \speedoflightleft \mu_L } \label{eq:interface-bc-V3}
+\end{equation}
+and
+\begin{equation}
+\alphaGeneral^{out} = \frac{\speedoflightright \epsilon_R \alphaGeneral^R + \speedoflightleft \epsilon_L \alphaGeneral^L - \left( H_3^R - H_3^L \right) }{\speedoflightright \epsilon_R + \speedoflightleft \epsilon_L}
+\end{equation}
+with
+$$ \alphaGeneral = n_1 E_2 - n_2 E_1 $$
+and for the $\TMz$ this results in 
+% divide by c* coeff then 1-2 again
+\begin{equation}
+E_3^{out} = \frac{\speedoflightright \epsilon_R E_3^R + \speedoflightleft \epsilon_L E_3^L - \left(\alphaGeneral^R - \alphaGeneral^L \right)}{\speedoflightright \epsilon_R + \speedoflightleft \epsilon_L }
+\end{equation}
+and
+\begin{equation}
+\alphaGeneral^{out} = \frac{\speedoflightright \mu_R \alphaGeneral^R + \speedoflightleft \mu_L \alphaGeneral^L - \left( E_3^R - E_3^L \right) }{\speedoflightright \mu_R + \speedoflightleft \mu_L}
+\end{equation}
+with $$ \alphaGeneral = n_1 E_2 - n_2 E_1 $$
+
+\subsection{Absorbing boundary condition}
+...infinite
+domain....truncation....finite....computation....
+ABC...is...artificial.....EM radiation absorbed....
+
+This is obtained by...Only flux out....
+numerical flux becomes...
+\begin{align}
+\NumFlux(\USoltn,\Uout) = \NormalFluxPositiveEigenvalues(\USoltn) = \AnPlus \USoltn
+\end{align}
+% TODO - U here shouldn't have element subscript
+or equivalently....there is no inward flux....
+$$
+\AnMinus \JumpU = - \AnMinus \USoltn
+$$
+% TODO I don't get this expression...
+no incoming flux equiv to 1st order S-M condition
+
+can be used with no PML, to dissipate waves as they get to boundary...etc...
+Kabakian et al (2004)
+
+\subsection{Residual Vector}
+recall
+$$
+\Residual = \MassMatrix^{-1} \left[  \FluxDiv + \FluxNumFlux \right] - \Asource
+$$
+
+need to integrate over element interior for div term (and source term)
+need to integrate over element faces for boundary terms
+
 
 \subsubsection{Spatial Discretisation}
+  
+\begin{align*}
+\MassMatrixComponent_{ij} &= \int_{\elem} \SF_i \SF_j \delem \\
+\FluxDiv_{i} &=  \sum_{k=1}^{\nsd} a_k \sum_{j=1}^{\nen} \int_{\elem} \left( \dpart{\SF_i}{x_k} \dpart{\SF_j}{x_k} \delem \right) \ucoeff_j \\
+\FluxNumFlux_{i} &= \sum_{j=1}^{\nsd} \an^{-}
+\left( 
+\int_{\elemtrace} \SF_i \SF_j
+  \delemtrace
+ \right)
+\JumpUCoeffSpecifyIndex{j} \\
+\end{align*}
+\subsubsection{Planar Elements}
+
+...with planar faces
+...define a linear mapping ref elem (I) -> physical element.
+isoparametric mapping given by coords of the vertices of Omega
+...then $\FluxNumFlux_{i}$ integral 
+\begin{align*}
+\FluxDiv_{i} &=  \sum_{k=1}^{\nsd} a_k \sum_{j=1}^{\nsd} \int_{\elem} \left( \dpart{\SF_i}{x_k} \cdot \dpart{\SF_j}{x_k} \delem \right) \ucoeff_j ,
+\end{align*}
+is transformed to the reference element (i.e computed in the ref elem as
+\begin{align*}
+\FluxDiv_{i} &= |J| \sum_{k=1}^{\nsd} a_k \sum_{j=1}^{\nsd} J_{l,k}^{-1} \sum_{l=1}^{\nsd}\int_{\elem} \left( \dpart{\SF_i}{x_k} \cdot \dpart{\SF_j}{x_k} \delem \right) \ucoeff_j ,
+\end{align*}
+% TODO - this is not complete....I need to know how to transform to reference
+% element. Generally just do this by chain rule...simples...think about 1D first
+a note here about how the jacobian |J| (of the linear mapping I -> Omega) is a constant
+and can be taken out of calculation
+Then the 'convection elemental matricies' $ C_{i,j}^{\xi_l} $ (i.e. the stuff in brackets) is
+precomputed once only per reference element
+and the whole thing is computed as
+\begin{align*}
+\FluxDiv_{i} &= |J| \sum_{k=1}^{\nsd} a_k \sum_{j=1}^{\nsd} J_{l,k}^{-1} \sum_{l=1}^{\nsd} C_{i,j}^{\xi_l} \ucoeff_j ,
+\end{align*}
+i.e. now we're doing the same thing without any integration
+
+The flux term (i.e. the one on faces) similar...
+This time with a reference face...
+mapping R_I between reference face and physical face R_e
+Then compute the integral $\FluxNumFlux_{i}$ as
+
+$$
+\FluxNumFlux_{i} &=
+\an^{-}
+\sum_{j=1}^{\nfn}
+\left( 
+\int_{\elemtrace} \SF_i \SF_j
+  \delemtrace
+ \right)
+\JumpUCoeffSpecifyIndex{j} \\
+$$
+
+a_n^{-} now outside the integral - because its a constant for a given face
+(the normal is constant over face)
+sum is over face nodes, since for non-face nodes the thing vanishes
+% TODO - why does the thingy vanish
+Ruben quote
+'because other shape functions vanish over the complete planar face'
+
+so I can do the same thing
+$$
+\FluxNumFlux_{i} &=
+\an^{-}
+\sum_{j=1}^{\nfn}
+m_{ij}
+\JumpUCoeffSpecifyIndex{j} \\
+$$
+note: ruben uses Gamma as the superscript for this part of num flux
+
+with
+$$
+m_{ij} =
+\int_{\elemtrace} \SF_i \SF_j
+  \delemtrace
+$$
+m_ij == 'mass matrixfor the reference face'
+computed only once (not once per face or anything like that....apparently!??)
+'and used in the computation of each physical face'
+
+this is all ``quadrature free'' implementation of DG methods (Atkins and Shu,
+1998) -> can be done because: I can actually reference Rubens paper here
+The use of hybrid meshes to improve the efficiency of a discontinuous Galerkin
+method for the solution of Maxwell's equations
+
+A_n^- is constant (i.e. linear eqtns) and
+using triangular or tetrahedral meshes (i.e. constant Jacobian for non-curved
+elements)
+---> is this is also true for Quads? Or just affine/planar quads?
+
+\subsubsection{Curved Elements}
+
+I stopped reading Rubens Thesis at this point and switched to the paper...
+
+There is a lot of stuff in the thesis about curved elements...
+
+need to justify why NEFEM is actually pretty quick if elements are
+STORED...combine this with parallel....awesome...
+
+Fekette nodal distribution
+
+
+
 \begin{itemize}
 	\item discuss types of element - (non-)affine, planar, different shapes etc.
 	\item condition number of a matrix - moving nodes around %reference!
