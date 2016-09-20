@@ -47,9 +47,12 @@
 \newcommand{\zerov}{\mathbf{0}_3}
 \newcommand{\zerom}{\mathbf{0}_{3\times3}}
 \newcommand{\IdentityVect}{\mathbf{I}_3}
+\newcommand{\IdentityMatrix}{\mathbf{I}}
 \newcommand{\nsd}{n_\textrm{sd}}
 \newcommand{\nen}{n_\textrm{en}}
 \newcommand{\nfn}{n_\textrm{fn}}
+\newcommand{\xk}{x_{k}}
+
 
 % --------------------------------------------------------------------------------------------- %
 % General Physics
@@ -169,9 +172,8 @@
 \newcommand{\JumpH}{\Jump{\H}}
 
 \newcommand{\SF}{N}
-\newcommand{\ucoeff}{u}
-\newcommand{\JumpUCoeff}{\llbracket \ucoeff_i \rrbracket}
-\newcommand{\JumpUCoeffSpecifyIndex}[1]{\llbracket \ucoeff_{#1} \rrbracket}
+\newcommand{\JumpUVectUnkowns}{\llbracket \UVect \rrbracket}
+\newcommand{\JumpUCoeffVectUnknownsWithIndex}[1]{\llbracket \UVect_{#1} \rrbracket}
 \newcommand{\MassMatrixSymbol}{M}
 \newcommand{\MassMatrixComponent}{\mathit{\MassMatrixSymbol}}
 \newcommand{\MassMatrix}{\bm{\MassMatrixSymbol}}
@@ -183,13 +185,33 @@
 \newcommand{\speedoflightleft}{\speedoflight_{L}}
 \newcommand{\speedoflightright}{\speedoflight_{R}}
 
-\newcommand{\UFieldComp}{V}}
+% --------------------------------------------------------------------------------------------- %
+% DG Method Boundary Conditions
+% --------------------------------------------------------------------------------------------- %
+
+\newcommand{\UFieldComp}{V}
 \newcommand{\UField}{\mathbf{\UFieldComp}}
 \newcommand{\alphaGeneral}{\alpha}
 \newcommand{\LStar}{L^*}
 \newcommand{\RStar}{R^*}
-\newcommand{\alphaGeneral}{\alpha}
 \newcommand{\micoeff}{c^{*}} % material interface coeff
+\newcommand{\micoeffinv}{c^{**}} % material interface coeff
+
+% --------------------------------------------------------------------------------------------- %
+% DG Method Discretisation
+% --------------------------------------------------------------------------------------------- %
+
+\newcommand{\ConvectionMatrix}{\mathbf{C}}
+\newcommand{\MassMatrixFace}{\mathbf{M}^{\textrm{face}}}
+
+% Reference Element
+\newcommand{\refElemMap}{I}
+\newcommand{\refelem}{\Omega^{\elemindex}_{\refElemMap}}
+\newcommand{\refelemtrace}{\partial \refElemMap}
+\newcommand{\drefelemtrace}{d\Gamma_{\refElemMap}}
+\newcommand{\drefelem}{d\Omega_{\refElemMap}}
+\newcommand{\Jacobian}{\mathbf{J}}
+\newcommand{\JacobianFace}{\mathbf{J}^{\textrm{face}}}
 
 % --------------------------------------------------------------------------------------------- %
 % PDEs and ODEs
