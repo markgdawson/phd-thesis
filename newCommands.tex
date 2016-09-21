@@ -56,6 +56,7 @@
 \newcommand{\IdentityMatrix}{\mathbf{I}}
 \newcommand{\nsd}{n_\textrm{sd}}
 \newcommand{\nen}{n_\textrm{en}}
+\newcommand{\nel}{n_\textrm{el}}
 \newcommand{\nfn}{n_\textrm{fn}}
 \newcommand{\xk}{x_{k}}
 
@@ -142,12 +143,21 @@
 
 \newcommand{\Ue}{\mathbf{U}_e}
 \newcommand{\Uout}{\mathbf{U}_e^{\textrm{out}}}
-\newcommand{\elemindex}{n}
-\newcommand{\elemtot}{\MakeUppercase{\elemindex}}
-\newcommand{\elem}{\Omega_e^{\elemindex}}
+\newcommand{\physicalDomain}{\Omega}
+\newcommand{\physicalDomainBoundary}{\partial \physicalDomain}
+\newcommand{\elemindex}{i}
+\newcommand{\elemIndexed}{\physicalDomain_\elemindex}
+\newcommand{\anotherelemindex}{j}
+\newcommand{\anotherelem}{\physicalDomain_\anotherelemindex}
+\newcommand{\approximationSpaceSpatial}{V}
+\newcommand{\approximationSpaceTotal}{C}
+\newcommand{\spaceOfSpatialApproximationFunction}{\textrm{#####!!!###}}
+\newcommand{\genericElement}{\physicalDomain_e}
+\newcommand{\periodOfApproximation}{T}
+\newcommand{\barelemindexed}{\bar{\physicalDomain}_\elemindex}
 \newcommand{\delem}{d\Omega}
 \newcommand{\uet}{\frac{\partial \Ue}{\partial t}}
-\newcommand{\elemtrace}{\partial \elem}
+\newcommand{\elemtracegenericelement}{\Gamma_e}
 \newcommand{\delemtrace}{d\Gamma}
 \newcommand{\NormalFlux}{\mathbf{\Flux_n}}
 \newcommand{\outnormalcoeff}{n}
@@ -177,17 +187,6 @@
 \newcommand{\JumpE}{\Jump{\E}}
 \newcommand{\JumpH}{\Jump{\H}}
 
-\newcommand{\SF}{N}
-\newcommand{\JumpUVectUnkowns}{\llbracket \UVect \rrbracket}
-\newcommand{\JumpUCoeffVectUnknownsWithIndex}[1]{\llbracket \UVect_{#1} \rrbracket}
-\newcommand{\MassMatrixSymbol}{M}
-\newcommand{\MassMatrixComponent}{\mathit{\MassMatrixSymbol}}
-\newcommand{\MassMatrix}{\bm{\MassMatrixSymbol}}
-\newcommand{\UVect}{\bm{U}}
-\newcommand{\Residual}{\bm{R}}
-\newcommand{\FluxDiv}{\Flux^{\elem}}
-\newcommand{\FluxNumFlux}{\Flux^{\elemtrace}}
-
 \newcommand{\speedoflightleft}{\speedoflight_{L}}
 \newcommand{\speedoflightright}{\speedoflight_{R}}
 
@@ -207,12 +206,58 @@
 % DG Method Discretisation
 % --------------------------------------------------------------------------------------------- %
 
-\newcommand{\ConvectionMatrix}{\mathbf{C}}
-\newcommand{\MassMatrixFace}{\mathbf{M}^{\textrm{face}}}
+% Elemental Matrices
+\newcommand{\MassMatrix}{\bm{M}_{ij}}
+\newcommand{\MassMatrixFace}{\mathbf{M}^{\textrm{face}}_{ij}}
+\newcommand{\MassMatrixAffine}{\mathbf{m}}
+\newcommand{\MassMatrixFaceAffine}{\mathbf{m}^{\textrm{face}}}
+
+\newcommand{\ConvectionMatrix}{\mathbf{C}^{k}_{ij}}
+\newcommand{\ConvectionMatrixAffine}{\mathbf{c}^k}
+
+% Might want to change
+\newcommand{\faceindex}{m}
+\newcommand{\discretisedWeakForm}[1]{
+  \sum_{j=1}^{\nen}
+  \MassMatrix
+  \IdentityMatrix
+  \dodet{\UVect_j}
++
+  \sum_{j=1}^{\nen}
+  \left( \ConvectionMatrix \Ak \right) \UVect_j
+-
+  \sum_{\faceindex=1}^{#1}
+  \MassMatrixFace
+  \AnMinus
+  \Jump{\UVect_j}
+ -
+  \sum_{j=1}^{\nen}
+  \MassMatrix
+  \Asource
+  \UVect_j
+= 0
+\; \; \forall \; i \; \in \; 1...\nen,
+}
+
+% Shape and Test functions
+\newcommand{\SF}{N}
+
+\newcommand{\JumpUVectUnkowns}{\llbracket \UVect \rrbracket}
+\newcommand{\JumpUCoeffVectUnknownsWithIndex}[1]{\llbracket \UVect_{#1} \rrbracket}
+\newcommand{\UVect}{\bm{U}}
+\newcommand{\Residual}{\bm{R}}
+\newcommand{\FluxDiv}{\Flux^{\elem}}
+\newcommand{\FluxNumFlux}{\Flux^{\elemtrace}}
+
+% Spatial Discretisation
+\newcommand{\USoltnApprox}{\mathbf{U}_h}
 
 % Reference Element
 \newcommand{\IsoMapping}{I}
-\newcommand{\refelem}{\Omega^{\elemindex}_{\IsoMapping}}
+\newcommand{\refelem}{\Omega_{\IsoMapping}}
+\newcommand{\meshelem}{\genericElement^{h}_e}
+\newcommand{\meshelemtrace}{\Gamma^{h}_e}
+\newcommand{\refElemCoords}{\mathbf{\xi}}
 \newcommand{\refelemtrace}{\partial \IsoMapping}
 \newcommand{\drefelemtrace}{d\Gamma_{\IsoMapping}}
 \newcommand{\drefelem}{d\Omega_{\IsoMapping}}
@@ -220,16 +265,7 @@
 \newcommand{\JacobianFace}{\mathbf{J}^{\textrm{face}}}
 \newcommand{\refface}{\Gamma_{\IsoMapping}}
 \newcommand{\face}{\Gamma_e}
-
-% Affine/Planar faces
-\newcommand{\ConvectionMatrixAffine}{\mathbf{c}}
-\newcommand{\MassMatrixAffine}{\mathbf{m}}
-\newcommand{\MassMatrixFaceAffine}{\mathbf{m}^{\textrm{face}}}
-\newcommand{\ConvectionMatrixComponentAffine}{c_{ij}}
-\newcommand{\ConvectionMatrixComponent}{C_{ij}}
-\newcommand{\MassMatrixComponentAffine}{m_{ij}}
-\newcommand{\MassMatrixFaceComponentAffine}{m^{\textrm{face}}_{ij}}
-\newcommand{\faceindex}{m}
+\newcommand{\nodalCoordinatesOfElement}{\xbf_j}
 
 
 % --------------------------------------------------------------------------------------------- %

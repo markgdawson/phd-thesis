@@ -2,52 +2,55 @@
 \label{Chapter3}
 \lhead{Chapter 3. \emph{Discontinuous Galerkin}} % Write in your own chapter title to set the page header
 
-\subsection{Formulation}
-
 The Discontinuous Galerkin method was first introduced to solve the neutron transport problem by Reed and Hill \cite{} in 1973.
 ** Some background/literature review here Cockburn, Shui for solving hyperbolic equations etc ***
 % PhDJesusAlvarez good for motivation - not so much for the method
 
-As seen in Chapter~\ref{PhysicalProblemChapter}, given a suitable choice of initial conditions the evolution of the system in time can be described by Maxwell's curl equations in strong form,~\eqref{eq:maxwell-curl-equations-conservation-form}. Consider that the problem is defined on a physical domain, $\Omega$, which is discretised by an unstructured mesh of $\elemtot$ nonoverlapping and body-conforming simplices, $\elem$, such that $ \Omega \approx \Omega_h = \mathop{\bigcup}_{k=1}^{K} \elem $.
+As seen in Chapter~\ref{PhysicalProblemChapter}, given a suitable choice of
+initial conditions the evolution of the system in time can be described by
+Maxwell's curl equations in strong
+form,~\eqref{eq:maxwell-curl-equations-conservation-form}. Consider that the problem is defined on an open bounded physical domain, $\physicalDomain \in \Real^{\nsd}$, with a boundary $\physicalDomainBoundary$,
+% TODO - should I specify that its a PEC boundary (Ruben does)
+which is partitioned in an unstructured mesh of $\nel$ nonoverlapping, body-conforming simplices, $\elemIndexed$, such that
+$$
+\bar{\physicalDomain} = \mathop{\bigcup}_{\elemindex=1}^{\nel} \barelemindexed, \;\; \elemIndexed \cap \anotherelem \textrm{for} \elemindex \neq \anotherelemindex
+$$.
+% TODO - no approx here...!? Understand why this is...
+
 % discuss the discretisation more - duplication of nodes?
-Following the method of weighted residuals for a single element we multiply the strong form,~\eqref{eq:maxwell-curl-equations-conservation-form}, by a vector of test functions $\TF$ and integration over an element $\elem$,
+Following the method of weighted residuals for a single element we seek solutions to the strong form problem,~\eqref{eq:maxwell-curl-equations-conservation-form}, over a generic element, $\genericElement$, in the approximation space $\left( \E,\H,\J \right) \in \approximationSpaceTotal \left( \left[ 0, \periodOfApproximation \right], \approximationSpaceSpatial \right)$
+% TODO - check WHICH J I'm using here
+where $\approximationSpaceSpatial = \spaceOfSpatialApproximationFunction $ with
+% TODO - more space approx stuff here.
+Multiplied by a vector of test functions $\TF \in \approximationSpaceSpatial $ and integrated over the generic element $\elemIndexed$ results in,
 $$
-\int_{\elem} \TF \cdot \uet \delem  + \int_{\elem} \TF \cdot \dpart{\Flux_{k}}{x_{k}}= \int_{\elem} \TF \cdot \maxwellSource \delem,
+\int_{\genericElement} \TF \cdot \uet \delem  + \int_{\genericElement} \TF \cdot \dpart{\Flux_{k}}{x_{k}}= \int_{\genericElement} \TF \cdot \maxwellSource \delem,
 $$
-where $\Ue$ denotes the restriction of the solution, $\USoltn$, to the element $\elem$. After integration by parts the weak form is obtained as
+where $\Ue$ denotes the restriction of $\USoltn$ to the element $\genericElement$ and einsteins summation notation has been employed.
+% TODO - is this technically true
+Integration by parts results in
 
 \begin{equation}
-\int_{\elem} \TF \cdot \uet \delem  - \int_{\elem} \dpart{\TF}{\xk} \cdot
-\Flux_{k}(\Ue) \delem + \int_{\elemtrace} \TF \cdot \NormalFlux(\Ue) \delemtrace
-= \int_{\elem} \TF \cdot \maxwellSource(\Ue) \delem,
+\int_{\genericElement} \TF \cdot \uet \delem  - \int_{\genericElement} \dpart{\TF}{\xk} \cdot
+\Flux_{k}(\Ue) \delem + \int_{\genericElementtrace} \TF \cdot \NormalFlux(\Ue) \delemtrace
+= \int_{\genericElement} \TF \cdot \maxwellSource(\Ue) \delem,
 \label{eq:weak-form-with-physical-flux}
 \end{equation}
-where $\mathbf{F_n}$, the outward normal flux, is given by $ \mathbf{F_n}(\mathbf{U}) = \outnormalcoeffk \mathbf{F}_k(\mathbf{U}) $, with $\outnormalcoeffk$ being the $\outnormalcoeffcomp$th component of the outward unit normal vector of $\elemtrace$.
 
-Since the weak form stated in~\eqref{eq:weak-form-with-physical-flux} is specified on the element $\elem$, this does not constitute a scheme suitable for solving the global problem. In order to recover the global solution the continuity of the solution between elements is weakly enforced by replacing the physical normal flux, $\NormalFlux(\Ue)$, with a consistent numerical flux, $\NumFlux(\Ue,\Uout)$. This flux along the element trace of $\elem$ is evaluated in terms of the solution, $\mathbf{U}_e$, in the element $\elem$, and the solution in the neighbouring element, $\mathbf{U}^{out}$. The DG weak formulation is this written as
-\begin{equation}
-\int_{\elem} \TF \cdot \uet \delem  - \int_{\elem} \dpart{\TF}{\xk} \cdot
-\Flux_{k}(\Ue) \delem + \int_{\elemtrace} \TF \cdot \NumFlux(\Ue) \delemtrace
-= \int_{\elem} \TF \cdot \maxwellSource(\Ue) \delem,
-\label{eq:weak-form-with-numerical-flux}
-\end{equation}
+where $\outnormalvector$ is outward unit normal vector to the boundary $\genericElementtracegenericelement$ of $\genericElement$, which has directional cosines $\outnormalcoeffk$, and $\mathbf{F_n}$ is the outward normal physical flux, given by $ \mathbf{F_n}(\mathbf{U}) = \outnormalcoeffk \mathbf{F}_k(\mathbf{U}) $.
 
-% TODO: What is the definition of Uout in mathematical language
-% TODO:
-% Ruben/Oubay: This numerical flux is evaluated in terms of the trace of
-% the solution on element Xe and the trace of the solution, Uout, on the
-% other element adjacent to Ce
-\subsection{Choice of Numerical Flux}
-The flux splitting technique proposed in~\cite{donea2003finite} for linear hyperbolic systems is employed.
+Since the weak form stated in~\eqref{eq:weak-form-with-physical-flux} is specified on the element $\genericElement$, this does not constitute a scheme suitable for solving the global problem. As is usual in a DG context, continuity of the solution between elements is weakly enforcing by replacing the physical normal flux, $\NormalFlux(\Ue)$, with a consistent numerical flux, $\NumFlux(\Ue,\Uout)$. This numerical flux depends on both the trace of the solution on the element $\genericElement$ and the trace of the solution on the neighbouring element, $\mathbf{U}^{out}$.
+% TODO: What is the definition of Uout in mathematical language ??
+For a linear hyperbolic system a natural choice is to employ a flux splitting technique~\cite{donea2003finite}, corresponding to an upwind approximation\cite{chen2005high}.
 % TODO: this is a lot like Rubens/Obays paper, rewrite it. QUOTE: A natural choice, for the linear hyperbolic system of interest here, is to employ a flux splitting technique ~\cite{donea2003finite}, which corresponds to an upwind approximation \cite{chen2005high}
-The physical normal flux is therefore written as
+The physical normal flux is written as
 $$
-\NormalFlux(\USoltn) = \An \USoltn
+\NormalFlux(\USoltn) = \An \USoltn,
 $$
-where $\An = \outnormalcoeffk \Ak$, which can be decomposed into incoming
-(superscript -) and outgoing (superscript +) fluxes
+where $\An = \outnormalcoeffk \Ak$, and decomposed into incoming (superscript -) flux and outgoing flux (superscript +) as
+% VIVA: An is known as the jacobian matrix, and apparently is also \An = \frac{ \partial \NumFlux }{ \partial \U }
 \begin{align}
-\NormalFlux(\USoltn) = \NormalFluxPositiveEigenvalues(\USoltn) + \NormalFluxNegativeEigenvalues(\USoltn)
+\NormalFlux(\USoltn) = \NormalFluxPositiveEigenvalues(\USoltn) + \NormalFluxNegativeEigenvalues(\USoltn),
 \label{eq:phys-flux-splitting}
 \end{align}
 where $ \NormalFluxPositiveEigenvalues = \AnPlus \USoltn$, $\NormalFluxNegativeEigenvalues = \AnMinus \USoltn, $ and the matrices $\AnMinus$ and $\AnPlus$ denote respectively the matrices of the positive and negative eigenvalues of $\An$. These can be written conveniently as
@@ -56,12 +59,13 @@ where $ \NormalFluxPositiveEigenvalues = \AnPlus \USoltn$, $\NormalFluxNegativeE
 \AnPlus &= \left( \An + \AnMod \right) / 2   \\
 \AnMinus &= \left( \An - \AnMod \right) / 2
 \end{align}
-Choosing of an upwind approximation\cite{chen2005high} results in
+where %TODO: definition of AnMod and change AnMod to another symbol...Add the definition of An...
+The choice of an upwind approximation results in
 \begin{align}
 \NumFlux(\USoltn) = \NormalFluxPositiveEigenvalues(\USoltn) + \NormalFluxNegativeEigenvalues(\Uout).
 \label{eq:num-flux-splitting}
 \end{align}
-After integration by parts,~\eqref{eq:weak-form-with-numerical-flux} can be written as
+After substitution of $\NumFlux$ and integration by parts,~\eqref{eq:weak-form-with-physical-flux} becomes
 \begin{align*}
 \int_{\elem} \TF \cdot \uet \delem  + \int_{\elem} \TF \cdot \dpart{\Flux_{k}(\Ue)}{\xk} \delem + \int_{\elemtrace} \TF \cdot \left[ \NumFlux(\Ue,\Uout) - \NormalFlux(\Ue) \right] \delemtrace \\
 = \int_{\elem} \TF  \cdot \maxwellSource(\Ue) \delem, \label{eq:weak-form-upwind-splitting-fluxes}
@@ -71,7 +75,7 @@ We note that % TODO - I've lost some text here...!
 \begin{equation}
   \NumFlux(\Ue,\Uout) - \NormalFlux(\Ue) = \AnMinus \Uout - \AnMinus \USoltn = \AnMinusU, \label{eq:AnMinusUderivation}
 \end{equation}
-where the jump operator has been defined as $\JumpU = \Uout - \USoltn$. By substitution into~\eqref{eq:weak-form-upwind-splitting-fluxes}, the weak form with upwind flux splitting is written as
+where $\JumpU = \Uout - \USoltn$ denotes the jump in the solution across $\elemtracegenericelement$. By substitution into~\eqref{eq:weak-form-upwind-splitting-fluxes}, the weak form with upwind flux splitting is written as
 \begin{equation}
 \int_{\elem} \TF \cdot \uet \delem  + \int_{\elem} \TF \cdot \dpart{\Flux_{k}(\Ue)}{\xk} \delem + \int_{\elemtrace} \TF \cdot \AnMinusU \delemtrace = \int_{\elem} \TF  \cdot \maxwellSource(\Ue) \delem,
 \label{eq:weak-form-final}
@@ -83,19 +87,17 @@ where the jump operator has been defined as $\JumpU = \Uout - \USoltn$. By subst
 % *** conditions to be satisfied by numerical flux + form of numerical flux ***
 % TODO: upwind flux: effect for wave domination problems - flow of information, upwind flux
 
-\subsubsection{Internal Element Boundaries}
-We consider the boundary conditions at an internal boundary between elements. We recall the form of the physical outward normal flux
-$$\An = \sum_{k=1}^{\nsd} \outnormalcoeffk \Ak ,$$
-where $n_k$ are the directional cosines of the outward normal vector, $\outnormalvector$, on the element boundary. We recall from~\ref{sec:conservation-form} that this expression may be written as
+\section{Internal Element Boundaries}
+We consider the boundary conditions at an internal boundary between elements. From~\ref{sec:conservation-form}, this expression may be written as
 $$
   \An =
   \begin{pmatrix}
  & \zerom , & \mu^{-1} \RTotNorm, & \zerom \\
  & - \eps^{-1} \RTotNorm & \zerom & \zerom \\
  & \zerom & \zerom & \zerom 
- & \end{pmatrix}
+ & \end{pmatrix} ,
 $$
-where,
+where
 $$
   \RTotNorm =
   \begin{pmatrix}
@@ -104,7 +106,7 @@ $$
 & n_2 & -n_1 & 0 
  & \end{pmatrix} .
 $$
-The modulus of $\An$ is given by
+The modulus of $\An$ is then given by
 \begin{align*}
 \AnMod = \speedoflight
 \begin{pmatrix}
@@ -178,99 +180,182 @@ for the $\TMz$ mode with $ \alphaGeneral = - n_1 H_2 + n_2 H_1. $
 % VIVA: calculated with matlab script:
 % modAn = sqrtm(An*An') and knowing that
 % make sure I can do sqrtm by hand
-\subsection{Spatial Discretisation}
-The system is discretised by approximating the solution using a nodal basis
+\section{Spatial Discretisation}
+This section describes two approaches to spatial discretisation of the weak formulation~\ref{eq:weak-form-final}, namely the traditional isoparametric finite element formulation and the recently proposed NURBS-enhanced finite element method (NEFEM).
+
+\section{Isoparametric Finite Element Method}
+\label{sec:isoparametric-elements}
+A nodal interpolation of the solution, $\USoltn$, is defined in a reference element $\refelem$, with local coordinates $\refElemCoords$, as
+% TODO: do this directly in the 
 \begin{align}
 \USoltn_e(\xbf,\t) \simeq \sum_{j=1}^{\nen} \SF_{j} (\xbf) \UVect_{j}(\t) ,
 \label{eq:nodal-basis-defn}
 \end{align}
+% TODO - copy this directly from Ruben Paper!! COPYRUBEN
 % VIVA: the second U_j is the vector of coefficients
-where $N_{j}$ are $j$ nodal Lagrangian shape functions spanning the approximation space,
-$\UVect_{j}$ is the value of the solution at the $j$th node, $\nen$ is the number of nodal
-points. Following the Galerkin method, the
-vector of test functions, $\TF$, is chosen from the same basis as the shape
-functions
-\begin{align}
-\TF = \sum_{i=1}^{\nen} \SF_{i}(\xbf).
-\label{eq:test-function-comp-defn}
-\end{align}
-By substitution of~\eqref{eq:nodal-basis-defn} and~\eqref{eq:test-function-comp-defn} into~\eqref{eq:weak-form-final} we obtain the discretised weak form
-\begin{align*}
-\sum_{i,j} \left[
-  % term 1
-  \left(
-    \int_{\elem} \SF_i \SF_j \delem
-  \right)
-  \dodet{\UVect_j}
-+
-  % term 2
-  \left(
-    \int_{\elem} \SF_i \dpart{\SF_j}{x^k} \delem
-  \right)
-  \Ak \UVect_j
-+
-  % term 3
-  \left(
-  \int_{\elemtrace} \SF_i \SF_j \delemtrace 
-  \right)
-  \AnMinus \JumpUCoeffVectUnknownsWithIndex{j}
-  % term 4
--
-  \left(
-  \int_{\elem} \SF_i \SF_j \delem
-  \right)
-  \Asource 
-  \right]  = 0,
-\end{align*}
+where $N_{j}$ are polynomial, Lagrangian shape functions of order $p$ in $\refElemCoords$ and $\nen$ are the number of nodes of the element $\meshelem$. An isoparametric transformation, $\IsoMapping$, is introduced between the reference element, $\refelem$ and a generic mesh element $\meshelem$, namely
+% TODO - COPYRUBEN -> iso mapping - add comma to the end
+where $\nodalCoordinatesOfElement$ are the nodal coordinates of the element $\meshelem$. Note that for an element with a face or edge on the boundary of the computational domain, the boundary of the element $\meshelem$ will be a polynomial approximation of the real boundary\cite{}.
+% TODO - COPY RUBEN for citation
+ Following the Galerkin method, the vector of test functions, $\TF$, is chosen from the same basis as the shape
+functions.
+Substitution of~\eqref{eq:nodal-basis-defn} into~\eqref{eq:weak-form-final}, and selecting the space of test functions to be the same as the space spanned by the approximation functions, results in the system
 % NOTE - the second term actually also has an implicit sum over k in (Einstein notation)
-which can be written as a system of $\nen$ ordinary differential equations,
 $$
-\sum_{j=1}^{\nen}
-\left[
-\MassMatrix \dodet{\UVect_j} +
-\left( \ConvectionMatrix^{k} \Ak \right) \UVect_j -
-\MassMatrix \Asource
-\right]
-- \sum_{\faceindex=1}^{\nfn}
-\left( 
-\int_{\elemtrace} \SF_i \SF_j \AnMinus \delemtrace
- \right)
-\Jump{\UVect_j}
-= 0
+\discretisedWeakForm{\nfn}
+\label{eq:discretised-weak-form-fem}
 $$
+% TODO - what is the ij subscript, and also why is the An taken out of the face matrix if it isn't constant over the face?
+of $\nen$ ordinary differential equations, for each node $i$, where $\UVect_j$ is a vector of the solution coefficients at the $j$th node, $\MassMatrix$ is the elemental mass matrix, $\IdentityMatrix$ is the identity matrix, $\ConvectionMatrix$ is the convection matrix in the direction $x^{k}$, $\MassMatrixFace$ is the face mass matrix and $\nfn$ denotes the number of face nodes. Note that a choice of Lagrangian, nodal shape functions results in a block diagonal elemental mass matrix. Additionally, an isoparametric mapping results in the restriction of the index $\faceindex$ to face nodes only, since other terms are zero. These matrices are defined by
+\begin{align*}
+\MassMatrix &= \int_{\meshelem} \SF_i \SF_j \delem \\
+\ConvectionMatrix &= \int_{\meshelem} \SF_i \dpart{\SF_j}{\xk}\delem \\
+\MassMatrixFace &= \int_{\meshelemtrace} \SF_i \SF_j \delemtrace
+\end{align*}
+% TODO - why is Ruben as a captial here? And why is M_{ij} captial...none of this make sense...!
+% TODO - why dont I change the integration element here?
+
+Using the isoparametric mapping~\eqref{eq:isoparametric-mapping}, the integrals over $\meshelem$, are transformed to the reference element, $\refelem$, as
+\begin{align*}
+\MassMatrix &= \int_{\refelem} \SF_i \SF_j |\Jacobian| \delem \\
+\ConvectionMatrix &= 
+                               \sum_{l=1}^{\nsd}
+                                \int_{\refelem} \SF_i
+                               \Jacobian_{lk}^{-1}
+                               \dpart{\SF_j}{\xi_{l}}
+                             |\Jacobian|
+                             \delem
+\end{align*}
+where $\Jacobian = \frac{\partial \phi}{ \partial \xi}$, is the Jacobian of the mapping $\IsoMapping$. Similarly, the face mass matrix is evaluated as
+\begin{align*}
+\MassMatrixFace &= \int_{\refelemtrace} \SF_i \SF_j || \JacobianFace || \delemtrace
+\end{align*}
+% TODO - double lines here around HJacobian Face A) insert them properly B) what are they??
+where $\JacobianFace$ is the Jacobian of the restriction of the isoparametric mapping to the element face.
+
+% Wikipedia: 'In geometry, an affine transformation, affine map[1] or an affinity (from the Latin, affinis, "connected with") is a function between affine spaces which preserves points, straight lines and planes.'
+For elements for which the transformation $\IsoMapping$ is affine, both $\Jacobian$ and $\JacobianFace$ are scalar constants over the element, and therefore the elemental matrices simplify to
+\begin{align*}
+\MassMatrix &= |\Jacobian| \MassMatrixAffine \\
+\ConvectionMatrix &= |\Jacobian|
+                               \sum_{l=1}^{\nsd}
+                               \Jacobian_{kl}^{-1}
+                               \ConvectionMatrixAffine \\
+\MassMatrixFace &= || \JacobianFace || \MassMatrixFaceAffine
+,
+\end{align*}
+% TODO - double lines here around Jacobian Face
+with the reference elemental matrices
+\begin{align*}
+\MassMatrixAffine &= \int_{\refelem} \SF_i \SF_j \drefelem \\
+\ConvectionMatrixAffine &= \int_{\refelem} \SF_i
+                             \left(
+                               \dpart{\SF_j}{\xi_{l}}
+                             \right)
+                             \drefelem \\
+\MassMatrixFaceAffine &= \int_{\refelemtrace} \SF_i \SF_j \delemtrace
+,
+\end{align*}
+which depend only on the shape functions and the geometry of $\refelem$. The reference elemental matrices $\MassMatrixAffine$, $\ConvectionMatrixAffine$ and $\MassMatrixFaceAffine$ can be computed \textit{a priori} in the reference element, inverted if necessary and stored. Computation of $\ConvectionMatrix$, $\MassMatrixFace$ and the inverse of $\MassMatrix$ for each element therefore reduces to a multiplication of the reference element matrix by a scalar. Whenever possible meshes are constructed in order to maximise the number of elements for which an affine mapping can be established between $\refelem$ and $\meshelem$. For curved elements, since the $|\Jacobian|$ and $|\JacobianFace|$ are not constant, it is not possible to precompute reference element matrices. In practical applications however, meshes are constructed where with an extremely low number of curved elements. In these cases the elemental matrices $\MassMatrix$, $\ConvectionMatrix$ and $\MassMatrixFace$ are computed and stored once per element.
+The resulting implementation, in which numerical integration is performed \textit{a priori}, is known as the \textit{quadrature-free} implementation\cite{DGPaper:42}, and can reduce the cost of a high-order DG method by a factor of 100\cite{DGPaper:41}.
+% VIVA : no loop on gauss points now!!
+% TODO / VIVA : what about factoring \AnMinu out of the integrand because n is constant over a planar face????
+% TODO - also cite Rubens paper here: The use of hybrid meshes to improve the efficiency of a discontinuous Galerkin
+% TODO - what is this whole thing with triangular/tetrahedral meshes -> always constant jacobian unless curved, Quads -> not always constant jacobian unless curved, should I elabourate?
+
+
+% TODO - 'isoparametric mapping given by the coords of the vertices of Omega
+%%%  In order to perform the integration over the element interior an isoparametric
+%%% mapping, $\IsoMapping$, is introduced from a reference element $\refelem$ to the
+%%% physical element $\elem$. The integrals in~\eqref{}, once transformed to the
+%%% reference element, become
+% TODO - ruben has lk not lk on Jacobian matrix
+% VIVA - make sure I know what this definition of J means
+% TODO - easier way of saying this
+% TODO - comment (remark) on affine elements, and how I can remove the jcaobian etc etc
+
+
+
+
+\section{NURBS-enhanced finite element method (NEFEM)}
+% TODO - polynomial approximation of the boundary stuff here (take it from the paper maybe)
+In the NEFEM approach, the approximation is defined directly in the physical space in Cartesian coordinates, as
+\begin{align}
+\USoltn_e(\xbf,\t) \simeq \USoltnApprox = \sum_{j=1}^{\nen} \SF_{j} (\xbf) \UVect_{j}(\t) ,
+\label{eq:nodal-basis-defn}
+\end{align}
+% TODO - I haven't defined U_h here...!
+% TODO - duplicate definition of xbf? maybe?
+% VIVA: the second U_j is the vector of coefficients
+% TODO / VIVA - do these have to be Lagrangian at this stage? Can they be modal?
+where $N_{j}$ are polynomial, Lagrangian shape functions of order $p$, defined in $\xbf$, and $\nen$ are the number of nodes of the element $\meshelem$. Substitution of \eqref{eq:nodal-basis-defn} into the weak form,~\eqref{eq:weak-form-final}, and again selecting the space of test functions to be the same as the space spanned by the approximation functions, results in the system
+% TODO...
+Note that for an element with a face or edge on the boundary of the computational domain, the boundary of the element $\meshelem$ will be a polynomial approximation of the real boundary\cite{}.
+% TODO - COPY RUBEN for citation
+ Following the Galerkin method, the vector of test functions, $\TF$, is chosen from the same basis as the shape
+functions.
+Substitution of~\eqref{eq:nodal-basis-defn} into~\eqref{eq:weak-form-final}, and selecting the space of test functions to be the same as the space spanned by the approximation functions, results in the system
+% NOTE - the second term actually also has an implicit sum over k in (Einstein notation)
+$$
+\discretisedWeakForm{\nen}
+\label{eq:discretised-weak-form-nefem}
+$$
+of ordinary differential equations for each node $i$ of the element $\genericElement$. Due to the definition of the approximation in physical space, the summation over the index $\faceindex$ in~\eqref{eq:discretised-weak-form-nefem} is no longer restricted to face nodes as it is in~\eqref{eq:discretised-weak-form-fem}. The elemental matrices are defined as
+\begin{align*}
+\MassMatrix &= \int_{\genericElement} \SF_i \SF_j \delem \\
+\ConvectionMatrix &= 
+               \int_{\genericElement}
+               \SF_i
+               \dpart{\SF_j}{\xi_{l}}
+               \delem \\
+\MassMatrixFace &= \int_{\elemtracegenericelement} \SF_i \SF_j \delemtrace
+\end{align*}
+% TODO - what is the ij subscript, and also why is the An taken out of the face matrix if it isn't constant over the face?
+A detailed discussion and comparison of different strategies for computing integrals whilst accounting for the exact boundary representation are presented in\cite{DGPaper:38}. In this work it was concluded that composite Gaussian quadratures are the most efficient option. In addition, for the same mesh and degree of approximation NEFEM only requires one or two more integration points to obtain its maximum accuracy, which is significantly higher than the obtained by standard FEM with curved elements. 
+% TODO - why is Ruben as a captial here? And why is M_{ij} captial...none of this make sense...!
+% TODO - why dont I change the integration element here?
+% RUBEN - says 'the element face f'
+
+%% \begin{align*}
+%% \sum_{j=1}^{\nen} \left[
+%%   % term 1
+%%   \left(
+%%     \int_{\elem} \SF_i \SF_j \delem
+%%   \right)
+%%   \dodet{\UVect_j}
+%% +
+%%   % term 2
+%%   \left(
+%%     \int_{\elem} \SF_i \dpart{\SF_j}{x^k} \delem
+%%   \right)
+%%   \Ak \UVect_j
+%% +
+%%   % term 3
+%%   \left(
+%%   \int_{\elemtrace} \SF_i \SF_j \delemtrace 
+%%   \right)
+%%   \AnMinus \JumpUCoeffVectUnknownsWithIndex{j}
+%%   % term 4
+%% -
+%%   \left(
+%%   \int_{\elem} \SF_i \SF_j \delem
+%%   \right)
+%%   \Asource 
+%%   \right]  = 0
+%% %
+%%   \; \; \forall \; i \; \in \; 1...\nen,
+%% \end{align*}
 % NOTE - again, second has implicit sum
 % NOTE - in Ruben/Oubay paper MI is used instead of M
 % TODO - A_s has not been defined....! Also am I missing a U to multiply A_s?
-for each node $i$, where $\UVect_j$ is a vector of the solution coefficients at
-the $j$th node, with
-\begin{align*}
-\MassMatrixComponent &= \int_{\elem} \SF_i \SF_j \delem \\
-\ConvectionMatrixComponent^{k} &= \int_{\elem} \SF_i \dpart{\SF_j}{\xk}\delem
-\end{align*}
-where $\MassMatrix$ is the elemental mass matrix, $\ConvectionMatrix$ is the
-convection matrix in the direction $x^{k}$, $\MassMatrixFace$ is the face
-mass matrix and $\nfn$ denotes the number of face nodes. Note that a choice of
-Lagrangian, nodal shape functions results in a block diagonal elemental mass
-matrix. Additionally, an isoparametric mapping results in the restriction of the index $\faceindex$ to face nodes only, since
-other terms are zero.
+
 % TODO - this happens because by definition other face nodes are zero on all nodes
 % except the ones not on a face...
-The resulting system of equations can also be written as
-$$
-\dodet{\UVect} + \Residual(\UVect) = 0.
-$$
-where the residual vector is given by
-$$
-\Residual = \FluxDiv + \FluxNumFlux ,
-$$
-with
-\begin{align}
-  \FluxDiv &= \MassMatrix^{-1} \sum_{j}^{\nen} \ConvectionMatrix^{k} \Ak \UVect_j - \Asource \\
-  \FluxNumFlux &= \MassMatrix_{ij}^{-1} \sum_{\faceindex}^{\nfn} \int_{\elemtrace} \SF_i \SF_j \AnMinus \delemtrace \Jump{\UVect_j} .
-\end{align}
+
 % TODO: what is all this crap about M_{ij} and how does it correspond to residual?
 % TODO: how should I write residual vector now?
 
+\section{Time Integration}
 The solution is advanced in time with an explicit fourth order Runge-Kutta (RK4)
 method. The time step is selected to be sufficiently small that the numerical
 error is dominated by the error in spatial discretisation. Implicit schemes which allow larger time steps may be employed to obtain the final solution of the system of equations in a shorter computational time. However, as shown in~\autoref{Ch:SignalAnalysis}, methods to extract frequency domain information from a time domain signal have an upper frequency limit inversely proportional to time step.
@@ -291,85 +376,12 @@ error is dominated by the error in spatial discretisation. Implicit schemes whic
 %% are summarised in Table 1' <----
 
 
+\section{Quadrature}
 
-\subsection{Residual Vector}
-Computation of the residual vector requires integration over the element
-interior, to compute $\FluxDiv$ and over the element trace to compute $\FluxNumFlux$.
-% TODO - more comments here on the fact I'm going to use isoparametric mapping
-% (and maybe refer to NEFEM etc also)
-
-\subsubsection{Isoparametric Mapping}
-% TODO - 'isoparametric mapping given by the coords of the vertices of Omega
-In order to perform the integration over the element interior an isoparametric
-mapping, $\IsoMapping$, is introduced from a reference element $\refelem$ to the
-physical element $\elem$. The integrals in~\eqref{}, once transformed to the
-reference element, become
-\begin{align*}
-\MassMatrixComponent_{ij} &= \int_{\refelem} \SF_i \SF_j |\Jacobian| \drefelem \\
-\ConvectionMatrix^{k}_{ij} &= 
-                               \sum_{l=1}^{\nsd}
-                                \int_{\refelem} \SF_i
-                               \Jacobian_{lk}^{-1}
-                               \dpart{\SF_j}{\xi_{l}}
-                             |\Jacobian|
-                             \drefelem
-\end{align*}
-% TODO - ruben has lk not lk on Jacobian matrix
-% VIVA - make sure I know what this definition of J means
-where $\J = \dpart{\xbf}{\mathbf{\xi}}$ is the Jacobian of the mapping $\IsoMapping$. Similarly to compute the integrals from $\FluxNumFlux$, integration over a physical element face. An isoparametric mapping between the reference face $\refface$ and the physical face $\face$, is introduced. Following transformation to the reference face, the face mass matrix becomes
-
-$$
- \FluxNumFlux = \MassMatrix^{-1}
- \sum_{\faceindex=1}^{\nfn}
- \left( 
- \int_{\refelemtrace}
-\SF_i \SF_j \AnMinus |\JacobianFace| \drefelemtrace
- \right)
-\Jump{\UVect_j}
-$$
-where $\JacobianFace$ is the Jacobian of the restriction of the isoparametric
-mapping to the face $\face$.
-% TODO - easier way of saying this
-
-\subsubsection{Affine Elements}
-% Wikipedia: 'In geometry, an affine transformation, affine map[1] or an affinity (from the Latin, affinis, "connected with") is a function between affine spaces which preserves points, straight lines and planes.'
-For elements with planar faces, $\Jacobian$ and $\JacobianFace$ are constant,
-and therefore the mass and convection matrices become
-\begin{align*}
-\MassMatrix &= |\Jacobian| \MassMatrixAffine \\
-\ConvectionMatrix^{k} &= |\Jacobian|
-                               \sum_{l=1}^{\nsd}
-                               \Jacobian_{kl}^{-1}
-                               \ConvectionMatrixAffine^{k}
-\end{align*}
-with
-\begin{align*}
-\MassMatrixComponentAffine &= \int_{\refelem} \SF_i \SF_j \drefelem \\
-\ConvectionMatrixComponentAffine^{k} &= \int_{\refelem} \SF_i
-                             \left(
-                               \dpart{\SF_j}{\xi_{l}}
-                             \right)
-                             \drefelem .
-\end{align*}
-
-and $\FluxNumFlux$ becomes
-$$
-\FluxNumFlux = \MassMatrix^{-1}
-|\JacobianFace| 
-\AnMinus \Jump{\UVect_j}
- \sum_{\faceindex=1}^{\nfn}
- \MassMatrixFaceAffine
-$$
-with
-$$
- \MassMatrixFaceComponentAffine =
- \int_{\refelemtrace}
-\SF_i \SF_j \drefelemtrace,
-$$
-where $\AnMinus$ has been factored out of the integrand, since $\outnormalvector$, and therefore $\AnMinus$, are constant over a planar face. Note that matrices $\MassMatrixAffine^{-1}$, $\ConvectionMatrixAffine^{k}$ can be computed and stored once only for each reference element, and the matrix $\MassMatrixFaceAffine$ once for each reference face. This results in an implementation of the DG method where all numerical integration is performed \textit{a priori}, this is known as the \textit{quadrature free} implementation\cite{Atkins and Shu 1998}.
-% TODO - also cite Rubens paper here: The use of hybrid meshes to improve the efficiency of a discontinuous Galerkin
-% TODO - what is this whole thing with triangular/tetrahedral meshes -> always constant jacobian unless curved, Quads -> not always constant jacobian unless curved, should I elabourate?
-
+-> quatrature
+  -> optimal interpolation points proposed in \cite{DGPaper:39} and the technique proposed in \cite{DGPaper:20} for constructing high-order polynomial basis functions and their derivatives
+  -> The quadratures employed to integratet the terms of the weak form correspond to the integration rules recently proposed in \cite{DGPaper:40}
+  -> The number of integration points is seected so that exact integreation is achieved for polynomials of order less than or equal to 2p + 1 
 %TODO - Another thing to mention now is about the choices of quadrature (i.e. summations over gauss points)
 %%  R/O Quote:
 %%   For quadrilateral and hexahedral elements, quadrature
@@ -615,7 +627,14 @@ In practice this is often used in conjunction with a coarsening of the mesh arou
 \subsection{PML}
 ....possibly haven't actually used this yet...!
 
-\subsection{Errors and convergence}
+
+\section{Meshing}
+
+high-order curvilinear meshe for isoparametric FEM -> solid mechanics analogy -> \cite{DGPaper:43}
+meshes for NEFEM, technique proposed in -> \cite{DGPaper:44}
+
+\section{Errors and convergence}
+MENTION IN RESULTS
 \begin{itemize}
   \item expected rates of convergence for time-domain (interpolation error) and freq domain (dispersion error)
 \end{itemize}
