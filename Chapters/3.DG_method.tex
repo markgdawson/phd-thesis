@@ -13,8 +13,15 @@ form,~\eqref{eq:maxwell-curl-equations-conservation-form}. Consider that the pro
 % TODO - should I specify that its a PEC boundary (Ruben does)
 which is partitioned in an unstructured mesh of $\nel$ nonoverlapping, body-conforming simplices, $\elemIndexed$, such that
 $$
-\bar{\physicalDomain} = \mathop{\bigcup}_{\elemindex=1}^{\nel} \barelemindexed, \;\; \elemIndexed \cap \anotherelem \textrm{for} \elemindex \neq \anotherelemindex
-$$.
+\bar{\physicalDomain} = \mathop{\bigcup}_{\elemindex=1}^{\nel} \barelemindexed
+$$
+such that $\elemIndexed \cap \anotherelem = \emptyset $ for $\elemindex \neq \anotherelemindex$, as shown in~\ref{fig:meshPartitionFigure}.
+\begin{figure}
+  \centering
+  
+  \caption{Partition of a two dimensional domain $\physicalDomain$ in $\nel$ disjoin triangular element}
+  \label{fig:meshPartitionFigure}.
+\end{figure}
 % TODO - no approx here...!? Understand why this is...
 
 % discuss the discretisation more - duplication of nodes?
@@ -37,7 +44,7 @@ Integration by parts results in
 \label{eq:weak-form-with-physical-flux}
 \end{equation}
 
-where $\outnormalvector$ is outward unit normal vector to the boundary $\genericElementtracegenericelement$ of $\genericElement$, which has directional cosines $\outnormalcoeffk$, and $\mathbf{F_n}$ is the outward normal physical flux, given by $ \mathbf{F_n}(\mathbf{U}) = \outnormalcoeffk \mathbf{F}_k(\mathbf{U}) $.
+where $\outnormalvector$ is outward unit normal vector to the boundary $\elemtracegenericelement$ of $\genericElement$, which has directional cosines $\outnormalcoeffk$, and $\mathbf{F_n}$ is the outward normal physical flux, given by $ \mathbf{F_n}(\mathbf{U}) = \outnormalcoeffk \mathbf{F}_k(\mathbf{U}) $.
 
 Since the weak form stated in~\eqref{eq:weak-form-with-physical-flux} is specified on the element $\genericElement$, this does not constitute a scheme suitable for solving the global problem. As is usual in a DG context, continuity of the solution between elements is weakly enforcing by replacing the physical normal flux, $\NormalFlux(\Ue)$, with a consistent numerical flux, $\NumFlux(\Ue,\Uout)$. This numerical flux depends on both the trace of the solution on the element $\genericElement$ and the trace of the solution on the neighbouring element, $\mathbf{U}^{out}$.
 % TODO: What is the definition of Uout in mathematical language ??
@@ -67,8 +74,8 @@ The choice of an upwind approximation results in
 \end{align}
 After substitution of $\NumFlux$ and integration by parts,~\eqref{eq:weak-form-with-physical-flux} becomes
 \begin{align*}
-\int_{\elem} \TF \cdot \uet \delem  + \int_{\elem} \TF \cdot \dpart{\Flux_{k}(\Ue)}{\xk} \delem + \int_{\elemtrace} \TF \cdot \left[ \NumFlux(\Ue,\Uout) - \NormalFlux(\Ue) \right] \delemtrace \\
-= \int_{\elem} \TF  \cdot \maxwellSource(\Ue) \delem, \label{eq:weak-form-upwind-splitting-fluxes}
+\int_{\genericElement} \TF \cdot \uet \delem  + \int_{\genericElement} \TF \cdot \dpart{\Flux_{k}(\Ue)}{\xk} \delem + \int_{\genericElement} \TF \cdot \left[ \NumFlux(\Ue,\Uout) - \NormalFlux(\Ue) \right] \delemtrace \\
+= \int_{\genericElement} \TF  \cdot \maxwellSource(\Ue) \delem, \label{eq:weak-form-upwind-splitting-fluxes}
 % the second term changes from + to - from prev weak form
 \end{align*}
 We note that % TODO - I've lost some text here...!
@@ -77,7 +84,7 @@ We note that % TODO - I've lost some text here...!
 \end{equation}
 where $\JumpU = \Uout - \USoltn$ denotes the jump in the solution across $\elemtracegenericelement$. By substitution into~\eqref{eq:weak-form-upwind-splitting-fluxes}, the weak form with upwind flux splitting is written as
 \begin{equation}
-\int_{\elem} \TF \cdot \uet \delem  + \int_{\elem} \TF \cdot \dpart{\Flux_{k}(\Ue)}{\xk} \delem + \int_{\elemtrace} \TF \cdot \AnMinusU \delemtrace = \int_{\elem} \TF  \cdot \maxwellSource(\Ue) \delem,
+\int_{\genericElement} \TF \cdot \uet \delem  + \int_{\genericElement} \TF \cdot \dpart{\Flux_{k}(\Ue)}{\xk} \delem + \int_{\elemtracegenericelement} \TF \cdot \AnMinusU \delemtrace = \int_{\genericElement} \TF  \cdot \maxwellSource(\Ue) \delem,
 \label{eq:weak-form-final}
 \end{equation}
 
@@ -267,7 +274,7 @@ The resulting implementation, in which numerical integration is performed \texti
 % TODO - 'isoparametric mapping given by the coords of the vertices of Omega
 %%%  In order to perform the integration over the element interior an isoparametric
 %%% mapping, $\IsoMapping$, is introduced from a reference element $\refelem$ to the
-%%% physical element $\elem$. The integrals in~\eqref{}, once transformed to the
+%%% physical element $\genericElement$. The integrals in~\eqref{}, once transformed to the
 %%% reference element, become
 % TODO - ruben has lk not lk on Jacobian matrix
 % VIVA - make sure I know what this definition of J means
@@ -320,13 +327,13 @@ A detailed discussion and comparison of different strategies for computing integ
 %% \sum_{j=1}^{\nen} \left[
 %%   % term 1
 %%   \left(
-%%     \int_{\elem} \SF_i \SF_j \delem
+%%     \int_{\genericElement} \SF_i \SF_j \delem
 %%   \right)
 %%   \dodet{\UVect_j}
 %% +
 %%   % term 2
 %%   \left(
-%%     \int_{\elem} \SF_i \dpart{\SF_j}{x^k} \delem
+%%     \int_{\genericElement} \SF_i \dpart{\SF_j}{x^k} \delem
 %%   \right)
 %%   \Ak \UVect_j
 %% +
@@ -338,7 +345,7 @@ A detailed discussion and comparison of different strategies for computing integ
 %%   % term 4
 %% -
 %%   \left(
-%%   \int_{\elem} \SF_i \SF_j \delem
+%%   \int_{\genericElement} \SF_i \SF_j \delem
 %%   \right)
 %%   \Asource 
 %%   \right]  = 0
@@ -392,9 +399,6 @@ error is dominated by the error in spatial discretisation. Implicit schemes whic
 %%  proposed in [33, 34], are used. Analogously, efficient specific quadrature
 %%  rules are used for tetrahedra, prisms and pyramids [34, 35].
 
-
-\subsubsection{Curved Elements}
-For isoparametric curved elements, since $\Jacobian$ and $\JacobianFace$ are not constant, the computation of the matrices $\MassMatrix$, $\ConvectionMatrix^{k}$ and $\FluxNumFlux$ require a separate numerical integration for each element. In many applications the number of curved elements is small, for example to capture a curved boundary. In such cases the matrices are computed and stored \textit{a priori}, once for each curved element.
 
 %  * isoparametric only capture *roughly* the geometry....
 %  * curved elements used both for higher accuracy or for curved boundaries...
