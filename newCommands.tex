@@ -37,6 +37,12 @@
 \newcommand{\fk}{\frac{\partial \mathbf{F_k (\mathbf{U})} }{\partial x_k}}
 
 % --------------------------------------------------------------------------------------------- %
+% Words
+% --------------------------------------------------------------------------------------------- %
+
+\newcommand{\SilverMuller}{Silver-M\"uller}
+
+% --------------------------------------------------------------------------------------------- %
 % General
 % --------------------------------------------------------------------------------------------- %
 
@@ -205,13 +211,26 @@
 \newcommand{\MassMatrixFace}{\mathbf{M}^{\textrm{face}}}
 
 % Reference Element
-\newcommand{\refElemMap}{I}
-\newcommand{\refelem}{\Omega^{\elemindex}_{\refElemMap}}
-\newcommand{\refelemtrace}{\partial \refElemMap}
-\newcommand{\drefelemtrace}{d\Gamma_{\refElemMap}}
-\newcommand{\drefelem}{d\Omega_{\refElemMap}}
+\newcommand{\IsoMapping}{I}
+\newcommand{\refelem}{\Omega^{\elemindex}_{\IsoMapping}}
+\newcommand{\refelemtrace}{\partial \IsoMapping}
+\newcommand{\drefelemtrace}{d\Gamma_{\IsoMapping}}
+\newcommand{\drefelem}{d\Omega_{\IsoMapping}}
 \newcommand{\Jacobian}{\mathbf{J}}
 \newcommand{\JacobianFace}{\mathbf{J}^{\textrm{face}}}
+\newcommand{\refface}{\Gamma_{\IsoMapping}}
+\newcommand{\face}{\Gamma_e}
+
+% Affine/Planar faces
+\newcommand{\ConvectionMatrixAffine}{\mathbf{c}}
+\newcommand{\MassMatrixAffine}{\mathbf{m}}
+\newcommand{\MassMatrixFaceAffine}{\mathbf{m}^{\textrm{face}}}
+\newcommand{\ConvectionMatrixComponentAffine}{c_{ij}}
+\newcommand{\ConvectionMatrixComponent}{C_{ij}}
+\newcommand{\MassMatrixComponentAffine}{m_{ij}}
+\newcommand{\MassMatrixFaceComponentAffine}{m^{\textrm{face}}_{ij}}
+\newcommand{\faceindex}{m}
+
 
 % --------------------------------------------------------------------------------------------- %
 % PDEs and ODEs
