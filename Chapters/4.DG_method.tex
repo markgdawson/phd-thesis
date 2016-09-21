@@ -68,9 +68,9 @@ After integration by parts,~\eqref{eq:weak-form-with-numerical-flux} can be writ
 % the second term changes from + to - from prev weak form
 \end{align*}
 We note that % TODO - I've lost some text here...!
-\begin{align}
+\begin{equation}
   \NumFlux(\Ue,\Uout) - \NormalFlux(\Ue) = \AnMinus \Uout - \AnMinus \USoltn = \AnMinusU, \label{eq:AnMinusUderivation}
-\end{align}
+\end{equation}
 where the jump operator has been defined as $\JumpU = \Uout - \USoltn$. By substitution into~\eqref{eq:weak-form-upwind-splitting-fluxes}, the weak form with upwind flux splitting is written as
 \begin{equation}
 \int_{\elem} \TF \cdot \uet \delem  + \int_{\elem} \TF \cdot \dpart{\Flux_{k}(\Ue)}{\xk} \delem + \int_{\elemtrace} \TF \cdot \AnMinusU \delemtrace = \int_{\elem} \TF  \cdot \maxwellSource(\Ue) \delem,
