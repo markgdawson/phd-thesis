@@ -1,0 +1,7 @@
+#!/bin/bash
+mkdir tmp 2>/dev/null
+for j in Chapters/2.*.tex
+do
+   pdflatex -jobname="${j}" "\includeonly{$j}\input{Thesis}" 
+done
+

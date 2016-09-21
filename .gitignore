@@ -1,12 +1,11 @@
 Chapters/.*.tex.swp
-Thesis.aux
-Thesis.bbl
-Thesis.blg
-Thesis.log
-Thesis.out
-Thesis.pdf
-Thesis.pdfsync
-Thesis.toc
+*.aux
+*.blg
+*.log
+*.out
+*.pdf
+*.pdfsync
+*.toc
 _region*
 *.dvi
 *.prv
@@ -17,3 +16,4 @@ _region*
 *.fls
 auto/
 .#prv_*
+tmp
