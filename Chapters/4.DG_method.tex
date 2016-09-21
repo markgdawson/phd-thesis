@@ -145,7 +145,7 @@ Noting that $\RTotNorm \anyVector = \outnormalvector \times \anyVector$ and $\mo
 \end{align}
 % Should I write out A_n for the TEz and TMz modes?
 A similar procedure results in
-\begin{align*}
+\begin{align}
 \AnMinusU =
   \frac{1}{2}
   \left[
@@ -157,13 +157,10 @@ A similar procedure results in
    - \sqrt{ \frac{\mu}{\eps} } \\
    0  \\
    0 
-\end{pmatrix} .
-  \label{eq:AnMinuU-expression-TE}
-\end{align*}
-% TODO - swap this for JUMP ALPHA here....bec
-with $ \alphaGeneral = n_1 E_2 - n_2 E_1. $
-for the $\TEz$ mode and
-\begin{align*}
+\end{pmatrix} . \label{eq:AnMinuU-expression-TE}
+\end{align}
+with $ \alphaGeneral = n_1 E_2 - n_2 E_1. $ for the $\TEz$ mode and
+\begin{align}
 \AnMinusU =
   \frac{1}{2}
   \left[
@@ -174,9 +171,8 @@ for the $\TEz$ mode and
    -\outnormalcoeff_1 \\
    -\sqrt{ \frac{\eps}{\mu} } \\
    0 
-\end{pmatrix} .
-  \label{eq:AnMinuU-expression-TM}
-\end{align*}
+\end{pmatrix} . \label{eq:AnMinuU-expression-TM}
+\end{align}
 for the $\TMz$ mode with $ \alphaGeneral = - n_1 H_2 + n_2 H_1. $
 
 % VIVA: calculated with matlab script:
@@ -388,24 +384,22 @@ where $\AnMinus$ has been factored out of the integrand, since $\outnormalvector
 \subsubsection{Curved Elements}
 For isoparametric curved elements, since $\Jacobian$ and $\JacobianFace$ are not constant, the computation of the matrices $\MassMatrix$, $\ConvectionMatrix^{k}$ and $\FluxNumFlux$ require a separate numerical integration for each element. In many applications the number of curved elements is small, for example to capture a curved boundary. In such cases the matrices are computed and stored \textit{a priori}, once for each curved element.
 
-* isoparametric only capture *roughly* the geometry....
-* curved elements used both for higher accuracy or for curved boundaries...
-   -> can use planar high order elements...dont confuse the two
-p-extension of FEM reference (Ruben has Szabo and Babuska,1991)
-
-planar mesh -> 'poly order of the approximation is increased' -> to get to the desired error
-
-This is great...but in some cases...
-but... geometric accuracy 'deteriorates the solution'...
-isoparametric causes this...i.e the nodes are correct but between them is interpolation...
-LOADS OF REFERENCES HERE (Sevilla stuff)
-
-
-higher geom accuracy
-
+%  * isoparametric only capture *roughly* the geometry....
+%  * curved elements used both for higher accuracy or for curved boundaries...
+%     -> can use planar high order elements...dont confuse the two
+%  * p-extension of FEM reference (Ruben has Szabo and Babuska,1991)
+%  
+%  planar mesh -> 'poly order of the approximation is increased' -> to get to the desired error
+%  
+%  This is great...but in some cases...
+%  but... geometric accuracy 'deteriorates the solution'...
+%  isoparametric causes this...i.e the nodes are correct but between them is interpolation...
+%  LOADS OF REFERENCES HERE (Sevilla stuff)
+% Fekette + matrix condition number
+%  higher geom accuracy
+%  There is a lot of stuff in Rubens thesis about curved elements...what is he on about??
 % VIVA: parallel is also cool for storage...possibly...
 
-There is a lot of stuff in Rubens thesis about curved elements...what is he on about??
 
 % TODO: Fekette nodal distribution: Show some figures of Fekette distributions in reference element?
 %% R/O Quote: In two dimensions, a Fekete nodal distribution is adopted for the triangle
@@ -414,22 +408,9 @@ There is a lot of stuff in Rubens thesis about curved elements...what is he on a
 %% nodal distributions is used for the hexahedron and a tensor product of triangular
 %% and one dimensional Fekete nodal distributions is used for the prism.l Fekete nodal distributions for the quadrilateral.
 
-
-
-What is the definition of an affine shape??
-
-
-
-
-\begin{itemize}
-	\item discuss types of element - (non-)affine, planar, different shapes etc.
-	\item condition number of a matrix - moving nodes around %reference!
-\end{itemize}
-
 \subsection{Jump Conditions}
 % TODO - references -> LeVeque/Donea + Huerta(2005)
 For interfaces which intersect the domain boundary, $\partial \Omega$, the not all components of $\mathbf{U}^{out}$ are determined by the boundary conditions on the interface. For a system of conservation laws Rankine-Hugoniot jump conditions of the form
-
 \begin{align}
 \Jump{ \mathbf{F}_n } = \lambda_j \Jump{ \mathbf{U} } \label{eq:rankine-hugoniot}
 \end{align}
