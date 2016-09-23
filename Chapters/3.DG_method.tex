@@ -2,8 +2,8 @@
 \label{Chapter3}
 \lhead{Chapter 3. \emph{Discontinuous Galerkin}} % Write in your own chapter title to set the page header
 
-The Discontinuous Galerkin method was first introduced to solve the neutron transport problem by Reed and Hill \cite{} in 1973.
-** Some background/literature review here Cockburn, Shui for solving hyperbolic equations etc ***
+The Discontinuous Galerkin method was first introduced to solve the neutron transport problem by Reed and Hill \cite{reed1973triangularmesh} in 1973 to solve the neutron transport problem. [ Motivation/State of the art - here on in the introduction?]
+%** Some background/literature review here Cockburn, Shui for solving hyperbolic equations etc ***
 % PhDJesusAlvarez good for motivation - not so much for the method
 
 As seen in Chapter~\ref{PhysicalProblemChapter}, given a suitable choice of
@@ -13,7 +13,7 @@ form,~\eqref{eq:maxwell-curl-equations-conservation-form}. Consider that the pro
 % TODO - should I specify that its a PEC boundary (Ruben does)
 which is partitioned in an unstructured mesh of $\nel$ nonoverlapping, body-conforming simplices, $\elemIndexed$, such that
 $$
-\bar{\physicalDomain} = \mathop{\bigcup}_{\elemindex=1}^{\nel} \barelemindexed
+\bardomain = \mathop{\bigcup}_{\elemindex=1}^{\nel} \barelemindexed
 $$
 such that $\elemIndexed \cap \anotherelem = \emptyset $ for $\elemindex \neq \anotherelemindex$, as shown in~\ref{fig:meshPartitionFigure}.
 \begin{figure}
@@ -25,30 +25,38 @@ such that $\elemIndexed \cap \anotherelem = \emptyset $ for $\elemindex \neq \an
 % TODO - no approx here...!? Understand why this is...
 
 % discuss the discretisation more - duplication of nodes?
-Following the method of weighted residuals for a single element we seek solutions to the strong form problem,~\eqref{eq:maxwell-curl-equations-conservation-form}, over a generic element, $\genericElement$, in the approximation space $\left( \E,\H,\J \right) \in \approximationSpaceTotal \left( \left[ 0, \periodOfApproximation \right], \approximationSpaceSpatial \right)$
+As is usual in a DG context, solutions to the strong form problem,~\eqref{eq:maxwell-curl-equations-conservation-form}, over a generic
+element $\genericElement$, are sought in the approximation space $\left(
+  \E,\H,\J \right) \in \approximationSpaceTotal \left( \left[ 0,
+    \periodOfApproximation \right], \approximationSpaceSpatial \right)$ where
+$ \approximationSpaceSpatial = \HcurlZero \times \Hcurl \times \LTwoV $
 % TODO - check WHICH J I'm using here
-where $\approximationSpaceSpatial = \spaceOfSpatialApproximationFunction $ with
-% TODO - more space approx stuff here.
-Multiplied by a vector of test functions $\TF \in \approximationSpaceSpatial $ and integrated over the generic element $\elemIndexed$ results in,
-$$
-\int_{\genericElement} \TF \cdot \uet \delem  + \int_{\genericElement} \TF \cdot \dpart{\Flux_{k}}{x_{k}}= \int_{\genericElement} \TF \cdot \maxwellSource \delem,
-$$
-where $\Ue$ denotes the restriction of $\USoltn$ to the element $\genericElement$ and einsteins summation notation has been employed.
-% TODO - is this technically true
-Integration by parts results in
+with
+\begin{align*}
+\Hcurl = \{ \bm{v} \in \LTwoV  \; | \; \nabla \times \bm{v} \in \LTwoV \},  \\
+\HcurlZero = \{ \bm{v} \in \Hcurl  \; | \; \bm{v} \times \mathbf{n}  = \0  \} 
+\end{align*}
+and $\LTwoV = [ \LTwo ]^{\nsd}$. [$\mathbf{n}$ not defined]
+Following the method of weighted residuals for a single element the strong form,~\eqref{eq:maxwell-curl-equations-conservation-form}, the strong form 
+is multiplied by a vector of test functions $\TF \in \approximationSpaceSpatial
+$ and integrated over the generic element $\elemIndexed$, resulting in
 
+\begin{equation*}
+\int_{\genericElement} \TF \cdot \uet \delem  + \int_{\genericElement} \TF \cdot \dpart{\Flux_{k}(\Ue)}{\xk}= \int_{\genericElement} \TF \cdot \maxwellSource(\Ue) \, \delem,
+\end{equation*}
+where $\Ue$ denotes the restriction of $\USoltn$ to the element $\genericElement$. Integration by parts then results in
+% TODO - am I technically using Einstein notation here...!????
 \begin{equation}
 \int_{\genericElement} \TF \cdot \uet \delem  - \int_{\genericElement} \dpart{\TF}{\xk} \cdot
-\Flux_{k}(\Ue) \delem + \int_{\genericElementtrace} \TF \cdot \NormalFlux(\Ue) \delemtrace
+\Flux_{k}(\Ue) \delem + \int_{\elemtracegenericelement} \TF \cdot \NormalFlux(\Ue) \delemtrace
 = \int_{\genericElement} \TF \cdot \maxwellSource(\Ue) \delem,
 \label{eq:weak-form-with-physical-flux}
 \end{equation}
-
-where $\outnormalvector$ is outward unit normal vector to the boundary $\elemtracegenericelement$ of $\genericElement$, which has directional cosines $\outnormalcoeffk$, and $\mathbf{F_n}$ is the outward normal physical flux, given by $ \mathbf{F_n}(\mathbf{U}) = \outnormalcoeffk \mathbf{F}_k(\mathbf{U}) $.
+where $\outnormalvector$ is outward unit normal vector to the boundary $\elemtracegenericelement$ of $\genericElement$, with directional cosines $\outnormalcoeffk$, and $\mathbf{F_n}$ is the outward normal physical flux, given by $ \mathbf{F_n}(\mathbf{U}) = \outnormalcoeffk \mathbf{F}_k(\mathbf{U}) $.
 
 Since the weak form stated in~\eqref{eq:weak-form-with-physical-flux} is specified on the element $\genericElement$, this does not constitute a scheme suitable for solving the global problem. As is usual in a DG context, continuity of the solution between elements is weakly enforcing by replacing the physical normal flux, $\NormalFlux(\Ue)$, with a consistent numerical flux, $\NumFlux(\Ue,\Uout)$. This numerical flux depends on both the trace of the solution on the element $\genericElement$ and the trace of the solution on the neighbouring element, $\mathbf{U}^{out}$.
 % TODO: What is the definition of Uout in mathematical language ??
-For a linear hyperbolic system a natural choice is to employ a flux splitting technique~\cite{donea2003finite}, corresponding to an upwind approximation\cite{chen2005high}.
+For a linear hyperbolic system a natural choice is to employ a flux splitting technique~\cite{DoneaHuerta:05}, corresponding to an upwind approximation\cite{CockburnCEM:05}.
 % TODO: this is a lot like Rubens/Obays paper, rewrite it. QUOTE: A natural choice, for the linear hyperbolic system of interest here, is to employ a flux splitting technique ~\cite{donea2003finite}, which corresponds to an upwind approximation \cite{chen2005high}
 The physical normal flux is written as
 $$
@@ -60,49 +68,49 @@ where $\An = \outnormalcoeffk \Ak$, and decomposed into incoming (superscript -)
 \NormalFlux(\USoltn) = \NormalFluxPositiveEigenvalues(\USoltn) + \NormalFluxNegativeEigenvalues(\USoltn),
 \label{eq:phys-flux-splitting}
 \end{align}
-where $ \NormalFluxPositiveEigenvalues = \AnPlus \USoltn$, $\NormalFluxNegativeEigenvalues = \AnMinus \USoltn, $ and the matrices $\AnMinus$ and $\AnPlus$ denote respectively the matrices of the positive and negative eigenvalues of $\An$. These can be written conveniently as
-\begin{align}
-  \label{eq:AnMinus-AnPlus-Definition}
+where $ \NormalFluxPositiveEigenvalues = \AnPlus \USoltn$, $\NormalFluxNegativeEigenvalues = \AnMinus \USoltn, $ and the matrices $\AnMinus$ and $\AnPlus$ denote respectively the matrices of the positive and negative eigenvalues of $\An$, which are obtained, after diagonalisation of $\An = \AnDiagP \AnDiag \AnDiagPInv$, as
+\begin{align*}
 \AnPlus &= \left( \An + \AnMod \right) / 2   \\
 \AnMinus &= \left( \An - \AnMod \right) / 2
-\end{align}
-where %TODO: definition of AnMod and change AnMod to another symbol...Add the definition of An...
-The choice of an upwind approximation results in
+\end{align*}
+where $\AnMod$ is the absolute value of $\An$, given by $\AnMod \equiv \AnDiagP \AnDiagStar \AnDiagPInv$ and $\AnDiagStar$ is a diagonal matrix which contains the absolute value of the eigenvalues of $\An$.
+
+The choice of an upwind flux splitting approach results in
 \begin{align}
-\NumFlux(\USoltn) = \NormalFluxPositiveEigenvalues(\USoltn) + \NormalFluxNegativeEigenvalues(\Uout).
+\NumFlux(\USoltn,\Uout) = \NormalFluxPositiveEigenvalues(\USoltn) + \NormalFluxNegativeEigenvalues(\Uout),
 \label{eq:num-flux-splitting}
 \end{align}
-After substitution of $\NumFlux$ and integration by parts,~\eqref{eq:weak-form-with-physical-flux} becomes
+Substitution of~\eqref{eq:num-flux-splitting} into~\eqref{eq:weak-form-with-physical-flux} and integration by parts leads to
 \begin{align*}
 \int_{\genericElement} \TF \cdot \uet \delem  + \int_{\genericElement} \TF \cdot \dpart{\Flux_{k}(\Ue)}{\xk} \delem + \int_{\genericElement} \TF \cdot \left[ \NumFlux(\Ue,\Uout) - \NormalFlux(\Ue) \right] \delemtrace \\
-= \int_{\genericElement} \TF  \cdot \maxwellSource(\Ue) \delem, \label{eq:weak-form-upwind-splitting-fluxes}
+= \int_{\genericElement} \TF  \cdot \maxwellSource(\Ue) \delem \label{eq:weak-form-upwind-splitting-fluxes}
+.
 % the second term changes from + to - from prev weak form
 \end{align*}
-We note that % TODO - I've lost some text here...!
+The term in square brackets can be expressed as
 \begin{equation}
   \NumFlux(\Ue,\Uout) - \NormalFlux(\Ue) = \AnMinus \Uout - \AnMinus \USoltn = \AnMinusU, \label{eq:AnMinusUderivation}
 \end{equation}
-where $\JumpU = \Uout - \USoltn$ denotes the jump in the solution across $\elemtracegenericelement$. By substitution into~\eqref{eq:weak-form-upwind-splitting-fluxes}, the weak form with upwind flux splitting is written as
+where the jump operator, defined as $\JumpU = \Uout - \USoltn$, denotes the jump in the solution across $\elemtracegenericelement$. By substitution of~\label{eq:AnMinusUderivation}, the weak form of~\eqref{eq:maxwell-curl-equations-conservation-form} is thus stated as:
+find $\left( \E,\H,\J \right) \in \approximationSpaceTotal \left( \left[ 0, \periodOfApproximation \right], \approximationSpaceSpatial \right)$, such that
 \begin{equation}
 \int_{\genericElement} \TF \cdot \uet \delem  + \int_{\genericElement} \TF \cdot \dpart{\Flux_{k}(\Ue)}{\xk} \delem + \int_{\elemtracegenericelement} \TF \cdot \AnMinusU \delemtrace = \int_{\genericElement} \TF  \cdot \maxwellSource(\Ue) \delem,
 \label{eq:weak-form-final}
 \end{equation}
-
-% TODO: missing some stuff on diagonalisation of A here....is it necessary, also the form of the
-% positive and negative eigenvalues.
-% TODO: Missing the form of the numerical flux for DG!!
-% *** conditions to be satisfied by numerical flux + form of numerical flux ***
+for all $\TF \in \approximationSpaceSpatial$.
 % TODO: upwind flux: effect for wave domination problems - flow of information, upwind flux
 
 \section{Internal Element Boundaries}
-We consider the boundary conditions at an internal boundary between elements. From~\ref{sec:conservation-form}, this expression may be written as
+We consider the boundary conditions at an internal boundary between elements.
+From~\ref{sec:conservation-form}, this expression the normal Jacobian matrix can
+be written as
 $$
   \An =
   \begin{pmatrix}
- & \zerom , & \mu^{-1} \RTotNorm, & \zerom \\
+ & \zerom  & \mu^{-1} \RTotNorm & \zerom \\
  & - \eps^{-1} \RTotNorm & \zerom & \zerom \\
  & \zerom & \zerom & \zerom 
- & \end{pmatrix} ,
+ & \end{pmatrix} 
 $$
 where
 $$
@@ -153,7 +161,54 @@ Noting that $\RTotNorm \anyVector = \outnormalvector \times \anyVector$ and $\mo
   \label{eq:AnMinuU-expression-3D}
 \end{align}
 % Should I write out A_n for the TEz and TMz modes?
-A similar procedure results in
+Similarly, in two dimensions, the normal Jacobian matrix is written as
+$$
+  \An =
+  \begin{pmatrix}
+ & 0  & 0  & - \outnormalcoeff_2 \mu^{-1} & 0 & 0 \\
+ & 0  & 0  & \outnormalcoeff_1 \mu^{-1} & 0 & 0 \\
+ & - \outnormalcoeff_2 \eps^{-1}  & \outnormalcoeff_1 \eps^{-1}  & 0 & 0 & 0 \\
+ & 0  & 0  & 0  & 0  & 0 \\
+ & 0  & 0  & 0 & 0 & 0
+ \end{pmatrix} 
+$$
+for the $\TEz$ mode and
+$$
+  \An =
+  \begin{pmatrix}
+ & 0  & 0  & \outnormalcoeff_2 \eps^{-1} & 0 \\
+ & 0  & 0  & - \outnormalcoeff_1 \eps^{-1} & 0 \\
+ & \outnormalcoeff_2 \mu^{-1}  & - \outnormalcoeff_1 \mu^{-1}  & 0 & 0 \\
+ & 0  & 0  & 0  & 0
+ \end{pmatrix} 
+$$
+for the $\TMz$ mode, which following single value decomposition, results in
+$$
+  \AnMod =
+  \speedoflight
+  \begin{pmatrix}
+ & \outnormalcoeff_2^2  &  - \outnormalcoeff_1 \outnormalcoeff_2 & 0 & 0 & 0 \\
+ & - \outnormalcoeff_1 \outnormalcoeff_2 & \outnormalcoeff_1^2 & 0 & 0 & 0 \\
+ & 0  & 0  & 1  & 0  & 0 \\
+ & 0  & 0  & 0 & 0 & 0 \\
+ & 0  & 0  & 0 & 0 & 0
+ \end{pmatrix} 
+$$
+for the $\TEz$ mode and
+$$
+  \AnMod =
+  \speedoflight
+  \begin{pmatrix}
+ & \outnormalcoeff_2^2  &  - \outnormalcoeff_1 \outnormalcoeff_2 & 0 & 0  \\
+ & - \outnormalcoeff_1 \outnormalcoeff_2 & \outnormalcoeff_1^2 & 0 & 0  \\
+ & 0  & 0  & 1  & 0   \\
+ & 0  & 0  & 0 & 0  
+  \end{pmatrix} 
+$$
+for the $\TMz$ mode. [ I need to check these]
+% TODO - Taken from Mar - I need to compute and check these!]
+The the boundary term in~\eqref{eq:weak-form-final} in two dimensions is thus
+given as
 \begin{align}
 \AnMinusU =
   \frac{1}{2}
@@ -166,7 +221,8 @@ A similar procedure results in
    - \sqrt{ \frac{\mu}{\eps} } \\
    0  \\
    0 
-\end{pmatrix} . \label{eq:AnMinuU-expression-TE}
+\end{pmatrix} .
+  \label{eq:AnMinuU-expression-TE}
 \end{align}
 with $ \alphaGeneral = n_1 E_2 - n_2 E_1. $ for the $\TEz$ mode and
 \begin{align}
@@ -182,53 +238,56 @@ with $ \alphaGeneral = n_1 E_2 - n_2 E_1. $ for the $\TEz$ mode and
    0 
 \end{pmatrix} . \label{eq:AnMinuU-expression-TM}
 \end{align}
-for the $\TMz$ mode with $ \alphaGeneral = - n_1 H_2 + n_2 H_1. $
-
+with $ \alphaGeneral = - n_1 H_2 + n_2 H_1 $ for the $\TMz$ mode.
 % VIVA: calculated with matlab script:
 % modAn = sqrtm(An*An') and knowing that
 % make sure I can do sqrtm by hand
 \section{Spatial Discretisation}
-This section describes two approaches to spatial discretisation of the weak formulation~\ref{eq:weak-form-final}, namely the traditional isoparametric finite element formulation and the recently proposed NURBS-enhanced finite element method (NEFEM).
+This section details two approaches to spatial discretisation of the weak formulation~\ref{eq:weak-form-final}, namely the traditional isoparametric finite element formulation and the recently proposed NURBS-enhanced finite element method (NEFEM).
 
 \section{Isoparametric Finite Element Method}
 \label{sec:isoparametric-elements}
-A nodal interpolation of the solution, $\USoltn$, is defined in a reference element $\refelem$, with local coordinates $\refElemCoords$, as
-% TODO: do this directly in the 
-\begin{align}
-\USoltn_e(\xbf,\t) \simeq \sum_{j=1}^{\nen} \SF_{j} (\xbf) \UVect_{j}(\t) ,
+A nodal interpolation of the solution $\USoltn$ is defined in a reference element $\refelem$, with local coordinates $\refElemCoords$, as
+\begin{equation}
+\USoltn(\xiV) \simeq \Uh(\xiV) = \sumNen
+  \UVect_{j}(\t)
+  \SF_{j} (\xiV)
+  ,
 \label{eq:nodal-basis-defn}
-\end{align}
-% TODO - copy this directly from Ruben Paper!! COPYRUBEN
+\end{equation}
 % VIVA: the second U_j is the vector of coefficients
-where $N_{j}$ are polynomial, Lagrangian shape functions of order $p$ in $\refElemCoords$ and $\nen$ are the number of nodes of the element $\meshelem$. An isoparametric transformation, $\IsoMapping$, is introduced between the reference element, $\refelem$ and a generic mesh element $\meshelem$, namely
-% TODO - COPYRUBEN -> iso mapping - add comma to the end
-where $\nodalCoordinatesOfElement$ are the nodal coordinates of the element $\meshelem$. Note that for an element with a face or edge on the boundary of the computational domain, the boundary of the element $\meshelem$ will be a polynomial approximation of the real boundary\cite{}.
-% TODO - COPY RUBEN for citation
- Following the Galerkin method, the vector of test functions, $\TF$, is chosen from the same basis as the shape
-functions.
-Substitution of~\eqref{eq:nodal-basis-defn} into~\eqref{eq:weak-form-final}, and selecting the space of test functions to be the same as the space spanned by the approximation functions, results in the system
-% NOTE - the second term actually also has an implicit sum over k in (Einstein notation)
-$$
+where $N_{j}$ are polynomial, Lagrangian shape functions of order $p$ in $\refElemCoords$, $\UVect_j(t) = \USoltn(\nodalCoordinatesOfElement,\t)$ are the time-dependent values of the solution at the nodal point $\nodalCoordinatesOfElement$, and $\nen$ are the number of nodes of the element $\meshelem$.
+
+An isoparametric transformation, $\IsoMapping$, is introduced between the reference element, $\refelem$ and a generic mesh element $\meshelem$, namely
+\begin{equation} \label{eq:isoparametricMapping}
+\IsoMapping(\xiV) = \sumNen \xCoord_j N_j(\xiV)
+\end{equation}
+where $\nodalCoordinatesOfElement$ are the nodal coordinates of the element $\meshelem$. Note that for an element with a face or edge on the boundary of the computational domain, the boundary of the element $\meshelem$ will be a polynomial approximation of the real boundary\cite{ComparisonCurvedFEs}.
+
+ Following the Galerkin method, the vector of test functions, $\TF$, is chosen from the same basis as the shape functions. Substitution of~\eqref{eq:nodal-basis-defn} into~\eqref{eq:weak-form-final}, and selecting the space of test functions to be the same as the space spanned by the approximation functions, results in the system
+ \begin{equation}
 \discretisedWeakForm{\nfn}
 \label{eq:discretised-weak-form-fem}
-$$
-% TODO - what is the ij subscript, and also why is the An taken out of the face matrix if it isn't constant over the face?
+\end{equation}
+% TODO - what is the ij subscript, and also why is the An taken out of the face matrix if it isn't constant over the face? Also why is M_{ij} capital below (this is just one matrix entry, right?)
+% NOTE - the second term actually also has an implicit sum over k in (Einstein notation)
 of $\nen$ ordinary differential equations, for each node $i$, where $\UVect_j$ is a vector of the solution coefficients at the $j$th node, $\MassMatrix$ is the elemental mass matrix, $\IdentityMatrix$ is the identity matrix, $\ConvectionMatrix$ is the convection matrix in the direction $x^{k}$, $\MassMatrixFace$ is the face mass matrix and $\nfn$ denotes the number of face nodes. Note that a choice of Lagrangian, nodal shape functions results in a block diagonal elemental mass matrix. Additionally, an isoparametric mapping results in the restriction of the index $\faceindex$ to face nodes only, since other terms are zero. These matrices are defined by
-\begin{align*}
-\MassMatrix &= \int_{\meshelem} \SF_i \SF_j \delem \\
-\ConvectionMatrix &= \int_{\meshelem} \SF_i \dpart{\SF_j}{\xk}\delem \\
-\MassMatrixFace &= \int_{\meshelemtrace} \SF_i \SF_j \delemtrace
-\end{align*}
+\begin{equation}
+\MassMatrix = \int_{\meshelem} \SF_i \SF_j \delem, \quad
+\ConvectionMatrix = \int_{\meshelem} \SF_i \dpart{\SF_j}{\xk}\delem \quad \text{and} \quad
+\MassMatrixFace = \int_{\meshelemtrace} \SF_i \SF_j \delemtrace .
+\end{equation}
 % TODO - why is Ruben as a captial here? And why is M_{ij} captial...none of this make sense...!
 % TODO - why dont I change the integration element here?
-
-Using the isoparametric mapping~\eqref{eq:isoparametric-mapping}, the integrals over $\meshelem$, are transformed to the reference element, $\refelem$, as
+Using the isoparametric mapping~\eqref{eq:isoparametric-mapping}, the integrals over $\meshelem$, are evaluated on the reference element, $\refelem$, as
 \begin{align*}
-\MassMatrix &= \int_{\refelem} \SF_i \SF_j |\Jacobian| \delem \\
-\ConvectionMatrix &= 
+\MassMatrix = \int_{\refelem} \SF_i \SF_j |\Jacobian| \delem \quad \text{and} \quad
+\ConvectionMatrix = 
                                \sum_{l=1}^{\nsd}
                                 \int_{\refelem} \SF_i
-                               \Jacobian_{lk}^{-1}
+                               \left( 
+                                   \Jacobian^{-1}
+                               \right)_{kl}
                                \dpart{\SF_j}{\xi_{l}}
                              |\Jacobian|
                              \delem
@@ -246,7 +305,9 @@ For elements for which the transformation $\IsoMapping$ is affine, both $\Jacobi
 \MassMatrix &= |\Jacobian| \MassMatrixAffine \\
 \ConvectionMatrix &= |\Jacobian|
                                \sum_{l=1}^{\nsd}
-                               \Jacobian_{kl}^{-1}
+                               \left( 
+                               \Jacobian^{-1}\
+                                \right)_{kl}
                                \ConvectionMatrixAffine \\
 \MassMatrixFace &= || \JacobianFace || \MassMatrixFaceAffine
 ,
@@ -264,7 +325,7 @@ with the reference elemental matrices
 ,
 \end{align*}
 which depend only on the shape functions and the geometry of $\refelem$. The reference elemental matrices $\MassMatrixAffine$, $\ConvectionMatrixAffine$ and $\MassMatrixFaceAffine$ can be computed \textit{a priori} in the reference element, inverted if necessary and stored. Computation of $\ConvectionMatrix$, $\MassMatrixFace$ and the inverse of $\MassMatrix$ for each element therefore reduces to a multiplication of the reference element matrix by a scalar. Whenever possible meshes are constructed in order to maximise the number of elements for which an affine mapping can be established between $\refelem$ and $\meshelem$. For curved elements, since the $|\Jacobian|$ and $|\JacobianFace|$ are not constant, it is not possible to precompute reference element matrices. In practical applications however, meshes are constructed where with an extremely low number of curved elements. In these cases the elemental matrices $\MassMatrix$, $\ConvectionMatrix$ and $\MassMatrixFace$ are computed and stored once per element.
-The resulting implementation, in which numerical integration is performed \textit{a priori}, is known as the \textit{quadrature-free} implementation\cite{DGPaper:42}, and can reduce the cost of a high-order DG method by a factor of 100\cite{DGPaper:41}.
+The resulting implementation, in which numerical integration is performed \textit{a priori}, is known as the \textit{quadrature-free} implementation\cite{AJ-Atkins-98}, and can reduce the cost of a high-order DG method by a factor of 100\cite{HybridMeshesCEM}.
 % VIVA : no loop on gauss points now!!
 % TODO / VIVA : what about factoring \AnMinu out of the integrand because n is constant over a planar face????
 % TODO - also cite Rubens paper here: The use of hybrid meshes to improve the efficiency of a discontinuous Galerkin
@@ -303,10 +364,10 @@ Note that for an element with a face or edge on the boundary of the computationa
 functions.
 Substitution of~\eqref{eq:nodal-basis-defn} into~\eqref{eq:weak-form-final}, and selecting the space of test functions to be the same as the space spanned by the approximation functions, results in the system
 % NOTE - the second term actually also has an implicit sum over k in (Einstein notation)
-$$
+\begin{equation}
 \discretisedWeakForm{\nen}
 \label{eq:discretised-weak-form-nefem}
-$$
+\end{equation}
 of ordinary differential equations for each node $i$ of the element $\genericElement$. Due to the definition of the approximation in physical space, the summation over the index $\faceindex$ in~\eqref{eq:discretised-weak-form-nefem} is no longer restricted to face nodes as it is in~\eqref{eq:discretised-weak-form-fem}. The elemental matrices are defined as
 \begin{align*}
 \MassMatrix &= \int_{\genericElement} \SF_i \SF_j \delem \\
@@ -318,7 +379,7 @@ of ordinary differential equations for each node $i$ of the element $\genericEle
 \MassMatrixFace &= \int_{\elemtracegenericelement} \SF_i \SF_j \delemtrace
 \end{align*}
 % TODO - what is the ij subscript, and also why is the An taken out of the face matrix if it isn't constant over the face?
-A detailed discussion and comparison of different strategies for computing integrals whilst accounting for the exact boundary representation are presented in\cite{DGPaper:38}. In this work it was concluded that composite Gaussian quadratures are the most efficient option. In addition, for the same mesh and degree of approximation NEFEM only requires one or two more integration points to obtain its maximum accuracy, which is significantly higher than the obtained by standard FEM with curved elements. 
+A detailed discussion and comparison of different strategies for computing integrals whilst accounting for the exact boundary representation are presented in\cite{NEFEM-Integration}. In this work it was concluded that composite Gaussian quadratures are the most efficient option. In addition, for the same mesh and degree of approximation NEFEM only requires one or two more integration points to obtain its maximum accuracy, which is significantly higher than the obtained by standard FEM with curved elements. 
 % TODO - why is Ruben as a captial here? And why is M_{ij} captial...none of this make sense...!
 % TODO - why dont I change the integration element here?
 % RUBEN - says 'the element face f'
@@ -363,10 +424,46 @@ A detailed discussion and comparison of different strategies for computing integ
 % TODO: how should I write residual vector now?
 
 \section{Time Integration}
-The solution is advanced in time with an explicit fourth order Runge-Kutta (RK4)
-method. The time step is selected to be sufficiently small that the numerical
-error is dominated by the error in spatial discretisation. Implicit schemes which allow larger time steps may be employed to obtain the final solution of the system of equations in a shorter computational time. However, as shown in~\autoref{Ch:SignalAnalysis}, methods to extract frequency domain information from a time domain signal have an upper frequency limit inversely proportional to time step.
-% TODO: RK4 Stability condition 
+The semi-discrete system, ..., can be written in the form
+$$
+\MassMatrix \dodet{\UVect} + \Residual = 0 ,
+$$
+where the residual vector, $\Residual$, contains contributions arising from the divergence, boundary and source terms from either \eqref{eq:discretised-weak-form-fem} or \eqref{eq:discretised-weak-form-nefem}. Multiplying by the inverse of the mass matrix results in
+$$
+\dodet{\UVect} = \ResidualInv(\UVect,\t) ,
+$$
+where $\ResidualInv = \MassMatrixInv \Residual(\UVect,\t)$.
+This system of ordinary differential equations is integrated in time using an explicit fourth order Runge-Kutta method, as given by
+$$
+\UVect^{n+1} = \UVect^{n} + \frac{\Delta t}{6}
+\left( 
+  \ResidualInvContrib{1}
++  \ResidualInvContrib{2}
++  \ResidualInvContrib{3}
++  \ResidualInvContrib{4}
+\right)
+$$
+where
+\begin{align}
+\ResidualInvContrib{1} &= \ResidualInv(\UVect^n,\t^n) \\
+\ResidualInvContrib{2} &= \ResidualInv
+  \left( 
+    \UVect^n + \ResidualInvContrib{1} \frac{\Delta \t}{2},\t^{n} + \frac{\Delta \t}{2}
+ \right) \\
+\ResidualInvContrib{3} &= \ResidualInv
+  \left( 
+    \UVect^n + \ResidualInvContrib{2} \frac{\Delta \t}{2},\t^{n} + \frac{\Delta \t}{2}
+ \right) \\
+\ResidualInvContrib{4} &= \ResidualInv(\UVect^n + \ResidualInvContrib{3} \Delta \t,\t^{n} + \Delta \t) \\
+\label{eq:3}
+\end{align}
+The method is known to be conditionally stable, with a stability condition given by
+$$
+\Delta t \le  \frac{ \CFLCondition \minElemSize }{ \speedoflightCFL p^2}
+$$
+where $\minElemSize$ is the minimum element size, $p$ is the degree of polynomial approximation and $\CFLCondition$ is a constant for a given $p$.
+% different constant from speed of light?
+In practice the time step had been taken to be sufficiently small that the numerical error is dominated by error due to spatial discretisation. Implicit time integration schemes, which are unconditionally stable, steps may be employed, however this is undesirable since larger timesteps limit the highest frequencies which are resolvable in the signal processing applications, as shown in~\autoref{Ch:SignalAnalysis}.
 % TODO - justify high order time integration....!
 
 % TODO: R/O Quote: 'Triangles and quadrilaterals are employed to provide a consistent
@@ -383,12 +480,8 @@ error is dominated by the error in spatial discretisation. Implicit schemes whic
 %% are summarised in Table 1' <----
 
 
-\section{Quadrature}
-
--> quatrature
-  -> optimal interpolation points proposed in \cite{DGPaper:39} and the technique proposed in \cite{DGPaper:20} for constructing high-order polynomial basis functions and their derivatives
-  -> The quadratures employed to integratet the terms of the weak form correspond to the integration rules recently proposed in \cite{DGPaper:40}
-  -> The number of integration points is seected so that exact integreation is achieved for polynomials of order less than or equal to 2p + 1 
+\subsection{Quadrature and numerical integration}
+For numerical integration of the mass matrix, the optimal interpolation points proposed in \cite{Babuska-CB:95} are utilised, together with the technique proposed in \cite{JOCP-Hesthaven-02} for constructing high-order polynomial basis functions and their derivatives. The quadratures employed to integrate the terms of the weak form correspond to the integration rules recently proposed in \cite{Witherden20151232}. The number of integration points is selected so that exact integreation is achieved for polynomials of order less than or equal to $2p + 1$.
 %TODO - Another thing to mention now is about the choices of quadrature (i.e. summations over gauss points)
 %%  R/O Quote:
 %%   For quadrilateral and hexahedral elements, quadrature
@@ -426,12 +519,11 @@ error is dominated by the error in spatial discretisation. Implicit schemes whic
 
 \subsection{Jump Conditions}
 % TODO - references -> LeVeque/Donea + Huerta(2005)
-For interfaces which intersect the domain boundary, $\partial \Omega$, the not all components of $\mathbf{U}^{out}$ are determined by the boundary conditions on the interface. For a system of conservation laws Rankine-Hugoniot jump conditions of the form
+For interfaces which intersect $\partial \Omega$ and material interfaces not all components of $\mathbf{U}^{out}$ are completely determined. For a system of conservation laws the solution at the interface can be determined by applying  Rankine-Hugoniot jump conditions along characteristics in the phase plane, given by
 \begin{align}
 \Jump{ \mathbf{F}_n } = \lambda_j \Jump{ \mathbf{U} } \label{eq:rankine-hugoniot}
 \end{align}
 where $\lambda_j$ are the eigenvalues of the jacobian matrix $\mathbf{A}_n$.
-This condition should be satisfied along the characteristics in the phase plane.
 For the 3 dimensions these are $ \lambda_{ 1,2 } = - \speedoflightleft $, $
 \lambda_{ 3,4 } = \speedoflightright $ and $\lambda_{5..9} = 0 $, where the
 $\speedoflightleft$ and $\speedoflightright$ are the velocities of the
@@ -457,14 +549,14 @@ For the three dimensional case the normal flux can be written as
 \end{align*}
 Applying the condition~\eqref{eq:rankine-hugoniot} and solving the resulting linear system results in
 \begin{align}
-  \mu^{out} \H^{out} - \mu_L \H^{L} = - \frac{1}{\speedoflightleft} \outnormalvector \times \left( \E^{out} - \E^{L} \right)
+  \LStarMat{\mu} \LStarMat{H} - \muL \LMat{\H} = - \frac{1}{\LMat{\speedoflight}} \outnormalvector \times \left( \LStarMat{\E} - \LMat{\E} \right)
   \label{eq:jump-condition-resulting-equation-system-3D-1} \\
-  \mu^{R} \H^{R} - \mu_{out} \H^{out} = \frac{1}{\speedoflightleft} \outnormalvector \times \left( \E^{R} - \E^{*} \right)
+  \muR \RMat{\H} - \LStarMat{\mu} \LStarMat{\H} = \frac{1}{\LMat{\speedoflight}} \outnormalvector \times \left( \RMat{\E} - \LStarMat{\E} \right)
   \label{eq:jump-condition-resulting-equation-system-3D-2} \\
 \end{align}
 % TODO - I got this from Mar thesis, have not verified it
 \subsection{Rankine-Hugoniot Jump Conditions in 2D}
-For the $\TEz$ and $\TMz$ modes, by setting..., the normal physical flux can be
+For the $\TEz$ and $\TMz$ modes, the non-zero components of the normal physical flux can be
 written in the form
 $$
 \NormalFlux = 
@@ -486,131 +578,167 @@ $ for the $\TEz$ mode, and $
     H_1 \; H_2 \; E_3
   \end{pmatrix}^T
   $ for the $\TMz$ mode.
-For dispersive media this will be expanded with zeros...
 % TODO - CHECK OUT THE A_n vectors and check that these F_n come nicely from there...
 % TODO - should I have a numbered lambda here? and would that be different for
 % TE and TM modes
-By applying the Rankine-Hugoniot condition along $\dpart{x}{t} = 0$, with $ \Jump{ \mathbf{F}_n } = 0 $, the normal flux in region $\LStar$
-and $\RStar$ are equal, we denote the flux in these region as
-$$
-\mathbf{F}_n^{out} = 
-\begin{pmatrix}
-  - n_2 \UFieldComp_3^{out} \\
-  n_1 \UFieldComp_3^{out} \\
-  \alphaGeneral^{out}
-\end{pmatrix} .
-$$
-
+By applying the Rankine-Hugoniot condition along $\dpart{x}{t} = 0$, with $ \Jump{ \mathbf{F}_n } = 0 $, the normal flux in regions $\LStarSymbol$ and $\RStarSymbol$ are equal, and
+\begin{equation*}
+  \LStarMat{\UFieldComp_3} = \RStarMat{\UFieldComp_3} \quad \text{and} \quad \LStarMat{\alphaGeneral} = \RStarMat{\alphaGeneral},
+\end{equation*}
+therefore only $\LStarMat{\Box}$ is used to represent both regions.
 Along $\dpart{x}{t} = \speedoflightright$, the Rankine-Hugoniot condition takes the form
 $$
 \Jump{ \mathbf{F}_n } = \speedoflightright \Jump{ \mathbf{U} }
 $$
 which results in
 \begin{align}
--n_2 \left(V_3^{R} - V_3^{out} \right) &= \micoeff_R \left( V_1^{R} - V_1^{out} \right) \label{RHR-sys-1} \\
-n_1 \left(V_3^{R} - V_3^{out} \right) &= \micoeff_R  \left( V_2^{R} - V_2^{out} \right) \label{RHR-sys-2} \\
-\micoeff_R \left(\alphaGeneral^{R} - \alphaGeneral^{out} \right) &= \left( V_3^{R} - V_3^{out} \right) \label{RHR-sys-3}
+-n_2 \left(\RMat{V_3} - \LStarMat{V_3} \right) &= \micoeffR \left( \RMat{V_1} - \LStarMat{V_1} \right) \label{RHR-sys-1} \\
+n_1 \left(\RMat{V_3} - \LStarMat{V_3} \right) &= \micoeffR  \left( \RMat{V_2} - \LStarMat{V_2} \right) \label{RHR-sys-2} \\
+\micoeffR \left(\RMat{\alphaGeneral} - \LStarMat{\alphaGeneral} \right) &= \left( \RMat{V_3} - \LStarMat{V_3} \right) \label{RHR-sys-3}
 \end{align}
 where $\micoeff = \sqrt{\eps/\mu}$ for $\TEz$ mode and $\micoeff =
 \sqrt{\mu/\eps}$ for $\TMz$ mode. It can be easily verified that
 \eqref{RHR-sys-1} and~\eqref{RHR-sys-2} imply~\eqref{RHR-sys-3}.
 
-Along the $\dpart{x}{t} = - \speedoflightleft$, the Rankine-Hugoniot condition
-takes the form
+Along the $\dpart{x}{t} = - \speedoflightleft$, the Rankine-Hugoniot condition takes the form
 $$
 \Jump{ \mathbf{F}_n } = - \speedoflightleft \Jump{ \mathbf{U} }
 $$
 which results in
 \begin{align}
--n_2 \left(V_3^{L} - V_3^{out} \right) &= - \micoeff_L \left( V_1^{L} - V_1^{out} \right) \label{RHL-sys-1} \\
-n_1 \left(V_3^{L} - V_3^{out} \right) &= - \micoeff_L  \left( V_2^{L} - V_2^{out} \right) \label{RHL-sys-2} \\
-- \micoeff_L \left( \alphaGeneral^{L} - \alphaGeneral^{out} \right) &= \left( V_3^{L} - V_3^{out} \right) \label{RHL-sys-3}
+-n_2 \left(\LMat{V_3} - \LStarMat{V_3} \right) &= - \micoeffL \left( \LMat{V_1} - \LStarMat{V_1} \right) \label{RHL-sys-1} \\
+n_1 \left(\LMat{V_3} - \LStarMat{V_3} \right) &= - \micoeffL  \left( \LMat{V_2} - \LStarMat{V_2} \right) \label{RHL-sys-2} \\
+- \micoeffL \left( \LMat{\alphaGeneral} - \LStarMat{\alphaGeneral} \right) &= \left( \LMat{V_3} - \LStarMat{V_3} \right) \label{RHL-sys-3}
 \end{align}
 As above, \eqref{RHL-sys-1} and \eqref{RHL-sys-2} imply \eqref{RHL-sys-3}.
-For the $\TEz$ and $\TMz$ modes solving the Ranking-Hugoniot condition is equivalent to solving the system
-\begin{align}
-\micoeff_R \left(\alphaGeneral^{R} - \alphaGeneral^{out} \right) &= \left( V_3^{R} - V_3^{out} \right) \\
-- \micoeff_L \left( \alphaGeneral^{L} - \alphaGeneral^{out} \right) &= \left( V_3^{L} - V_3^{out} \right)
-\end{align}
-Solving the linear system results given by \eqref{RHL-sys-3} and
-\eqref{RHR-sys-3} results in
+Therefore, for the $\TEz$ and $\TMz$ modes, the Rankine-Hugoniot constraints are
+imposed by solving the linear system given by \eqref{RHL-sys-3} and
+\eqref{RHR-sys-3}, resulting in
 % divide by c* coeff then 1-2 again
 % 1 - 2 and rearrange
 \begin{equation}
-\alphaGeneral^{out} = \frac{\UFieldComp_3^R - \UFieldComp_3^L - \micoeff_R \alphaGeneral^R - \micoeff_L \alphaGeneral^L}{\micoeff_L + \micoeff_R}\label{eq:interfce-bc-alphaGeneral}
+\LStarMat{\alphaGeneral} = \frac{\RMat{\UFieldComp_3} - \RMat{\UFieldComp_3} - \micoeffR \RMat{\alphaGeneral} - \micoeffL \LMat{\alphaGeneral}}{\micoeffL + \micoeffR}\label{eq:interfce-bc-alphaGeneral}
 \end{equation}
 and
 \begin{equation}
-  \UFieldComp_3^{out} =
+  \LStarMat{\UFieldComp_3} =
   \frac{
-    \micoeffinv_R \UFieldComp_3^R + \micoeffinv_L \UFieldComp_3^L - \left(\alphaGeneral^R - \alphaGeneral^L \right)
+    \micoeffinvR \RMat{\UFieldComp_3} + \micoeffinvL \LMat{\UFieldComp_3} - \RMat{\alphaGeneral} + \LMat{\alphaGeneral}
   }{
-    \micoeffinv_L + \micoeffinv_R
+    \micoeffinvL + \micoeffinvR
     } , \label{eq:interface-bc-V3}
 \end{equation}
-where $\micoeffinv = 1 / \micoeff$.
+where $\micoeffinv \equiv \micoeff^{-1}$.
 
 \subsection{Material Interfaces}
-The expressions for the jump of the solution at a material interface are given by $\Jump{\E} = \E^{out} - \E^{L}$ and $\Jump{\H} = \H^{out} - \H^{L}$ for the left element and $\Jump{\E} = \E^{out} - \E^{R}$ and $\Jump{\H} = \H^{out} - \H^{R}$ for the right element.
+The expressions for the jump of the solution at a material interface are given by $\Jump{\E} = \LStarMat{\E} - \LMat{\E}$ and $\Jump{\H} = \LStarMat{\H} - \LMat{\H}$ for the left element and $\Jump{\E} = \LStarMat{\E} - \RMat{\E}$ and $\Jump{\H} = \LStarMat{\H} - \RMat{\H}$ for the right element.
 % TODO - do I need a jump J? as well
 Solving the linear system given by~\eqref{eq:jump-condition-resulting-equation-system-3D-2} and~\eqref{eq:jump-condition-resulting-equation-system-3D-2} results in
 \begin{align}
- \outnormalvector \times \E^{out} = \outnormalvector \times \frac{
+ \outnormalvector \times \LStarMat{\E} = \outnormalvector \times \frac{
   \left( 
-\speedoflightleft \eps_L \E^{L} - \outnormalvector \times \H^{L}
+\speedoflightleft \epsL \LMat{\E} - \outnormalvector \times \LMat{\H}
  \right)
   +
   \left( 
-\speedoflightright \eps_R \E^{R} + \outnormalvector \times \H^{R}
+\speedoflightright \epsR \RMat{\E} + \outnormalvector \times \RMat{\H}
  \right)
 }{
-  \speedoflightright \eps_R + \speedoflightleft \eps_L
+  \speedoflightright \epsR + \speedoflightleft \epsL
 } \label{eq:material-interfaces-1} \\
- \outnormalvector \times \H^{out} = \outnormalvector \times \frac{
+ \outnormalvector \times \LStarMat{\H} = \outnormalvector \times \frac{
   \left( 
-\speedoflightleft \eps_L \H^{L} + \outnormalvector \times \E^{L}
+\speedoflightleft \epsL \LMat{\H} + \outnormalvector \times \LMat{\E}
  \right)
   +
   \left( 
-\speedoflightright \eps_R \H^{R} - \outnormalvector \times \E^{R}
+\speedoflightright \epsR \RMat{\H} - \outnormalvector \times \RMat{\E}
  \right)
 }{
-  \speedoflightright \eps_R + \speedoflightleft \eps_L
+  \speedoflightright \epsR + \speedoflightleft \epsL
 } \label{eq:material-interfaces-1}
 \end{align}
-The resulting expression for $\outnormalvector \times \Jump{E}$ and $\outnormalvector \times \Jump{H}$ are substituted into~\eqref{eq:AnMinuU-expression-3D} in order obtain an expression for numerical flux on the interface.
+The resulting expression for $\outnormalvector \times \LStarMat{\E}$ and $\outnormalvector \times \LStarMat{\H}$ are substituted into~\eqref{eq:AnMinuU-expression-3D} in order obtain an expression for numerical flux on the interface.
+
 For the $\TEz$ mode solving the system of equations given by \eqref{eq:interfce-bc-alphaGeneral} and~\eqref{eq:interface-bc-V3} results in the conditions
 % divide by c* coeff then 1-2 again
 \begin{equation}
-H_3^{out} = \frac{\speedoflightright \mu_R H_3^R + \speedoflightleft \mu_L H_3^L - \left(\alphaGeneral^R - \alphaGeneral^L \right)}{\speedoflightright \mu_R + \speedoflightleft \mu_L } \label{eq:interface-bc-H3-TE}
+\LStarMat{H_3} = \frac{\speedoflightright \muR \RMat{H_3} + \speedoflightleft \muL \LMat{H_3} - \left(\RMat{\alphaGeneral} - \LMat{\alphaGeneral} \right)}{\speedoflightright \muR + \speedoflightleft \muL } \label{eq:interface-bc-H3-TE}
 \end{equation}
 and
 \begin{equation}
-\alphaGeneral^{out} = \frac{\speedoflightright \eps_R \alphaGeneral^R + \speedoflightleft \eps_L \alphaGeneral^L - \left( H_3^R - H_3^L \right) }{\speedoflightright \eps_R + \speedoflightleft \eps_L} \label{eq:interface-bc-alpha-TE}
+\LStarMat{\alphaGeneral} = \frac{\speedoflightright \epsR \RMat{\alphaGeneral} + \speedoflightleft \epsL \LMat{\alphaGeneral} - \left( \RMat{H_3} - \LMat{H_3} \right) }{\speedoflightright \epsR + \speedoflightleft \epsL} \label{eq:interface-bc-alpha-TE}
 \end{equation}
-with
+where
 $$ \alphaGeneral = n_1 E_2 - n_2 E_1. $$
 An expression for the numerical flux is obtained by substitution of the expressions for $\Jump{H_3}$ and $\Jump{\alphaGeneral}$ resulting from~\eqref{eq:interface-bc-H3-TE} and ~\eqref{eq:interface-bc-alpha-TE} into~\eqref{eq:AnMinuU-expression-TE}
 Similarly for the $\TMz$ this results in 
 % divide by c* coeff then 1-2 again
 \begin{equation}
-E_3^{out} = \frac{\speedoflightright \eps_R E_3^R + \speedoflightleft \eps_L E_3^L - \left(\alphaGeneral^R - \alphaGeneral^L \right)}{\speedoflightright \eps_R + \speedoflightleft \eps_L }
+\LStarMat{E_3} = \frac{\speedoflightright \epsR \RMat{E_3} + \speedoflightleft \epsL \LMat{E_3} - \left(\RMat{\alphaGeneral} - \LMat{\alphaGeneral} \right)}{\speedoflightright \epsR + \speedoflightleft \epsL }
 \end{equation}
 and
 \begin{equation}
-\alphaGeneral^{out} = \frac{\speedoflightright \mu_R \alphaGeneral^R + \speedoflightleft \mu_L \alphaGeneral^L - \left( E_3^R - E_3^L \right) }{\speedoflightright \mu_R + \speedoflightleft \mu_L}
+\LStarMat{\alphaGeneral} = \frac{\speedoflightright \muR \RMat{\alphaGeneral} + \speedoflightleft \muL \LMat{\alphaGeneral} - \left( \RMat{E_3} - \LMat{E_3} \right) }{\speedoflightright \muR + \speedoflightleft \muL}
 \end{equation}
-with
+where
 $$ \alphaGeneral = - n_1 H_2 + n_2 H_1. $$
 
-Again expressions for $\Jump{E_3}$ and $\Jump{\alphaGeneral}$ resulting from~\eqref{eq:interface-bc-H3-TE} and ~\eqref{eq:interface-bc-alpha-TE} are substituted into~\eqref{eq:AnMinuU-expression-TM} to obtain the numerical flux.
+Again expressions for $\Jump{E_3}$ and $\Jump{\alphaGeneral}$ resulting from~\eqref{eq:interface-bc-H3-TE} and ~\eqref{eq:interface-bc-alpha-TE} are substituted into~\eqref{eq:AnMinuU-expression-TM} to compute the numerical flux term.
 % TODO - do I need a jump J? as well
+\subsection{PEC}
+Along a PEC boundary only the tangential components of the electric field is known, the tangential component of the magnetic field is determined from the Rankine-Hugoniot jump condition. For a PEC boundary the jump in the fields at the interface corresponds to $\JumpU = \SurfMat{\USoltn} - \USoltn$ , where $\SurfMat{\USoltn}$ is the value of the solution on the surface, which corresponds to the $\LStarSymbol$ material. In three dimensions, the tangential component of electric field is known and from~\eqref{eq:material-interfaces-tangentalcondition-H-PEC} and the tangential component of the magnetic field can be from~\eqref{eq:jump-condition-resulting-equation-system-3D-1} 
+\begin{align}
+  \outnormalvector \times \SurfMat{\H} = \outnormalvector \times \H - \sqrt{\frac{\eps}{\mu}} \outnormalvector \times \left( \outnormalvector \times \SurfMat{\E} - \outnormalvector \times \E \right)
+\end{align}
 
+For the $\TEz$ mode, the condition~\eqref{eq:material-interfaces-tangentalcondition-E-PEC} implies in $ \SurfMat{\alphaGeneral} = 0 $, which from~\eqref{RHL-sys-3}, by identifying $\LMat{\USoltn}$ with $\USoltn$, and $\LStarMat{\USoltn}$ with $\SurfMat{\USoltn}$, the expression
+\begin{equation*}
+\SurfMat{H_3} 
+  =  H_3
+- \sqrt{\frac{\eps}{\mu}} \Jump{ \alphaGeneral},
+\end{equation*}
+is obtained. By substitution into~\eqref{eq:AnMinuU-expression-TE} results in the expression,
+$$
+\AnMinusU =
+\alphaGeneral
+\sqrt{\frac{\eps}{\mu}}
+\begin{pmatrix}
+ - n_2 \\
+n_1 \\
+- \sqrt{\frac{\mu}{\eps} }
+\end{pmatrix}
+.
+$$
+% TODO - not verified
 
+Similarly for the $TMz$ mode ~\eqref{eq:material-interfaces-tangentalcondition-E-PEC} implies in $ E_3 = 0$, which from~\eqref{RHL-sys-3}, by identifying $\LMat{\USoltn}$ with $\USoltn$, and $\LStarMat{\USoltn}$ with $\SurfMat{\USoltn}$, an expression for $\SurfMat{\alphaGeneral}$ is obtained as
+\begin{equation*}
+\SurfMat{\alphaGeneral} 
+  =  \alphaGeneral
++ \sqrt{\frac{\eps}{\mu}} \Jump{ E_3}
+.
+\end{equation*}
+By substitution of $\SurfMat{\alphaGeneral}$ into~\eqref{eq:AnMinuU-expression-TE}, the expression
+$$
+\AnMinusU =
+E_3
+\begin{pmatrix}
+n_2 \\
+- n_1 \\
+\sqrt{\frac{\mu}{\eps} }
+\end{pmatrix}
+$$
+% TODO - not verified
+is obtained, which is then used in computation of the numerical flux.
 
+% TODO - reference equations
 \subsection{Absorbing boundary condition}
-Many problems are posed on infinite domains, however this presents computational difficulties. In practice computation is done on a truncated domain with boundary conditions set in such a way as to approximate the infinite domain. This is done by introducing an artificial outer boundary condition which absorbs incident radiation known as an absorbing boundary condition (ABC)\cite[].
-% TODO - what about PML
+Many problems are posed on infinite domains, however this presents computational
+difficulties. In practice computation is done on a truncated domain with
+boundary conditions set in such a way as to approximate the infinite domain.
+This is done by introducing an artificial outer boundary condition which absorbs
+incident radiation known as an absorbing boundary condition (ABC)\cite{GivoliBook}.
 This is achieved by a modified numerical flux which contains outgoing flux only,
 \begin{align}
 \NumFlux(\Ue,\Uout) = \NormalFluxPositiveEigenvalues(\USoltn) = \AnPlus \USoltn
@@ -629,13 +757,12 @@ which corresponds to a first order approximation of the \SilverMuller condition.
 In practice this is often used in conjunction with a coarsening of the mesh around the truncated boundary to further dissipate outgoing waves\cite{Hall2004140}.
 
 \subsection{PML}
-....possibly haven't actually used this yet...!
+....possibly haven't actually used this yet...!?
 
 
 \section{Meshing}
-
-high-order curvilinear meshe for isoparametric FEM -> solid mechanics analogy -> \cite{DGPaper:43}
-meshes for NEFEM, technique proposed in -> \cite{DGPaper:44}
+high-order curvilinear meshe for isoparametric FEM (Roman) \cite{HO-Meshing}
+meshes for NEFEM, technique proposed in (Luke) \cite{NEFEMmeshes}
 
 \section{Errors and convergence}
 MENTION IN RESULTS

@@ -544,7 +544,7 @@ for the $TM_z$ mode. These modes are written in quasilinear form, as~\eqref{eq:q
     0 & \plasfreq^2 & 0 & 0 & -\gamma \\
   \end{pmatrix}
 \end{align*}
-for the $TM_z$ mode and 
+for the $TE_z$ mode and 
 \begin{align*}
   \A_1 = 
   \begin{pmatrix}
@@ -571,7 +571,7 @@ for the $TM_z$ mode and
   \end{pmatrix}
 \end{align*}
 
-for the $TE_z$ mode where in both cases $\Jnormalised{k} = 1 + \frac{J_{k}}{\JpolScalar_{k}}$.
+for the $TM_z$ mode where in both cases $\Jnormalised{k} = 1 + \frac{J_{k}}{\JpolScalar_{k}}$.
 In particular, radiation which is quantised by confinement to a waveguide can be described by the $TE_z$ or $TM_z$ modes.
 \section{Material Interfaces}
 % TODO - reread this section and check the maths
@@ -658,18 +658,24 @@ electric fields. Let us consider that the material on the right hand side of the
 interface described above is a PEC. In this case, since $E_R$ is zero inside the
 material, then~\eqref{eq:material-interfaces-tangentalcondition-E} simply
 becomes
-$$
-\int_{L_1}^{L_2} \E_L \cdot d\mathbf{l} = 0 ,
-$$
+\begin{equation*}
+\int_{L_1}^{L_2} \LMat{E} \cdot d\mathbf{l} = 0 ,
+\end{equation*}
+% TODO: L1 and L2 not defined
 and the resulting condition is
-$$
-\E_L \times \hat{\mathbf{n}} = 0 .
-$$
+\begin{equation}
+\LMat{E} \times \hat{\mathbf{n}} = 0 .
+\label{eq:material-interfaces-tangentalcondition-E-PEC}
+\end{equation}
 A similar procedure for the magnetic field results in
-$$
-\H_L \times \hat{\mathbf{n}} = \J_s ,
-$$
+\begin{equation}
+\outnormalvector \cdot \LMat{H} = \J_s ,
+\label{eq:material-interfaces-tangentalcondition-H-PEC}
+\end{equation}
 where $\J_s$ is the surface current.
+
+In the $TEz$ mode, only is automatically satisfied and the
+boundary conditions
 % TODO - what about the other two conditions i.e. divergence conditions - should
 % I specify those too?
 % VIVA: what does this mean? According to Ruben/Oubay paper: the tangiental

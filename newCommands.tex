@@ -36,6 +36,11 @@
 \newcommand{\ut}{\frac{\partial \mathbf{U}}{\partial t}}
 \newcommand{\fk}{\frac{\partial \mathbf{F_k (\mathbf{U})} }{\partial x_k}}
 
+% Temporal discretisation
+\newcommand{\CFLCondition}{C}
+\newcommand{\speedoflightCFL}{c}
+\newcommand{\minElemSize}{h}
+
 % --------------------------------------------------------------------------------------------- %
 % Words
 % --------------------------------------------------------------------------------------------- %
@@ -54,12 +59,20 @@
 \newcommand{\zerom}{\mathbf{0}_{3\times3}}
 \newcommand{\IdentityVect}{\mathbf{I}_3}
 \newcommand{\IdentityMatrix}{\mathbf{I}}
-\newcommand{\nsd}{n_\textrm{sd}}
-\newcommand{\nen}{n_\textrm{en}}
-\newcommand{\nel}{n_\textrm{el}}
-\newcommand{\nfn}{n_\textrm{fn}}
-\newcommand{\xk}{x_{k}}
+\newcommand{\0}{\bm{0}}
 
+
+% Indicies
+\newcommand{\nen}  {\ensuremath{\texttt{n}_{\texttt{en}}}}
+\newcommand{\nef}  {\ensuremath{\texttt{n}_{\texttt{ef}}}}
+\newcommand{\nfn}  {\ensuremath{\texttt{n}_{\texttt{fn}}}}
+\newcommand{\nsd}  {\ensuremath{\texttt{n}_{\texttt{sd}}}}
+\newcommand{\nip}  {\ensuremath{\texttt{n}_{\texttt{eq}}}}
+\newcommand{\nipF}  {\ensuremath{\texttt{n}_{\texttt{fq}}}}
+\newcommand{\ndof} {\ensuremath{\texttt{n}_{\texttt{dof}}}}
+\newcommand{\nel}  {\ensuremath{\texttt{n}_{\texttt{el}}}}
+\newcommand{\nT}  {\ensuremath{\texttt{n}_{\texttt{T}}}}
+\newcommand{\nnode}  {\ensuremath{\texttt{n}_{\texttt{node}}}}
 
 % --------------------------------------------------------------------------------------------- %
 % General Physics
@@ -137,10 +150,10 @@
 % DG Method
 % --------------------------------------------------------------------------------------------- %
 
+% weak form
 \newcommand{\TFComp}{W} % test function
 \newcommand{\TF}{\mathbf{\TFComp}}
 \newcommand{\RTotNorm}{\RTot_{\mathbf{n}}}
-
 \newcommand{\Ue}{\mathbf{U}_e}
 \newcommand{\Uout}{\mathbf{U}_e^{\textrm{out}}}
 \newcommand{\physicalDomain}{\Omega}
@@ -149,12 +162,12 @@
 \newcommand{\elemIndexed}{\physicalDomain_\elemindex}
 \newcommand{\anotherelemindex}{j}
 \newcommand{\anotherelem}{\physicalDomain_\anotherelemindex}
-\newcommand{\approximationSpaceSpatial}{V}
-\newcommand{\approximationSpaceTotal}{C}
-\newcommand{\spaceOfSpatialApproximationFunction}{\textrm{----------TODO-------------}}
+\newcommand{\approximationSpaceSpatial}{\bm{\mathcal{V}}}
+\newcommand{\approximationSpaceTotal}{\mathcal{C}}
 \newcommand{\genericElement}{\physicalDomain_e}
 \newcommand{\periodOfApproximation}{T}
-\newcommand{\barelemindexed}{\bar{\physicalDomain}_\elemindex}
+\newcommand{\barelemindexed}{\overline{\physicalDomain}_\elemindex}
+\newcommand{\bardomain}{\overline{\physicalDomain}}
 \newcommand{\delem}{d\Omega}
 \newcommand{\uet}{\frac{\partial \Ue}{\partial t}}
 \newcommand{\elemtracegenericelement}{\Gamma_e}
@@ -168,6 +181,13 @@
 \newcommand{\NormalFluxPositiveEigenvalues}{\NormalFlux^+}
 \newcommand{\NormalFluxNegativeEigenvalues}{\NormalFlux^-}
 \newcommand{\anyVector}{\mathbf{v}}
+\newcommand{\xk}{x_k}
+
+% Spaces
+\newcommand{\LTwo}{\mathcal{L}^2(\Omega)}
+\newcommand{\LTwoV}{\bm{\mathcal{L}}^2(\Omega)}
+\newcommand{\Hcurl}{\bm{\mathcal{H}}(\textbf{curl},\Omega)}
+\newcommand{\HcurlZero}{\bm{\mathcal{H}}_0(\textbf{curl},\Omega)}
 
 % Quasilinear A
 \newcommand{\an}{a_n}
@@ -176,7 +196,6 @@
 \newcommand{\AnMinus}{\An^{-}}
 \newcommand{\AnMinusU}{\AnMinus \JumpU}
 \newcommand{\AnMinusUSymbol}{\Flux^{\textrm{diff}}}
-\newcommand{\AnMod}{\left| \An \right|}
 \newcommand{\modAnSubMatrix}{\mathbf{T}}
 \newcommand{\nvect}{\mathbf{n}}
 
@@ -187,8 +206,20 @@
 \newcommand{\JumpE}{\Jump{\E}}
 \newcommand{\JumpH}{\Jump{\H}}
 
-\newcommand{\speedoflightleft}{\speedoflight_{L}}
-\newcommand{\speedoflightright}{\speedoflight_{R}}
+\newcommand{\LMat}[1]{#1^l}
+\newcommand{\RMat}[1]{#1^r}
+\newcommand{\LStarSymbol}{*}
+\newcommand{\RStarSymbol}{**}
+\newcommand{\LStarMat}[1]{#1^\LStarSymbol}
+\newcommand{\RStarMat}[1]{#1^{\RStarSymbol}}
+\newcommand{\SurfMat}[1]{#1^s}
+
+\newcommand{\epsL}{\LMat{\eps}}
+\newcommand{\epsR}{\RMat{\eps}}
+\newcommand{\muL}{\LMat{\mu}}
+\newcommand{\muR}{\RMat{\mu}}
+\newcommand{\speedoflightleft}{\LMat{\speedoflight}}
+\newcommand{\speedoflightright}{\RMat{\speedoflight}}
 
 % --------------------------------------------------------------------------------------------- %
 % DG Method Boundary Conditions
@@ -197,14 +228,23 @@
 \newcommand{\UFieldComp}{V}
 \newcommand{\UField}{\mathbf{\UFieldComp}}
 \newcommand{\alphaGeneral}{\alpha}
-\newcommand{\LStar}{L^*}
-\newcommand{\RStar}{R^*}
-\newcommand{\micoeff}{c^{*}} % material interface coeff
-\newcommand{\micoeffinv}{c^{**}} % material interface coeff
+\newcommand{\micoeff}{m} % material interface coeff
+\newcommand{\micoeffL}{\LMat{\micoeff}} % material interface coeff
+\newcommand{\micoeffR}{\RMat{\micoeff}} % material interface coeff
+\newcommand{\micoeffinv}{n} % material interface coeff
+\newcommand{\micoeffinvL}{\LMat{n}}
+\newcommand{\micoeffinvR}{\LMat{n}}
 
 % --------------------------------------------------------------------------------------------- %
 % DG Method Discretisation
 % --------------------------------------------------------------------------------------------- %
+
+% Choice of Numerical Flux
+\newcommand{\AnMod}{\An^{\parallel}}
+\newcommand{\AnDiagP}{\mathbf{P}}
+\newcommand{\AnDiag}{\mathbf{\Lambda}}
+\newcommand{\AnDiagStar}{\mathbf{\Lambda}^{*}}
+\newcommand{\AnDiagPInv}{\mathbf{P}^{-1}}
 
 % Elemental Matrices
 \newcommand{\MassMatrix}{\bm{M}_{ij}}
@@ -245,27 +285,42 @@
 \newcommand{\JumpUVectUnkowns}{\llbracket \UVect \rrbracket}
 \newcommand{\JumpUCoeffVectUnknownsWithIndex}[1]{\llbracket \UVect_{#1} \rrbracket}
 \newcommand{\UVect}{\bm{U}}
-\newcommand{\Residual}{\bm{R}}
 \newcommand{\FluxDiv}{\Flux^{\elem}}
 
 % Spatial Discretisation
 \newcommand{\USoltnApprox}{\mathbf{U}_h}
 
 % Reference Element
-\newcommand{\IsoMapping}{I}
-\newcommand{\refelem}{\Omega_{\IsoMapping}}
+\newcommand{\IsoMapping}{\bm{\phi}}
+\newcommand{\refelem}{\widehat{\physicalDomain}}
 \newcommand{\meshelem}{\genericElement^{h}}
 \newcommand{\meshelemtrace}{\Gamma^{h}_e}
 \newcommand{\refElemCoords}{\mathbf{\xi}}
 \newcommand{\refelemtrace}{\partial \IsoMapping}
 \newcommand{\drefelemtrace}{d\Gamma_{\IsoMapping}}
 \newcommand{\drefelem}{d\Omega_{\IsoMapping}}
-\newcommand{\Jacobian}{\mathbf{J}}
-\newcommand{\JacobianFace}{\mathbf{J}^{\textrm{face}}}
-\newcommand{\refface}{\Gamma_{\IsoMapping}}
+\newcommand{\Jacobian}{\mathbf{J}_{\IsoMapping}}
+\newcommand{\JacobianFace}{\mathbf{J}^{\textrm{face}}_{\IsoMapping}}
+\newcommand{\refFace}{\widehat{\Gamma}}
 \newcommand{\face}{\Gamma_e}
-\newcommand{\nodalCoordinatesOfElement}{\xbf_j}
 
+% Summations
+\newcommand{\sumNen}{\sum_{j=1}^{\nen}}
+\newcommand{\sumNfn}{\sum_{j=1}^{\nfn}}
+\newcommand{\sumNsdK}{\sum_{k=1}^{\nsd}}
+\newcommand{\sumNsdL}{\sum_{l=1}^{\nsd}}
+
+% referential coordinates
+\newcommand{\xiV}{\bm{\xi}}
+\newcommand{\xCoord}{\bm{x}}
+\newcommand{\nodalCoordinatesOfElement}{\xCoord_j}
+\newcommand{\Uh}{\USoltn_{h}}
+
+% Time integration
+\newcommand{\Residual}{\bm{R}}
+\newcommand{\ResidualInv}{\hat{\bm{R}}}
+\newcommand{\MassMatrixInv}{\MassMatrix^{-1}}
+\newcommand{\ResidualInvContrib}[1]{\ResidualInv^{(#1)}}
 
 % --------------------------------------------------------------------------------------------- %
 % PDEs and ODEs

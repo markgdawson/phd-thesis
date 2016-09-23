@@ -1,6 +1,6 @@
 clear all;
-mode = 'TM'
-syms mu eps
+mode = 'TE'
+syms mu eps real
 syms E1 E2 E3 H1 H2 H3
 
 ATM=cell(2,1);
@@ -57,7 +57,7 @@ Vn_TM = [
     ];
 
 %% normal compoenent
-syms n1 n2
+syms n1 n2 real
 if(strcmp(mode,'TM'))
     An = n1.*ATM{1} + n2.*ATM{2};
     U = UTM;
