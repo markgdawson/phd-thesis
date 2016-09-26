@@ -424,7 +424,7 @@ A detailed discussion and comparison of different strategies for computing integ
 % TODO: how should I write residual vector now?
 
 \section{Time Integration}
-The semi-discrete system, ..., can be written in the form
+The semi-discrete systems,~\eqref{eq:discretised-weak-form-fem} and~\eqref{eq:discretised-weak-form-nefem}, can be written in the form
 $$
 \MassMatrix \dodet{\UVect} + \Residual = 0 ,
 $$
@@ -443,7 +443,7 @@ $$
 +  \ResidualInvContrib{4}
 \right)
 $$
-where
+with
 \begin{align}
 \ResidualInvContrib{1} &= \ResidualInv(\UVect^n,\t^n) \\
 \ResidualInvContrib{2} &= \ResidualInv
