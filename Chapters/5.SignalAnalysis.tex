@@ -2,10 +2,11 @@
 \label{Ch:SignalAnalysis}
 \lhead{Chapter 6. \emph{Signal Analysis}} % Write in your own chapter title to set the page header
 
+* Q: how can we turn the signal which depends on time -> function that depends
+on frequency (spectrum)
 Resonance is an important phenomena in a number of engineering applications, characterised by quantities such as resonant frequencies, quality factors and mode shapes. The advantage of time domain simulations is that a broadband frequency response can be obtained in a single run. However the the frequency content isn't readily available and needs to be extracted from the obtained time domain evolution of the system. In this chapter we will discuss the fourier decomposition of the time domain solution using parametric and non-parametric methods and the errors associated with this transformation.
 
 \section{Fourier Decomposition}
-
 Fourier transform is a techniques which permits decomposition of any time-domain signal into its frequency domain representation. Based on the Fourier series in which a periodic time domain signal $s(t)$, with a period $T$ such that $s(x)=s(x+nT)$ for $n=1,2,3 ...$ can be written on the interval $(-l,l)$ as
 
 $$
@@ -29,10 +30,10 @@ $$
 If $s(x)$ is only defined on $(-l,l)$ this is equivalent to extending $s(x)$ periodically with a period $2l$. Using eulers equations this can be rewritten as
 
 $$
-s(x) = \sum_{n=-\infty}{\infty} c_n e^{\frac{i n \pi x}{l}}
+s(x) = \sum_{n=-\infty}^{\infty} c_n e^{\frac{i n \pi x}{l}}
 $$
 
-In order to deal with functions on the interval $(\infty,\infty)$ the interval is extended such that the functions is considered periodic with an infinite period. If $s(x)$ is absolutely integrable over the interval $(-\infty,\infty)$ a change of variable $\omega = n \pi / l$ and allowing $l \lim \infty$ results in the summation becoming an integral and $s(x)$ in the interval $(0,\infty)$ can be expressed as
+In order to deal with functions on the interval $[\infty,\infty]$ the interval is extended such that the functions is considered periodic with an infinite period. If $s(x)$ is absolutely integrable over the interval $(-\infty,\infty)$ a change of variable $\omega = n \pi / l$ and allowing $l \to \infty$ results in the summation becoming an integral and $s(x)$ in the interval $(0,\infty)$ can be expressed as
 
 $$
 s(x) = \int_{0}^{\infty} \left( A(\omega) cos(\omega x) + B(\omega) sin(\omega x) \right) d\omega
@@ -83,11 +84,137 @@ $$
 
 The Fourier transform in this form is known as the discrete Fourier transform (DFT).
 
+\section{Spectral Leakage}
+The continuous fourier transform requires that integration is preformed between $-\infty$ and $\infty$, or over an integer multiple of the periodicity of the signal, $T$. For most sampled signal with multiple frequency components it is not possible in general to measure signals which would be repeated periodically in $T$. That is signals where $s(T) = s(0)$. Such signals extended to infinity would exhibit discontinuities. These discontinuities give rise to a phenomena known as spectral leakage[], in order to capture these discontinuities, which introduces noise into the system. This is clearly not desirable, and can be reduced by using a window function, such as the Blackman window. The signal is multiplied by and envelope which ensures the discontinuity is eliminated.
+* Show some examples of spectral leakage and how it can be handled...
+
+\section{Spectrum}
 A correctly scaled fourier transform of a time domain signal is known as the power spectrum of the signal.
 
-The continuous fourier transform requires that integration is preformed between $\-infty$ and $\infty$, or over an integer multiple of the periodicity of the signal, $T$. For most sampled signal with multiple frequency components it is not possible in general to measure signals which would be repeated periodically in $T$. That is signals where $s(T) = s(0)$. Such signals extended to infinity would exhibit discontinuities. These discontinuities give rise to a phenomena known as spectral leakage[], in order to capture these discontinuities, which intoduces noise into the system. This is clearly not desirable, and can be reduced by using a window function, such as the Blackman window. The signal is multiplied by and envelope which ensures the discontinuity is eliminated.
+real part -> absorption mode line
+  - in fact, in the case of exponential decaying signal, such as
+$$
+  S(t) = S_0 e^{i \omega t}exp^{ -R_2 t }
+$$
+$R_2 = 1 / T_2$ rate constant, larger rate constant -> more rapid decay
+$T_2 = $ time constant,
+the shape of the line is known as a Lorentzian, 'or to be precise the absorption
+mode Lorentzian' ....> What is this absorbtion mode stuff?
+% http://www-keeler.ch.cam.ac.uk/lectures/understanding/chapter_4.pdf
 
+'The imaginary part of the spectrum gives a lineshape known as the dispersion
+mode Lorentzian'
+
+Absorbtion Lorenzian shape (show it)
+-> Integral/area is constant
+width = half the max height
+--> broader and shorter, narrower and taller
+something to do with height being $1/(\pi T_2)$ Hz % why Hz ???
+Height directly proportional to amplitude...
+
+Dispersion Line
+obviously the integral thing isn't true any more...
+also broader than the absorption mode...
+%note Dispersion line ISNT realted to derivative line of ESR spectra
+
+Fourier transform is linear process, so
+\begin{equation}
+\FT{a x(t) + b y(t) } = a \FT{x(t)} + b \FT{y(t)}
+\end{equation}
+for any time domain functions $x(t)$ and $y(t)$.
+
+Also, time shift:
+$$
+\FT{x(t \pm t_0)} = \FT{x(t)} e^{\pm i \omega t_0}
+$$
+
+if sig is a sum of decaying terms, then total FT will be the sum of the line
+corresponding to each peak
+-> this is actually useful with max frequency
+
+** Phase
+-> what is the phase? what does it correspond to? how does it correspond to the
+imaginary part of FFT?
+Is it useful? (dont think so???)
+Interesting -> by shifting the phase of the wave I can swap the real and
+imaginary parts of the FT...? Is that true in my case..?
+
+after signal has decayed -> just recording noise
+--> reducing the time, mean better signal to noise ratio (SNR)
+--> but also means that not as much signal produced
+--> careful with this
+----> Excitation is used instead
+time spend recording signal == aquisition time (is this a real term?)
+
+Sensitivity enhancement:
+Signal is strongest initially, and decays
+--> first part is ``more important''   --> multiply by a decaying function (1 -> 0)
+--> weighting gives more importance to early stuff
+---> not (I think) this also affects amplitude...so should point this out.
+
+Example weighting function:
+$$
+W(t) = exp(-R_{LB} t)
+$$
+where $R_{LB} = $  rate constant (choice).
+
+Different $R_{LB}$ changes noise + also changes amplitude (so I need to
+normalise back, also amplitude meaning is lost -> which is kinda true anyway, right?)
+
+Note: weighting function will also broaden the lines (since decay is happening
+quicker) and reduce peak height...!
+
+NOTE: by taking the absolute value, actually I don't care about phase any more,
+because the absolute value doesn't vary with phase
+% check that it IS the absolute value that I should be taking
+Complex -> phase + magnitude
+Signals 'power' in a frequency bin = amplitude (ish - not sure about this)
+
+Question: is my Lorentzian the shape of the amplitude or the shape of the real
+part that is in phase? Are these two thing equivalent? Does fitting with a
+Lorentzian imply that I need to use the real part of the spectrum?
+
+Question: maybe a better way to think about this is the absolute value and phase angle...?
+
+\section{sinc wiggles / truncation artefacts}
+
+methods (supposedly) designed to reduce truncation
+* maxiumum entropy
+* linear prediction
+* FDM
+% thats what it says in http://www-keeler.ch.cam.ac.uk/lectures/understanding/chapter_4.pdf
+
+
+* example of what a spectrum looks like
+* what are the peaks, what is resonance etc
+* Quantities of interest
+  * Peak height
+  * Peak width (Quality factor calculations)
+  * FSR
+  * phase
+
+\section{FFT}
+* present FFT as a way of computing DFT
+* who came up with it
+* how important is it
+* how much faster is it
+* we don't have anything faster for a GENERAL signal
+
+\section{Alternatives}
+* These work for SPECIFIC cases....
+STFT (short time fast fourier transform) -> at least get a reference and some
+comments with reference to existing work
+ -- http://repository.cmu.edu/cgi/viewcontent.cgi?article=1065&context=dissertations
+z-transform - smaller windows
+spare FT - zero outputs (not intersting I don't think)
+FDM - constrained to decaying outputs (solve eigenvalue problem)
+
+
+\section{Obtaining Resonant Frequencies}
+* what is resonance and how do we obtain it from the spectrum
 A system exhibits resonance if frequency components at the resonant frequencies of the system oscillate with larger amplitudes than away from these resonant frequencies. In this case peaks in power spectrum will be seen at the corresponding resonant frequencies. Resonant frequency values can be recovered by peak fitting. [ mention Lorentz fitting here? compare to spline fitting? ]
+
+* mention 
 
 *** Fast Fourier Transform ***
 
@@ -238,3 +365,8 @@ However parametric methods are sensitive to dispersion which can degrade the sig
   \item comparison of the FFT + FDM
   \item Summary of complete methods to recover resonant frequencies for a given problem
 \end{itemize}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "../Thesis"
+%%% End:
