@@ -51,15 +51,21 @@
 % General
 % --------------------------------------------------------------------------------------------- %
 
-\newcommand{\Real}{\mathbb{R}}
-\newcommand{\RealPart}{\textrm{Re}}
-\newcommand{\ImagPart}{\textrm{Im}}
 \newcommand{\norm}[1]{\left\lVert#1\right\rVert}
 \newcommand{\zerov}{\mathbf{0}_3}
 \newcommand{\zerom}{\mathbf{0}_{3\times3}}
 \newcommand{\IdentityVect}{\mathbf{I}_3}
 \newcommand{\IdentityMatrix}{\mathbf{I}}
 \newcommand{\0}{\bm{0}}
+% --------------------------------------------------------------------------------------------- %
+% Sets
+% --------------------------------------------------------------------------------------------- %
+\newcommand{\IntegerSet}{\mathbb{Z}}
+\newcommand{\ComplexSet}{\mathbb{C}}
+\newcommand{\Real}{\mathbb{R}}
+
+\newcommand{\RealPart}[1]{\textrm{Re}\{#1\}}
+\newcommand{\ImagPart}[1]{\textrm{Im}\{#1\}}
 
 
 % Indicies
@@ -341,10 +347,21 @@
 \newcommand{\dodextilde}[1]{\frac{d #1}{d \tilde{x}}}
 
 % --------------------------------------------------------------------------------------------- %
-% Figures
+% Fourier
 % --------------------------------------------------------------------------------------------- %
 
+\newcommand{\invsqrN}{\frac{1}{\sqrt{N}}}
 \newcommand{\FT}[1]{\mathcal{F}\left[#1\right]} % maybe mathfrak or mathscr + \usepackage{mathrsfs}
+\newcommand{\Ts}{T_s}
+\newcommand{\fs}{f_s}
+\newcommand{\fmax}{f_{max}}
+\newcommand{\sig}{s}
+\newcommand{\signonortho}{\tilde{s}}
+\newcommand{\signonorthocont}{\hat{s}}
+\newcommand{\Spectrum}{S}
+\newcommand{\Projection}{\mathcal{P}}
+\newcommand{\DFTsum}{\sum_{n=0}^{N=-1}}
+\newcommand{\DFTexp}[1]{e^{-i2 \pi n #1 / N}}
 
 % --------------------------------------------------------------------------------------------- %
 % Figures
