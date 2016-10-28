@@ -21,120 +21,116 @@ of time) ** how this connects with resonance * Q: how can we turn the signal
 which depends on time -> function that depends on frequency (spectrum) ** what
 is a signal...?
 
-\section{DFT} Introduce the inner product + ideas around projection.... % FROM
-BEFORE>...! Fourier transform is a techniques which permits decomposition of any
-time-domain signal into its frequency domain representation. Based on the
-Fourier series in which a periodic time domain signal $s(t)$, with a period $T$
-such that $s(x)=s(x+nT)$ for $n=1,2,3 ...$ can be written on the interval
-$(-l,l)$ as
+\section{DFT}
+% TODO
+Introduce the inner product + ideas around projection.... % FROM
+BEFORE>...! Fourier transform is a well-established technique, based on the
+Fourier series, for finding a frequency domain representation, $\singalFreq$, of
+a time-domain signal, $\signalTime$.
 
-The Fourier transform of $s(t)$, denoted as $\hat{s}(f)$, is a complex function
-of frequency whos magnitude and complex argument represent respectively the
-amplitude and phase offset of the infinite series of sinosoidal functions of
-which $s(t)$ is composed.
 
-\section{Sinusoids} Complex/Real sinusoids...correspondance Equivalence of
+\section{Sinusoids}
+% TODO...
+Complex/Real sinusoids...correspondance Equivalence of
 sinusoids with same frequency (different phase)... justify that signals can be
 expressed as a series of sinusoids
-\subsection{Sinosuoidal Basis} Taking the discrete fourier transform corresponds
-to the projection of the signal onto a basis of sinusoids of different
-frequencies. It is well known that any two sinusoids, $\signonorthocont_1(t)$
-and $\signonorthocont_2(t)$, of arbitrary phase and ampltude, defined on the
-interval $t \in [-\infty, \infty]$, with frequencies $\omega_1$ and $\omega_2$
-are orthogonal for any $\omega_1 \neq \omega_2$. For two discrete sinusoids,
-$\signonortho_1(t)$ and $\signonortho_2(t)$ however, this condition only holds
-for the frequencies which are periodic in $N$ samples. Consider a set of
-discrete sinusoid $\{ \sig_f\}$, of frequency $\omega_f$, given by
+
+Introduce continuous and DISCRETE sinusoids
+This can also readily be verified for a set of discrete sinusoids. A generic $N$-sampled discrete sinusoid, can be written
 $$
-\signonortho_f(n) \equiv \frac{1}{\sqrt{N}}e^{i\omega_f n T}.
+\signonortho_f(n) \equiv e^{i\omega_f n T},
 $$
-where the factor $\sqrt{N}$ has been included for normalisation. The inner
-product between two sinusoids from this set, $\sig_l$ and $\sig_m$, is given by
-\begin{align} \left< \signonortho_f, \signonortho_k \right> &\equiv \invsqrN
-\sum_{n=0}^{N-1} \signonortho_f(n) \overline{\signonortho_k(n)} \\ &= \invsqrN
-\sum_{n=0}^{N-1} e^{i ( \omega_f - \omega_k) nT} \\ &=
-    \begin{cases} \frac{N}{\sqrt{N}} & \textrm{for}\ \omega_f = \omega_k \\
-\frac{ 1 - e^{i ( \omega_f - \omega_k) NT} }{ \sqrt{N} ( 1 - e^{i ( \omega_f -
-\omega_k) T} ) } & \textrm{otherwise}
+
+define:
+\Nsamples
+\sampleT = T, sample period
+% equivalence of sinusoids with different amplitude and, phase etc etc...
+% what is a signal...define it (no big deal - just demistify the word)
+
+\subsection{Sinosuoidal Basis}
+Taking the discrete fourier transform of $s(t)$ is equivalent to
+projection of the signal onto a selected basis of sinusoids. It is well known
+that two continuous sinusoids, $\signonorthocont_1(t)$ and $\signonorthocont_2(t)$, of arbitrary phase and ampltude, defined on the interval $t \in [-\infty, \infty]$, with frequencies $\omega_1$ and $\omega_2$ are orthogonal to each other for any $\omega_1 \neq \omega_2$.
+
+The inner product between two discrete sinusoids, $\dSinOneNonDFT(\dtime)$ and $\dSinTwoNonDFT(\dtime)$, sampled at $\Nsamples$ discrete points is given by 
+\begin{align}
+  \left< \dSinOne, \dSinTwo \right>
+  &\equiv \DFTsum \dSinOne(\dtime) \complexConj{\dSinTwo(\dtime)} \\
+  &= \DFTsum e^{i ( \omegaSinOne - \omegaSinTwo) \nDFT \sampleT } \\
+  &= \begin{cases}
+    \Nsamples & \textrm{for}\ \omegaSinOne = \omegaSinTwo \\
+    \frac{ 1 - e^{i ( \omegaSinOne - \omegaSinTwo) \Nsamples \sampleT} }{ 1 - e^{i ( \omegaSinOne - \omegaSinTwo) \sampleT} } & \textrm{otherwise}
+,
     \end{cases}
 \label{eq:inner-product-general}
-\end{align} where the final step is acheived by observing that a geometric
-sequence $x(z_1) \equiv \sum_{n=0}^{N - 1} z_1^n$, can be written as $x(z_1)
+\end{align}
+
+where the final step is acheived by recalling that any complex geometric sequence $x(z_1) \equiv \sum_{n=0}^{N - 1} z_1^n$, can be written as $x(z_1)
 \equiv \frac{1-z_1^N}{1-z_1}$ for any $z_1 \in \{\ \ComplexSet\ |\ z_1 \ne 1
-\}$. Consider a subset, $\{ \sig_k \}$ of $\{ \sig_f \}$, with sinusoids of
-frequency $\omega_k \equiv k \frac{2 \pi }{N} f_s$, for $k \in
-\IntegerSet[0,N-1]$. It can be easily verified
-from~\eqref{eq:inner-product-general} that the inner product between two members
-of this set, $\sig_k$ and $\sig_l$, is given by
+\}$.
+For the set of discrete sinusoids which are periodic in the sampling interval,
+$\{ \DFTbasis\ |\ \omega_k \equiv \frac{2 \pi k }{N} f_s \forall\ k \in \IntegerSet[0,\Nsamples-1] \}$, it can be easily verified that the inner product between any two functions $\dSinOne, \dSinTwo \in \DFTbasis$ is given by
 $$
-\left< \sig_k, \sig_l \right> =
-\begin{cases} \frac{N}{\sqrt{N}}, & \text{for}\ k = l \\ 0, & \text{for}\ k \ne
-l
+\left< \dSinOneDFT, \dSinTwoDFT \right> =
+    \begin{cases}
+      N, & \text{for}\ \dSinOneIndex = \dSinTwoIndex \\
+      0, & \text{for}\ \dSinOneIndex \ne \dSinTwoIndex
     \end{cases},
-  $$
-and are thus orthogonal to each other. It can also be readily verified from that
-the norm of $\signonortho_k$ is given by
-\begin{align*} \norm{\signonortho_k} &= \left< \signonortho_k, \signonortho_k
-\right>^{1/2} \\ &= \left( \sum_{n=0}^{N-1} e^{j 2 \pi(k-k) n / N} \right)^{1/2}
+$$
+and thus, $\DFTbasis$ is an orthogonal set. Further to this it can be verified that the set $\DFTbasis$ forms a complete, orthogonal basis which spans $\ComplexSet^{N}$, which the norm
+\begin{align*}
+  \norm{\dSinOne}
+  &= \left< \dSinOne, \dSinOne\right>^{1/2} \\
+  &= \sqrt{ \DFTsum e^{i 2 \pi(\dSinOneIndex-\dSinOneIndex) \nDFT / \Nsampled} }
 \\ &= \sqrt{N}
-\end{align*} It can be shown that $\{ \sig_k \}$ form an orthonormal, complete
-basis\cite{} spanning $\ComplexSet^{N}$, in which any discrete, $N$-sampled
-complex sinusoid can be expressed. We will describe $\{ \sig_k \}$ as the
-\textit{ discrete Fourier basis }. Another thing....show that any x(t) is
-expressable as a superposition of sinusoids....!? % equivalence for sinusoids
-with different amplitude and, phase etc etc... % condition otherwise they're
-equal % todo - this is for a specific cases...right? % unit amplitude, zero
-phase complex sinusoids -> it is readily verified that % any nonzero amplitude
-and phase have no effect on orthogonality. The projection of a discrete signal,
-$\{ x(n) \} \in \ComplexSet^{N} $, onto the $k$th discrete Fourier basis
-function, $\sig_k$, is given by % TODO: in the book it ISNT the orthonormal
-basis thats used.... just the ortho one
-\begin{equation} \Projection_{\sig_k} (x) = \frac{ \left< x, s_k \right>
-}{\norm{s_k}^2} \sig_k \label{eq:projection-onto-basis}
-\end{equation} The discrete frequency spectrum, $\Spectrum(\omega_k)$, is then
-defined as the coefficients of this projection
-\begin{equation} \Spectrum(\omega_k) \equiv \frac{1}{\sqrt{N}}\sum_{n=0}^{N-1}
-x(n) e^{-i 2 \pi k n / N}\ \ \textrm{for}\ k = [0,N-1]
-  \label{eq:dft} .
-\end{equation} The correponding inverse transform, given simply by the sum of
-the projections,
-\begin{equation} x(t) = \frac{1}{\sqrt{N}} \sum_{k=0}^{N-1} \Spectrum(\omega_k)
-e^{i 2 \pi k n / N}
+,
+\end{align*}
+% TODO - change expression above
+in which any discrete, $N$-sampled complex sinusoid can be expressed, 
+% TODO - is this true? Or any function at all? obviously periodic ones are expressable...but what else...exactly...? Or are the words 'expressed' clear that its not obvious
+An orthonormal basis could be readily defined, however the members of $\DFTbasis$ will be adopted, as the prevailing convention in numerical analysis, and referred to as the \textit{ discrete Fourier basis } functions. Note that this is a finite set, in contrast with the equivalent continuous Fourier basis, consisting of $Nsample$ functions, at regularly spaces frequencies with an intervals of $ 1 / \Nsample$.
+% TODO : check the freuqency interval ^^^
+Analysis has been performed with unit amplitude, zero phase complex sinusoids, but the same analysis would demonstrate the orthogonality of sinusoids any arbitrary choice of amplitude and phase.
+% VIVA : the basis is written with the same amplitude and phase (phase is necessary for orthogonality, amplitude for normalisation). Verify this and do the maths.
+
+% TODO: . Another thing....show that any x(t) is expressable as a superposition of sinusoids....!? Can I do that?
+% condition otherwise they're equal
+
+The projection of a discrete signal, $\{ \tdSignal(\dtime) \} \in \ComplexSet^{N} $, onto the $\dSinAnyIndex$th discrete Fourier basis function, $\dSinAny$, is given by
+\begin{equation}
+\Projection_{\dSinAny} (x) = \left< x, \dSinAny \right> \label{eq:projection-onto-basis}
+\end{equation}
+The \textit{ discrete frequency spectrum }, $\Spectrum(\omegaSinAny)$, is a discrete function of frequency, defined as the coefficients of projection onto each basis function
+\begin{equation}
+  \Spectrum(\omegaSinAny)
+  \equiv \DFTsum x(\dtime) e^{-i 2 \pi \dSinAnyIndex \nDFT / \Nsamples }\ \ \textrm{for}\ \dSinAnyIndex = [0,\Nsamples - 1]
+  \label{eq:dft}
+  ,
+\end{equation}
+and will be referred to as the \texit{ frequency spectrum } or frequency domain representation of $\tdSignal(\dtime)$.
+% TODO - are nDFT and dtime actuall the same thing???
+The correponding inverse transform, which allows $\tdSignal(\dtime)$ to be recovered from $\Spectrum(\omegaSinAny)$, is simply by the sum of projections,
+\begin{equation}
+  x(\dtimeAny) = \DFTsum \Spectrum(\dOmegaAny) e^{i 2 \pi \dSinAnyIndex \nDFT / \Nsamples }
   \label{eq:idft} ,
-\end{equation} allows the original signal to be reconstructed from the spectrum,
-$\{ \Spectrum(\omega_k) \}$. % have I dropped T here...?
-Equations~\eqref{eq:dft} and~\eqref{eq:idft} are known respectively as the
-discrete Fourier transform (DFT) and the inverse discrete Fourier transform
-(IDFT) of $\{ x(n) \}$. The process of sampling a continuous signal and
-transforming to a discrete frequency domain domain representation,
-using~\eqref{eq:dft}, is referred to as Fourier analysis. The inverse process,
-whereby an (approximation of) the original continuous signal is obtained from
-the spectral components, $\Spectrum(\omega_k)$, using~\eqref{eq:idft} is
-referred to as Fourier synthesis. % omega_k is discrete
+\end{equation}
+Equations~\eqref{eq:dft} and~\eqref{eq:idft} are known respectively as the discrete Fourier transform (DFT) and the inverse discrete Fourier transform (IDFT) of $\{ \dtSignal(\dtimeAny) \}$. The process of sampling a continuous signal, to obtain $\dtSignal(\dtimeAny)$, and transforming to its frequency domain representation using~\eqref{eq:dft}, to obtain $\Spectrum(\omgaAny)$, is referred to as Fourier analysis of $\dtSignal(\dtimeAny)$. The inverse process, whereby an approximate or exact expression of a sampled time domain signal, $\dtSignal(\dtimeAny)$, is obtained from the spectral components, $\Spectrum(\omega_k)$, using~\eqref{eq:idft} is referred to as Fourier synthesis.
 
-% TODO - anything about periodic extension? assumption of periodicity? maybe put
-% this in the spectral leakage section. % TODO - mention something about
-amplitude and phase early -- and maybe state that in this case phase is not of
-interest...? Put this gently. Careful with the word % BASIS written with the
-same amplitude and phase (phase is necessary for orthogonality, amplitude for
-normalisation).
+% TODO - mention something about amplitude and phase early -- and maybe state that in this case phase is not of interest...? Put this gently. Careful with the word
 
 
-\section{Shannon Theorem} \NiquistFreq define \omega_N as the niquist frequency.
+\section{Shannon Theorem}
+$\NiquistFreq$ define $\omega_N$ as the niquist frequency.
 
-\section{Spectral Leakage} % TODO: talk about periodic extension here.... A
-continuous signal, $x(t)$, with a maximum frequency $\NiquistFreq$, and
+\section{Spectral Leakage} % TODO: talk about periodic extension here.... 
+A continuous signal with a maximum frequency $\NiquistFreq$, and
 periodicity which is an integer divisor of the sampling duration $T$, can
-readily be expressed exactly as a linear superposition of continuous sinusoids
-with the frequencies as the fourier basis, $\omega_k = 2 \pi k f_s / N$ for $k
-\in [0,N-1]$. Therefore the original continuous signal $x(t)$ is reconstructed
-exactly by Fourier synthesis of the Spectrum obtained by Fourier analysis. For a
-signal which contains frequencies different from the basis frequency, this is
-not the case. Whilst the continuous function obtained reproduces $x(t)$ exactly
-at the $N$ sample points, it may differ away from these values. % IS THIS
-TRUE....!??? I think so...!? Should verify this. Consider the projection of
-$\{x(t)\}$ onto the discrete Fourier basis function $\sig_k$, where the
-projection coefficients, from~\eqref{eq:inner-product-general}, are given by
+be expressed exactly as a linear superposition of continuous sinusoids
+with the frequencies of the discrete Fourier basis, $\omegaSinAny = 2 \pi \dSinAnyIndex \samplingFreq / \Nsamples $ for $ \dSinAnyIndex \in [0,\Nsamples - 1 ]$. Such a signal can be reconstructed exactly, for any $t$, by Fourier synthesis given its frequency spectrum. For a signal which contains frequencies different from the basis frequency, this is not the case. Whilst the synthesised function and the original sampled function will be exactly identical at the $N$ sample points, the values of the function between point may differ.
+% TODO: IS THIS TRUE....!??? Isnt this the point of the DFT for this NOT to be the case? Should I verify this.
+Consider the projection of an sampling of an arbitrary time domain $\{x(t)\}$ onto the discrete Fourier basis function $\sig_k$, where the projection coefficients, from~\eqref{eq:inner-product-general}, are given by
+%% TODO : NEED TO SHOW THAT ANYTHING IS EXPRESSABLE AS A SIN WAVE _ OTHERWISE THIS HAS NO MEANING
+%%%%%%%%%% TODO : THIS IS ALL CARP...!?? The projection is for sin -> sin....!???
 \begin{align*} \Spectrum(\omega_k) &=\equiv \frac{ 1 - e^{i (\omega_f -
 \omega_k) N T} }{1 - e^{i(\omega_f - \omega_k) T}} \\ &= \frac{ \sin[(\omega_f -
 \omega_k)N T / 2]}{\sin[(\omega_f - \omega_k) T / 2]} e^{i (\omega_f - \omega_k)
@@ -145,8 +141,7 @@ contribution against the frequency of the sinusoid is given
 in~\ref{fig:amplitude-contribution-to-component-by-freq}.
 \begin{figure}[h] \centering
   \includegraphics[width=\textwidth]{Figures/Chapters/SignalAnalysis/img1065}
-  \caption{Plot showing the amplitude contribution of a sinusoid at any
-frequency \omega_f to a given spectral component}
+  \caption{Plot showing the amplitude contribution of a sinusoid at any frequency $\omega_f$ to a given spectral component}
   \label{fig:amplitude-contribution-to-component-by-freq}
 \end{figure} The largest contribution to $\Spectrum(\omega_k)$ comes from the
 frequency of the basis, $\omega_k$, and contributions from the other basis
@@ -161,9 +156,10 @@ discontinuites caused by periodic extension of functions which do not exhibit a
 periodicity $T$, and is exhibited by all frequency components except for $\{
 \omega_k \}$. Note that peak spectral leakage is caused by truncation of the
 signal at the endpoints of the sample window, and is not reduced by increasing
-$N$\cite{}. % TODO - more on input signal being the same as its extension ->
-Section 7.1.2
+$N$\cite{}.
+% TODO - more on input signal being the same as its extension -> Section 7.1.2
 
+\section{Window Functions}
 The contribution which a frequency makes to further frequency components can be
 minimised by an appropriate choice of window function. Such window functions
 will go to zero at the endpoints of the interval, thereby producing a signal
@@ -189,7 +185,7 @@ artefacts or sinc wiggles
 
 methods (supposedly) designed to reduce truncation * maxiumum entropy * linear
 prediction * FDM % thats what it says in
-http://www-keeler.ch.cam.ac.uk/lectures/understanding/chapter_4.pdf
+%http://www-keeler.ch.cam.ac.uk/lectures/understanding/chapter_4.pdf
 
 
 * example of what a spectrum looks like * what are the peaks, what is resonance
@@ -220,7 +216,8 @@ since,
 \pi n k /N} + \beta \sum_{n=0}^{N-1} y(n) e^{-i 2 \pi n k / N} \\ &\equiv \alpha
 X + \beta Y
 \end{align*} where $X$ and $Y$ are respectively the discrete fourier transforms
-of $x$ and $y$. ** also the maxwells equations are linear....so extra linearity
+of $x$ and $y$.
+%** also the maxwells equations are linear....so extra linearity
 
 \section{Spectrum Symmetry} In our case, we are interested on in only real input
 signals where $x \in \Real^N$. In this case the spectrum can be written as
@@ -234,7 +231,7 @@ frequencies (from $0$ and $\fs/2$) are plotted when presenting spectra, since
 negative frequencies contain no additional information. % TODO - be more
 specific about what is meant by FLIP(x) or x(-n)... % note, I haven't proved
 that the angle or magnitude are even/odd here...but it follows from conjugate
-summetry of X in polar form X(k) = |X(k)|e^{i \angleX(K)} i.e. just write X(k)
+summetry of X in polar form $X(k) = |X(k)|e^{i \angle X(K)}$ i.e. just write X(k)
 in polar form and its immediately obvious...is it?
 \begin{align*} DFT_k(-x) &\equiv \DFTsum x(N-n) \DFTexp{k} \\ &=
 \sum_{m=0}^{N-1} x(m) e^{- i 2 \pi (N-m)k / N} \\ &= \sum_{m=0}^{N-1} x(m) e^{-
@@ -297,9 +294,7 @@ In quadratic interpolation of sinusoidal spectrum-analysis peaks, we replace the
 
 Note that, as mentioned in §D.1, the Gaussian window transform magnitude is precisely a parabola on a dB scale. As a result, quadratic spectral peak interpolation is exact under the Gaussian window. Of course, we must somehow remove the infinitely long tails of the Gaussian window in practice, but this does not cause much deviation from a parabola, as shown in Fig.3.36.
 
-values in the vicinity of the peaks. Since this is 
-
-given accuracy, o
+values in the vicinity of the peaks. Since this is given accuracy, o
 
 Since FFTs are efficient, this is an efficient interpolation method.
 However, in audio spectral modeling, there is usually a limit on the needed
@@ -397,7 +392,7 @@ $$
 $R_2 = 1 / T_2$ rate constant, larger rate constant -> more rapid decay $T_2 = $
 time constant, the shape of the line is known as a Lorentzian, 'or to be precise
 the absorption mode Lorentzian' ....> What is this absorbtion mode stuff? %
-http://www-keeler.ch.cam.ac.uk/lectures/understanding/chapter_4.pdf
+%http://www-keeler.ch.cam.ac.uk/lectures/understanding/chapter_4.pdf
 
 'The imaginary part of the spectrum gives a lineshape known as the dispersion
 mode Lorentzian'
@@ -469,8 +464,8 @@ a GENERAL signal
 
 \section{Alternatives} * These work for SPECIFIC cases.... STFT (short time fast
 fourier transform) -> at least get a reference and some comments with reference
-to existing work % --
-http://repository.cmu.edu/cgi/viewcontent.cgi?article=1065&context=dissertations
+to existing work 
+%http://repository.cmu.edu/cgi/viewcontent.cgi?article=1065&context=dissertations
 z-transform - smaller windows spare FT - zero outputs (not intersting I don't
 think) FDM - constrained to decaying outputs (solve eigenvalue problem)
 
