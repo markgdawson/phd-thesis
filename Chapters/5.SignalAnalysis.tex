@@ -1,61 +1,46 @@
 \chapter{Signal Analysis}
-\label{Ch:SignalAnalysis} \lhead{Chapter 6. \emph{Signal Analysis}} % Write in
-your own chapter title to set the page header
+\label{Ch:SignalAnalysis} \lhead{Chapter 6. \emph{Signal Analysis}}
+The analysis of signals is central to many fields of engineering. In this context, a \textit{signal} is some measurable output of a system. Many operations, such as finding resonant frequencies, can be performed with relative ease in the frequency domain, but are prohibitively expensive in the time domain. Therefore expressions for the signals are often sought in the frequency domain, that to say, as a linear combination of complex sinusoids. Additionally, these complex sinusoids are eigenfunctions of linear, time-invariant systems, such as those described by Maxwells' equations,~\eqref{}. In many real-world applications, time-continuous expressions for these signal are not readily available, and rather the signal values are known only at discrete, uniformly spaces points in time. This chapter will be concerned with the frequency domain representation of continuous, complex-valued time domain signals, which have been discretely sampled.
 
-% what do I have
-\section{Resonance} NOTE: maybe I should discuss RESONANCE in the physical
-problem part...?
+The term \textit{signal}, or \textit{discrete signal}, is used to refer to $N$ \textit{ samples }, consisting of the values of some continuous complex function at evenly spaced, sequential points in time over a time period $T$. It is convenient to consider this as a vector, in the space the complete, linear vector space $ \{ \ComplexSet^{N} \}$.
 
-Resonance is an important phenomena in a number of engineering applications,
-characterised by quantities such as resonant frequencies, quality factors and
-mode shapes. The advantage of time domain simulations is that a broadband
-frequency response can be obtained in a single run. However the the frequency
-content isn't readily available and needs to be extracted from the obtained time
-domain evolution of the system. In this chapter we will discuss the fourier
-decomposition of the time domain solution using parametric and non-parametric
-methods and the errors associated with this transformation.
+The frequency domain representation a signal in the frequency domain will be given by a linear combination of discrete sinusoids. To simply notation, these are represented in complex form, as $ A e^{i (\omega \dtime + \phi) } $, where $A$ is the complex peak amplitude (or equivalently the modulus), $\omega$ is the angular frequency of the oscillation in radians per unit time, $\phi$ is the phase, and $\dtime = n\sampleInterval$ with $n = 0,1,...,N-1$ are the $N$ discrete sample times, at intervals of $\sampleInterval$ in $\sampleInterval$.
+% TODO: verify the definition of t_n
 
-\section{Introduction} ** what I have: a discrete-time signal - discrete in x,
-continuous in y ** finite length ** discretely sampled ** time domain (function
-of time) ** how this connects with resonance * Q: how can we turn the signal
-which depends on time -> function that depends on frequency (spectrum) ** what
-is a signal...?
+Note however that by use of Eulers' identity, any discrete real sinusoid, can be expressed as a linear combination of discrete complex sinusoids with frequencies $\pm \omega$, as
+% VIVA: linear combination because cos is also a sinusoid with a different phae
+\begin{align*}
+A \sin(\omega \dtime + \phi) = \frac{A}{2i} \left( e^{i (\omega \dtime + \phi)} - e^{- i (\omega \dtime + \phi)} \right),
+\end{align*}
+%It will be seen that the Fourier transform is linear, and therefore results obtained with complex sinusoids are also valid for real sinusoids.
+% TODO: Is this the statement I should make ^ - i made up the whole 'linear' thing
+Note that any superposition of sinusoids at a given frequency with arbitrary phase and amplitude can always be written as a single sinusoid of the same frequency which has some phase, determined by the phase and amplitude of the summed sinusoids.
 
-\section{DFT}
-% TODO
-Introduce the inner product + ideas around projection.... % FROM
-BEFORE>...! Fourier transform is a well-established technique, based on the
-Fourier series, for finding a frequency domain representation, $\singalFreq$, of
-a time-domain signal, $\signalTime$.
+% TODO - state somewhere (results) that phase is not so interesting...?
+% TODO... justify that signals can be expressed as a series of sinusoids?
+% TODO - I've not mentioned anything in an FEM context, or what the Signal is in this context.
 
+\section{The discrete Fourier basis}
+The discrete Fourier transform will be introduced as a change of basis in a Hilbert space. By orthogonal projection, the vector signal is written as a weighted linear combination of discrete, complex sinusoids.
+% mention something about the coefficients of the linear combination? and how they're the important thing?
 
-\section{Sinusoids}
-% TODO...
-Complex/Real sinusoids...correspondance Equivalence of
-sinusoids with same frequency (different phase)... justify that signals can be
-expressed as a series of sinusoids
-
-Introduce continuous and DISCRETE sinusoids
-This can also readily be verified for a set of discrete sinusoids. A generic $N$-sampled discrete sinusoid, can be written
+First a Euclidian norm is introduced on $\ComplexSet^N$,
 $$
-\signonortho_f(n) \equiv e^{i\omega_f n T},
+\norm{\tdSignal}_{2} \equiv \sqrt{\DFTsum |\tdSignalSample|^2}
+,
 $$
+and by an inner product between any two vectors, $\sigSpaceVectOne$ and $\sigSpaceVectTwo$, in this space as
+$$
+\left< \sigSpaceVectOne, \sigSpaceVectTwo \right>
+\equiv \DFTsum \sigSpaceVectOneComp \complexConj{\sigSpaceVectTwoComp}
+$$
+% TODO: not defined x_n, u_n, v_n
+a Hilbert space is obtained, in which all $N$-sampled signals can be treated as vectors.
 
-define:
-\Nsamples
-\sampleT = T, sample period
-% equivalence of sinusoids with different amplitude and, phase etc etc...
-% what is a signal...define it (no big deal - just demistify the word)
-
-\subsection{Sinosuoidal Basis}
-Taking the discrete fourier transform of $s(t)$ is equivalent to
-projection of the signal onto a selected basis of sinusoids. It is well known
-that two continuous sinusoids, $\signonorthocont_1(t)$ and $\signonorthocont_2(t)$, of arbitrary phase and ampltude, defined on the interval $t \in [-\infty, \infty]$, with frequencies $\omega_1$ and $\omega_2$ are orthogonal to each other for any $\omega_1 \neq \omega_2$.
-
-The inner product between two discrete sinusoids, $\dSinOneNonDFT(\dtime)$ and $\dSinTwoNonDFT(\dtime)$, sampled at $\Nsamples$ discrete points is given by 
+The inner product between any two $N$-sampled discrete sinusoids, $\dSinOneNonDFT(\dtime)$ and $\dSinTwoNonDFT(\dtime)$, of arbitrary frequencies $\omegaSinOne$ and $\omegaSinTwo$ respectively is written as
 \begin{align}
-  \left< \dSinOne, \dSinTwo \right>
-  &\equiv \DFTsum \dSinOne(\dtime) \complexConj{\dSinTwo(\dtime)} \\
+  \left< \dSinOneNonDFT, \dSinTwoNonDFT \right>
+  &\equiv \DFTsum \dSinOneNonDFT(\dtime) \complexConj{\dSinTwoNonDFT(\dtime)} \\
   &= \DFTsum e^{i ( \omegaSinOne - \omegaSinTwo) \nDFT \sampleT } \\
   &= \begin{cases}
     \Nsamples & \textrm{for}\ \omegaSinOne = \omegaSinTwo \\
@@ -65,483 +50,264 @@ The inner product between two discrete sinusoids, $\dSinOneNonDFT(\dtime)$ and $
 \label{eq:inner-product-general}
 \end{align}
 
-where the final step is acheived by recalling that any complex geometric sequence $x(z_1) \equiv \sum_{n=0}^{N - 1} z_1^n$, can be written as $x(z_1)
+where $\complexConj{\Box}$ denotes the complex conjugate of $\Box$, and the final step is acheived by recalling that any complex geometric sequence $x(z_1) \equiv \sum_{n=0}^{N - 1} z_1^n$, can be written as $x(z_1)
 \equiv \frac{1-z_1^N}{1-z_1}$ for any $z_1 \in \{\ \ComplexSet\ |\ z_1 \ne 1
 \}$.
-For the set of discrete sinusoids which are periodic in the sampling interval,
-$\{ \DFTbasis\ |\ \omega_k \equiv \frac{2 \pi k }{N} f_s \forall\ k \in \IntegerSet[0,\Nsamples-1] \}$, it can be easily verified that the inner product between any two functions $\dSinOne, \dSinTwo \in \DFTbasis$ is given by
+
+It can be easily verified from~\eqref{eq:inner-product-general} that the set of discrete sinusoids which are periodic in $\sampleT$, $\{ e^{i \omegaSinAny \dtime} |\ \omegaSinAny \equiv \frac{2 \pi k  \samplingFreq}{N},  k = 0,1,2,...\Nsamples-1 \}$, which will be referred to as the \textit{discrete Fourier basis}, is an orthogonal set. Following a procedure similar to~\eqref{eq:inner-product-general}, the inner product between two members of this set, $\dSinOne$ and $\dSinTwo$, is given by
+
 $$
-\left< \dSinOneDFT, \dSinTwoDFT \right> =
+\left< \dSinOne, \dSinTwo \right> =
     \begin{cases}
       N, & \text{for}\ \dSinOneIndex = \dSinTwoIndex \\
       0, & \text{for}\ \dSinOneIndex \ne \dSinTwoIndex
-    \end{cases},
+    \end{cases}
+    ,
 $$
-and thus, $\DFTbasis$ is an orthogonal set. Further to this it can be verified that the set $\DFTbasis$ forms a complete, orthogonal basis which spans $\ComplexSet^{N}$, which the norm
+with a norm for this set given by
 \begin{align*}
   \norm{\dSinOne}
   &= \left< \dSinOne, \dSinOne\right>^{1/2} \\
-  &= \sqrt{ \DFTsum e^{i 2 \pi(\dSinOneIndex-\dSinOneIndex) \nDFT / \Nsampled} }
+  &= \sqrt{ \DFTsum e^{i 2 \pi(\dSinOneIndex-\dSinOneIndex) \nDFT / \Nsamples} }
 \\ &= \sqrt{N}
 ,
 \end{align*}
-% TODO - change expression above
-in which any discrete, $N$-sampled complex sinusoid can be expressed, 
-% TODO - is this true? Or any function at all? obviously periodic ones are expressable...but what else...exactly...? Or are the words 'expressed' clear that its not obvious
-An orthonormal basis could be readily defined, however the members of $\DFTbasis$ will be adopted, as the prevailing convention in numerical analysis, and referred to as the \textit{ discrete Fourier basis } functions. Note that this is a finite set, in contrast with the equivalent continuous Fourier basis, consisting of $Nsample$ functions, at regularly spaces frequencies with an intervals of $ 1 / \Nsample$.
-% TODO : check the freuqency interval ^^^
-Analysis has been performed with unit amplitude, zero phase complex sinusoids, but the same analysis would demonstrate the orthogonality of sinusoids any arbitrary choice of amplitude and phase.
+The discrete Fourier basis is said to form a basis for $\ComplexSet^{N}$, in which any discrete, $N$-sampled signal may be expressed. Note that this is a finite set, in contrast with the continuous Fourier basis, consisting of $\Nsamples$ discrete sinusoids, at regularly spaces frequencies between $0$ and $\omegaSampling = 2 \pi / \sampleInterval$. The basis could be selected in principle with any arbitrary amplitude and phase, for simplicity however unit amplitude and zero phase complex sinusoids are used.
+% TODO - check the sample interval upper limit^^^
 % VIVA : the basis is written with the same amplitude and phase (phase is necessary for orthogonality, amplitude for normalisation). Verify this and do the maths.
 
-% TODO: . Another thing....show that any x(t) is expressable as a superposition of sinusoids....!? Can I do that?
-% condition otherwise they're equal
-
-The projection of a discrete signal, $\{ \tdSignal(\dtime) \} \in \ComplexSet^{N} $, onto the $\dSinAnyIndex$th discrete Fourier basis function, $\dSinAny$, is given by
-\begin{equation}
-\Projection_{\dSinAny} (x) = \left< x, \dSinAny \right> \label{eq:projection-onto-basis}
-\end{equation}
-The \textit{ discrete frequency spectrum }, $\Spectrum(\omegaSinAny)$, is a discrete function of frequency, defined as the coefficients of projection onto each basis function
+The \textit{ discrete frequency spectrum }, $\Spectrum(\omegaSinAny)$, of the discrete signal $x(\dtime)$ is defined by convention as $N$ times the coefficient of the projection of the signal onto the $k$th basis function, given by
+$$
+\Spectrum(\omegaSinAny) = \frac { N \left< x, \dSinAny \right> }{\norm{\dSinAny}^2}
+$$
+and will be referred to as the \textit{ frequency spectrum } or \textit{frequency domain representation} or simply \textit{spectrum} of $\tdSignal(\dtime)$. This can be thought of as a measure of the amplitude and phase of the $k$th complex sinusoid present in the input signal at frequency $\omegaSinAny$. The spectrum is written explicitly, by substitution, as
 \begin{equation}
   \Spectrum(\omegaSinAny)
-  \equiv \DFTsum x(\dtime) e^{-i 2 \pi \dSinAnyIndex \nDFT / \Nsamples }\ \ \textrm{for}\ \dSinAnyIndex = [0,\Nsamples - 1]
+  \equiv \DFTsum x(\dtime) e^{-i 2 \pi \dSinAnyIndex \nDFT / \Nsamples }\ \ \textrm{for}\ \dSinAnyIndex = 0,1,...,\Nsamples - 1
   \label{eq:dft}
   ,
 \end{equation}
-and will be referred to as the \texit{ frequency spectrum } or frequency domain representation of $\tdSignal(\dtime)$.
-% TODO - are nDFT and dtime actuall the same thing???
-The correponding inverse transform, which allows $\tdSignal(\dtime)$ to be recovered from $\Spectrum(\omegaSinAny)$, is simply by the sum of projections,
+
+An alternative approach is possible, in which an orthonormal set is defined by normalisation of the discrete Fourier basis, and the spectrum is then defined without the factor of $N$, and either approach could be adopted.
+
+The correponding inverse transform, which allows the discrete signal $\tdSignal(\dtime)$ to be recovered from $\Spectrum(\omegaSinAny)$, is simply the sum of projections,
+$$
+\tdSignal(\dtime) = \sum_{k=0}^{N-1}\frac { \left< x, \dSinAny \right> }{\norm{\dSinAny}^2} \dSinAny
+$$
+or by substitution
 \begin{equation}
-  x(\dtimeAny) = \DFTsum \Spectrum(\dOmegaAny) e^{i 2 \pi \dSinAnyIndex \nDFT / \Nsamples }
+  x(\dtime) = \frac{1}{N} \DFTsum \Spectrum(\omegaSinAny) e^{i 2 \pi \dSinAnyIndex \nDFT / \Nsamples }
   \label{eq:idft} ,
 \end{equation}
-Equations~\eqref{eq:dft} and~\eqref{eq:idft} are known respectively as the discrete Fourier transform (DFT) and the inverse discrete Fourier transform (IDFT) of $\{ \dtSignal(\dtimeAny) \}$. The process of sampling a continuous signal, to obtain $\dtSignal(\dtimeAny)$, and transforming to its frequency domain representation using~\eqref{eq:dft}, to obtain $\Spectrum(\omgaAny)$, is referred to as Fourier analysis of $\dtSignal(\dtimeAny)$. The inverse process, whereby an approximate or exact expression of a sampled time domain signal, $\dtSignal(\dtimeAny)$, is obtained from the spectral components, $\Spectrum(\omega_k)$, using~\eqref{eq:idft} is referred to as Fourier synthesis.
+Equations~\eqref{eq:dft} and~\eqref{eq:idft} are known respectively as the discrete Fourier transform (DFT) and the inverse discrete Fourier transform (IDFT) of $\tdSignal(\dtime)$. The process of sampling a continuous signal, to obtain $\tdSignal(\dtime)$, and transforming to its frequency domain representation, $\Spectrum(\omegaSinAny)$, using~\eqref{eq:dft}, is referred to as \textit{Fourier analysis}, or simply \textit{signal analysis}, of $\tdSignal(\dtime)$. The inverse process, whereby an approximate or exact expression of a sampled time domain signal, $\tdSignal(\dtime)$, is obtained from $\Spectrum(\omega_k)$, using~\eqref{eq:idft}, is referred to as Fourier synthesis.
 
-% TODO - mention something about amplitude and phase early -- and maybe state that in this case phase is not of interest...? Put this gently. Careful with the word
-
-
-\section{Shannon Theorem}
-$\NiquistFreq$ define $\omega_N$ as the niquist frequency.
-
-\section{Spectral Leakage} % TODO: talk about periodic extension here.... 
-A continuous signal with a maximum frequency $\NiquistFreq$, and
-periodicity which is an integer divisor of the sampling duration $T$, can
-be expressed exactly as a linear superposition of continuous sinusoids
-with the frequencies of the discrete Fourier basis, $\omegaSinAny = 2 \pi \dSinAnyIndex \samplingFreq / \Nsamples $ for $ \dSinAnyIndex \in [0,\Nsamples - 1 ]$. Such a signal can be reconstructed exactly, for any $t$, by Fourier synthesis given its frequency spectrum. For a signal which contains frequencies different from the basis frequency, this is not the case. Whilst the synthesised function and the original sampled function will be exactly identical at the $N$ sample points, the values of the function between point may differ.
-% TODO: IS THIS TRUE....!??? Isnt this the point of the DFT for this NOT to be the case? Should I verify this.
-Consider the projection of an sampling of an arbitrary time domain $\{x(t)\}$ onto the discrete Fourier basis function $\sig_k$, where the projection coefficients, from~\eqref{eq:inner-product-general}, are given by
-%% TODO : NEED TO SHOW THAT ANYTHING IS EXPRESSABLE AS A SIN WAVE _ OTHERWISE THIS HAS NO MEANING
-%%%%%%%%%% TODO : THIS IS ALL CARP...!?? The projection is for sin -> sin....!???
-\begin{align*} \Spectrum(\omega_k) &=\equiv \frac{ 1 - e^{i (\omega_f -
-\omega_k) N T} }{1 - e^{i(\omega_f - \omega_k) T}} \\ &= \frac{ \sin[(\omega_f -
-\omega_k)N T / 2]}{\sin[(\omega_f - \omega_k) T / 2]} e^{i (\omega_f - \omega_k)
-(N - 1) T /2}
-\end{align*} which is equivalent to the contribution of an arbitrary frequency
-$\omega_f$ to the $k$the spectrum of the signal. A plot of the amplitude of the
-contribution against the frequency of the sinusoid is given
-in~\ref{fig:amplitude-contribution-to-component-by-freq}.
-\begin{figure}[h] \centering
-  \includegraphics[width=\textwidth]{Figures/Chapters/SignalAnalysis/img1065}
-  \caption{Plot showing the amplitude contribution of a sinusoid at any frequency $\omega_f$ to a given spectral component}
-  \label{fig:amplitude-contribution-to-component-by-freq}
-\end{figure} The largest contribution to $\Spectrum(\omega_k)$ comes from the
-frequency of the basis, $\omega_k$, and contributions from the other basis
-frequencies $\omega_l$ where $l \in { \IntegerSet\ |\ l \ne k}$ is zero, as is
-expected since functions are orthogonal. However it can be seen that frequencies
-between basis function frequencies have a non-zero contribution to the
-$\Spectrum(\omega_k)$, with the frequencies in the frequency bin between
-$\omega_{k-1/2}$ to $\omega_{k+1/2}$ contributing the most. However we see that
-$\Spectrum(\omega_k)$ is sensitive to all frequencies between $\omega_0$ and
-$\omega_N$. This phenomena is known as \textit{spectral leackage} and is due to
-discontinuites caused by periodic extension of functions which do not exhibit a
-periodicity $T$, and is exhibited by all frequency components except for $\{
-\omega_k \}$. Note that peak spectral leakage is caused by truncation of the
-signal at the endpoints of the sample window, and is not reduced by increasing
-$N$\cite{}.
-% TODO - more on input signal being the same as its extension -> Section 7.1.2
-
-\section{Window Functions}
-The contribution which a frequency makes to further frequency components can be
-minimised by an appropriate choice of window function. Such window functions
-will go to zero at the endpoints of the interval, thereby producing a signal
-with periodicity $T$. This has the effect of widening the main lobe and reducing
-the amplitude of the side lobes compared to the leakage of a rectangualar wave
-shown in~\ref{fig:amplitude-contribution-to-component-by-freq}. % MODFT: more
-about this in Chapter 8 (apparently) % why doesn't this remove leakage
-completely. %%% The window function will %%% -> addition of sinc wiggles... %%%
-Since multiplication by of corresponds to multiplication in the Fourier domain
-%% need to include more terms... In realistic broad band applications, a
-sufficiently large $N$ to be periodic for all frequen in fact not periodic in
-$N$ or aperiodic. and periodic extension of these signals would result in a
-discontinuity. , or equivalently are finite signals of length $N$, periodically
-extended with period $N$. ** for signal of finite length ** for signal sampled
-at discrete times ** classification -> continous time, discrete time,
-digital(but not necessary) % MORE STUFF... finite signal -> window (our signal
-is a representation of a longer time domain signal) issues with rectangular
-window(s) is this general? or a property of DFT? or a property of finite
-signals...?
-
-rectangular window -> sinc function -> spectral leakage words: truncation
-artefacts or sinc wiggles
-
-methods (supposedly) designed to reduce truncation * maxiumum entropy * linear
-prediction * FDM % thats what it says in
-%http://www-keeler.ch.cam.ac.uk/lectures/understanding/chapter_4.pdf
-
-
-* example of what a spectrum looks like * what are the peaks, what is resonance
-etc * Quantities of interest * Peak height * Peak width (Quality factor
-calculations) * FSR * phase
-
-% FOLLOWING IS FROM PREVIOUS WRITING...IS IT TRUE FOR DFT? The continuous
-fourier transform requires that integration is preformed between $-\infty$ and
-$\infty$, or over an integer multiple of the periodicity of the signal, $T$. For
-most sampled signal with multiple frequency components it is not possible in
-general to measure signals which would be repeated periodically in $T$. That is
-signals where $s(T) = s(0)$. Such signals extended to infinity would exhibit
-discontinuities. These discontinuities give rise to a phenomena known as
-spectral leakage[], in order to capture these discontinuities, which introduces
-noise into the system. This is clearly not desirable, and can be reduced by
-using a window function, such as the Blackman window. The signal is multiplied
-by and envelope which ensures the discontinuity is eliminated. * Show some
-examples of spectral leakage and how it can be handled...
-\section{Linearity} It can be shown easily verified that taking the discrete
-Fourier transfrom is a linear operation. For any $x,y \in \ComplexSet^{N}$ and
-any $\alpha,\beta \in \ComplexSet$ the DFT transform satisfied
+It is interesting to note that computing the Fourier transform of a signal of length $T$ is equivalent to extending that signal periodically with a period $T$. It can be shown easily verified that the discrete Fourier transfrom is a linear operation, since for any $x,y \in \ComplexSet^{N}$ and any $\alpha,\beta \in \ComplexSet$ the DFT satisfies
 $$
 \alpha x + \beta y \to \alpha X + \beta Y
 $$
-since,
-\begin{align*} DFT_k &\equiv \sum_{n=0}^{N-1} \left[ \alpha x(n) + \beta y(n)
-\right] e^{-j 2 \pi n k / N} \\ &= \alpha \sum_{n=0}^{N-1} \alpha x(n) e ^ {-i 2
-\pi n k /N} + \beta \sum_{n=0}^{N-1} y(n) e^{-i 2 \pi n k / N} \\ &\equiv \alpha
-X + \beta Y
-\end{align*} where $X$ and $Y$ are respectively the discrete fourier transforms
-of $x$ and $y$.
-%** also the maxwells equations are linear....so extra linearity
+as is readily demonstrated by substitution:
+\begin{align*}
+  DFT_k [ \alpha x + \beta y]
+  &\equiv \sum_{n=0}^{N-1} \left[ \alpha x(n) + \beta y(n) \right] e^{-j 2 \pi n k / N} \\
+  &= \alpha \sum_{n=0}^{N-1} \alpha x(n) e ^ {-i 2 \pi n k /N} + \beta \sum_{n=0}^{N-1} y(n) e^{-i 2 \pi n k / N} \\
+  &\equiv \alpha DFT_k[ x ] + \beta DFT_k[ y ]
+\end{align*}
+where $X$ and $Y$ are respectively the discrete fourier transforms of $x$ and $y$, and $DFT_k[\Box]$ indicates the $k$th component of the DFT transform of $\Box$.
+%** also the maxwells equations are linear....so what...?
 
-\section{Spectrum Symmetry} In our case, we are interested on in only real input
-signals where $x \in \Real^N$. In this case the spectrum can be written as
-\begin{align*} \Spectrum(-k) &\equiv - \DFTsum x(n) \DFTexp{( -k )} \\ &=
-\overline{ \DFTsum \overline{x(n)} \DFTexp{k}} \\ &= \overline{ \DFTsum x(m)
-\DFTexp{k}} \\ &= \overline{\Spectrum(k)}
-\end{align*} For a real signal, $\RealPart{\Spectrum(k)}$ and $|\Spectrum(k)|$
-are even symmetric functions and $\ImagPart{\Spectrum(k)}$ and $\angle
-\Spectrum(k)$ is an odd symmetric function. Due to this symmetry, only positive
-frequencies (from $0$ and $\fs/2$) are plotted when presenting spectra, since
-negative frequencies contain no additional information. % TODO - be more
-specific about what is meant by FLIP(x) or x(-n)... % note, I haven't proved
-that the angle or magnitude are even/odd here...but it follows from conjugate
-summetry of X in polar form $X(k) = |X(k)|e^{i \angle X(K)}$ i.e. just write X(k)
-in polar form and its immediately obvious...is it?
-\begin{align*} DFT_k(-x) &\equiv \DFTsum x(N-n) \DFTexp{k} \\ &=
-\sum_{m=0}^{N-1} x(m) e^{- i 2 \pi (N-m)k / N} \\ &= \sum_{m=0}^{N-1} x(m) e^{-
-i 2 \pi m ( -k ) / N} \\ &\equiv \Spectrum(-k)
-\end{align*} Therefore for any real signal reversal of the signal in time leads
-to reversal of the spectrum.
-\begin{quote} Definition: A signal with a real spectrum (such as any real, even
-signal) is often called a zero phase signal. However, note that when the
-spectrum goes negative (which it can), the phase is really $ \pm\pi$ , not 0 .
-When a real spectrum is positive at dc (i.e., $ X(0)>0$ ), it is then truly
-zero-phase over at least some band containing dc (up to the first zero-crossing
-in frequency). When the phase switches between 0 and $ \pi $ at the
-zero-crossings of the (real) spectrum, the spectrum oscillates between being
-zero phase and ``constant phase''. We can say that all real spectra are
-piecewise constant-phase spectra, where the two constant values are 0 and $ \pi
-$ (or $ -\pi$ , which is the same phase as $ +\pi$ ). In practice, such
-zero-crossings typically occur at low magnitude, such as in the ``side-lobes''
-of the DTFT of a ``zero-centered symmetric window'' used for spectrum analysis
-(see Chapter 8 and Book IV [73]).
-\end{quote}
+\section{Aliasing}
+Let $\downSampleSpectrum$ be the spectrum of the downsampled signal $\downSampleSignal(L \dtime)$ of length $M$, obtained by downsampling $\tdSignal(\dtime)$, that is the vector of every $L$th sample of $\tdSignal$, with $ M = N/L$. $\downSampleSpectrum$ can be written in the form
+\begin{align}
+Y(k') = \sum_{m=0}^{M-1} x(mL) e^{- i 2 \pi k' m / M} \frac{1}{L} \sum_{l=0}^{L-1} \left(  e^{-i 2 \pi n / L} \right)^l \label{eq:sig:downsampled-signal}
+\end{align}
+where the sum over $l$, using the closed form geometric series in~\eqref{}, is non-zero only for integer multiples of $L$ samples,
+\begin{align*}
+\frac{1}{L} \sum_{l=0}^{L-1} \left(  e^{-i 2 \pi n / L} \right)^l =  \frac{ 1 - e^{- i 2 \pi n }}{ L (1 - e ^{-i 2 \pi n/ L})} =
+  \begin{cases}
+   1, & n = 0,L,2L,3L,...,(M-1)L  \\
+   0, & \textrm{otherwise}
+  \end{cases}
+        .
+\end{align*}
+This expression is equivalent to the discrete Fourier transform of $\downSampleSignal(L \dtime)$, with only a change of index of the summation, and the addition of zero summation terms. Equation~\eqref{eq:sig:downsampled-signal} can be rewritten, by simple algebraic manipulations, as
+\begin{align*}
+Y(k')
+  %&= \sum_{n=0}^{N-1} x(n) e^{-i 2 \pi k' n / N} \sum_{l=0}^{L-1} \left(  e^{-i 2 \pi n / L} \right)^l \\ 
+  %&= \sum_{n=0}^{N-1} x(n) e^{-i 2 \pi k' n / N} \sum_{l=0}^{L-1} e^{-i 2 \pi lM n / N} \\
+  &= \frac{1}{L} \sum_{l=0}^{L-1} \sum_{n=0}^{N-1} x(n) e^{-i 2 \pi (k' + lM) n / N} \\
+  &= \frac{1}{L} \sum_{l=0}^{L-1} X(k' + lM) .
+\end{align*}
+Thus downsampling of $\tdSignal(\dtime)$ by a factor $L$ results in a spectrum of length $M = N / L$, equivalent to dividing the spectrum $X$ into $L$ continuous ranges by index, and summing the corresponding indicies in each range, as illustrated in figure~\ref{fig:illustration-of-spectral-ranges}.
 
-\begin{itemize}
-\item shift theorem -> a delay in time domain corresponds to a linear phase term
-in the frequency domain -> spectral magnitude unaffected by a linear phase term
-\item zero phase signals
-\end{itemize}
+Spectral components above $k'$ in the original spectrum are said to be \textit{folded} or \textit{mirrored} into the spectrum. Frequency components at $\freqSample + \freqSampleAbove$, where $\freqSample \equiv 1/\sampleInterval$ is the sampling frequency, will contribute to a peak in the resulting frequency spectrum at the frequency $\freqSample - \freqSampleAbove$, for $\freqSampleAbove \le \freqSample / 2$, and is said to alias to a lower frequency. This loss of information is not reversible in general. The two frequencies cannot be distinguished in the resulting spectrum, and the original signal can no longer be reconstructed exactly from its spectrum.
+% equiv to changing the radius of the unit circle in the $z$-plane along which the discrete Fourier basis function set is selected.
 
-\section{Parsevals Theorem}
-\begin{itemize}
-\item interpretation as energy per bin...
-\end{itemize}
+If $X(k')$ is bandlimited in the frequency domain such that it is zero for any $k' + lM > M$, then $Y(k') = X(k')$, and the downsampling of the signal results in no loss of information.
+
+The well known sampling theorem, first proposed by Harold Niquist in 1928 and
+later revived by Claude Shannon, states that any continuous, bandlimited signal, $\tdSignal(t)$, can be reconstructed exactly from its samples by sinc interpolation,
+$$
+\tdSignal(t) \equiv \sum_{n=0}^{N-1} x(\dtime) \
+\textrm{sinc}\left( \freqSample (t-t_{n}) \right),
+$$
+provided there is no energy in the signal frequency spectrum at or above half
+the sampling frequency. This upper frequency limit is referred to as the
+\textit{Niquist frequency}, $\NiquistFreq$, and the corrisponding minimum sampling rate is referred to as the \textit{Niquist rate}.
+
+In practice aliasing effects can also be reduced by applying a low-pass filter to the signal to remove all energy at a frequency of $\freqSample / 2$ and above. Perfect low-pass filters, which remove completely only frequencies above a given cut-off frequency, without modifying frequencies below, are only possible for infinitely long signals. However, low-pass filters with sufficiently narrow transition regions can usually be realised.
+
+In a finite element context, it is convenient to write the Niquist frequency as a lower limit on simulation time step
+$$
+\NiquistFreq < \frac{1}{2 \Delta t} .
+$$
+%NOTE: Should I introduce the concept of thinking of FEM as a low pass filter??? Solves aliasing problems.
+
+% represented fully...
+
+\section{Spectral Leakage}
+% TODO: talk about periodic extension here.... 
+If the function from which $\tdSignal$ is sampled has a periodicity which is an integer divisor of $T$, and can therefore be expressed as a linear superposition of continuous sinusoids of the frequencies of the discrete Fourier basis, then original continuous function can be synthesised exactly given the values of $\Spectrum(\omegaSinOne)$.
+
+For signal obtained from source which contains frequencies different from the basis frequency, this is not the case. Whilst the synthesised function and the original sampled function will be exactly identical at the $N$ sample points, the intermediate, interpolated values may differ.
+% TODO: IS THIS TRUE....!??? Isnt this the point of the DFT for this NOT to be the case? Should I verify this.
+Further insight can be obtained by looking at the contribution of a sinusoid at frequency $\omegaContrib$ to the $\dSinAnyIndex$th fourier basis function, by computing its orthogonal projection onto $\dSinAny$, as
+%% TODO : NEED TO SHOW THAT ANYTHING IS EXPRESSABLE AS A SIN WAVE _ OTHERWISE THIS HAS NO MEANING
+%%%%%%%%%% TODO : THIS IS ALL CARP...!?? The projection is for sin -> sin....!???
+\begin{align*}
+  \Spectrum(\omega_k) &= \frac{ 1 - e^{i (\omega_f -
+\omega_k) N T} }{1 - e^{i(\omega_f - \omega_k) T}} \\ &= \frac{ \sin[(\omega_f -
+\omega_k)N T / 2]}{\sin[(\omega_f - \omega_k) T / 2]} e^{i (\omega_f - \omega_k)
+(N - 1) T /2} .
+\end{align*}
+This absolute value of this expression, is plotted against $\omegaContrib$ in~\ref{fig:amplitude-contribution-to-component-by-freq}, is interpreted as the amount which any frequency, $\omegaContrib$, contributes to $\Spectrum(\omegaSinAny)$. The largest contribution to $\Spectrum(\omegaSinAny)$ comes from the frequency $\omegaSinAny$, as exepected. Since the discrete Fourier basis function are mutually orthogonal, the contribution from the other discrete Fourier frequencies is zero. The largest frequency contribution is given by sinusoids in the frequency bin $\omega_{k - 1/2}$ and $\omega_{k+1/2}$, known as the \textit{main lobe}, however contributions are also made by sinusoids in all frequency bins.
+\begin{figure}[h] \centering
+  \includegraphics[width=\textwidth]{Figures/Chapters/SignalAnalysis/spectralLeakage}
+  \caption{Plot showing the amplitude contribution of a sinusoid at any frequency $\omega_f$ to a given spectral component}
+  \label{fig:amplitude-contribution-to-component-by-freq}
+\end{figure}
+This phenomena is known as \textit{spectral leackage} and is due to
+discontinuites caused by periodic extension of functions which do not exhibit
+periodicity $T$. Spectral leakage is exhibited at all frequencies
+except for the discrete Fourier basis frequencies, which are the only sinusoids
+which are continuous under periodic extension. Note that peak leakage is not reduced by increasing $N$\cite{}.
+% TODO - more on input signal being the same as its extension -> Section 7.1.2
+
+\section{Window Functions}
+Choosing a sample length, $sampleT$, for which all sinusoidal frequency
+components are periodic is rarely possible or desirable in practical
+applications. Whilst spectral leakage cannot be eliminated, the contribution
+made to a component by distant frequency can be reduced by an appropriate choice
+of window function. In this context, the process of sampling a signal over a
+finite length of time is equivalent to multiplication by a rectangular window,
+such as the one shown in~\ref{fig:rectangular-window}, or equivalently convolution with the Fourier transform of the window, shown in~\ref{fig:rectangular-window-FT}, in the frequency domain.
+Truncation of the signal at the window endpoints gives rise to spectral leakage.
+Window functions which gradually tapers to zero at the endpoints of the sample
+interval are often used, resulting in a continuous periodic extension. This has
+the effect of widening the main lobe and reducing the amplitude of the side
+lobes compared to the leakage of a rectangualar wave shown
+in~\ref{fig:amplitude-contribution-to-component-by-freq}.
+
+The choice of window function should depend on the dynamic range of the input signal and the required resolution. Several popular choices of window functions and their spectra are shown in~\ref{fig:popular-window-functions}. Several choices of window functions are considered, including the Blackman window\cite{} given by
+% REF: Blackman, R. B. and Tukey, J. W. "Particular Pairs of Windows." In The Measurement of Power Spectra, From the Point of View of Communications Engineering. New York: Dover, pp. 98-99, 1959.
+$$
+W(x) = \frac{21}{50} \frac{1}{2} cos ( \frac{\pi x}{a} ) + \frac{2}{25} cos (
+\frac{2 \pi x }{a} )
+$$
+and the Hamming window\cite{}, given by
+$$
+W(x) = \alpha - \beta \cos\left(\frac{2 \pi n}{N - 1}\right)
+$$
+with $\alpha = 0.53836$ and $\beta = 0.46164$, and the Blackman-Nutall window\cite{}, given by
+$$
+W(x) = a_0 - a_1 \cos \left( \frac{ 2 \pi n }{N - 1} \right) + a_2 \cos \left(
+  \frac{ 4 \pi n }{ N - 1} \right) - a_3 \cos \left( \frac{ 6 \pi n }{N - 1} \right)
+$$
+with $a_0 = 0.35875$, $a_1 = 0.48829$, $a_2 = 0.14128$ and $a_3 = 0.01168$.
+\begin{figure}[h] \centering
+\includegraphics[width=0.5 \textwidth]{Figures/Chapters/SignalAnalysis/Windows/rectangularWindow}
+\includegraphics[width=0.5 \textwidth]{Figures/Chapters/SignalAnalysis/Windows/BlackmanWindow}
+\includegraphics[width=0.5 \textwidth]{Figures/Chapters/SignalAnalysis/Windows/BlackmanNutallWindow}
+\includegraphics[width=0.5 \textwidth]{Figures/Chapters/SignalAnalysis/Windows/HammingWindow}
+\includegraphics[width=0.5 \textwidth]{Figures/Chapters/SignalAnalysis/Windows/ConfinedGaussianWindow}
+  \caption{Plot showing the amplitude contribution of a sinusoid at any frequency $\omega_f$ to a given spectral component}
+  \label{fig:amplitude-contribution-to-component-by-freq}
+\end{figure}
+% TODO - some statement about not reducing peak leakage...but rather a tradeoff between resolution and dynamic range...
+% TODO - something about Rect window making peaks hard to find, but having high resolution.
+\subsection{Symmetry}
+For real input signals where $x \in \Real^N$, its spectrum exhibits symmetry
+about zero. This is verified by writing the flipped spectrum,
+\begin{align*}
+  \Spectrum(-k)
+  &\equiv - \sampleT x(n) \DFTexp{( -k )} \\
+  &= \overline{ \DFTsum \overline{x(n)} \DFTexp{k}} \\
+  &= \overline{ \DFTsum x(m) \DFTexp{k}} \\
+  &= \overline{\Spectrum(k)}
+\end{align*}
+For a real signal, $\RealPart{\Spectrum(k)}$ and $|\Spectrum(k)|$ are even symmetric functions and $\ImagPart{\Spectrum(k)}$ and $\angle \Spectrum(k)$ are odd symmetric functions. Due to this symmetry, only positive frequencies (from $0$ and $\samplingFreq/2$) are plotted when presenting spectra, since negative frequencies contain no additional information.
+% TODO - be more specific about what is meant by FLIP(x) or x(-n)...
+% note, I haven't proved that the angle or magnitude are even/odd here...but it follows from conjugate summetry of X in polar form $X(k) = |X(k)|e^{i \angle X(K)}$ i.e. just write X(k) in polar form and its immediately obvious...is it?
+
+%%%%  TIME REVERSAL
+%\begin{align*}
+%  DFT_k(-x)
+%  &\equiv \DFTsum x(N-n) \DFTexp{k} \\
+%  &= \sum_{m=0}^{N-1} x(m) e^{- i 2 \pi (N-m)k / N} \\
+%  &= \sum_{m=0}^{N-1} x(m) e^{- i 2 \pi m ( -k ) / N} \\
+%  &\equiv \Spectrum(-k)
+%\end{align*}
+%Therefore for any real signal reversal of the signal in time leads to reversal of the spectrum.
+
+%%%%  Zero phase signals
+% \begin{quote} Definition: A signal with a real spectrum (such as any real, even signal) is often called a zero phase signal. However, note that when the spectrum goes negative (which it can), the phase is really $ \pm\pi$ , not 0 . When a real spectrum is positive at dc (i.e., $ X(0)>0$ ), it is then truly zero-phase over at least some band containing dc (up to the first zero-crossing in frequency). When the phase switches between 0 and $ \pi $ at the zero-crossings of the (real) spectrum, the spectrum oscillates between being zero phase and ``constant phase''. We can say that all real spectra are piecewise constant-phase spectra, where the two constant values are 0 and $ \pi $ (or $ -\pi$ , which is the same phase as $ +\pi$ ). In practice, such zero-crossings typically occur at low magnitude, such as in the ``side-lobes'' of the DTFT of a ``zero-centered symmetric window'' used for spectrum analysis (see Chapter 8 and Book IV [73]). \end{quote}
 
 \section{Zero Padding \& Interpolation}
-In most cases its not practical to collect a signal for sufficiently long
-time to reach the required error in frequency. A method of interpolation is desired. As we will see appending zeros to a causal signal (that is a signal which is zero before t=0), corresponds to ideal interpolation in the frequency domain. Let $y \in
-\ComplexSet^{M}$ be a signal of length $M$, obtained by padding a signal $x \in
+In order to obtain high spectral resolution, a small $\deltaFreq$ is desirable.
+Often sampling the input signal over a sufficiently long $T$ to obtain the desired resolution is impractical. In such cases interpolation methods are often used. It can be shown that zeros padding a causal signal (that is a signal which is zero before $t=0$), corresponds to \textit{ideal bandlimited interpolation} in the frequency domain. Let $\zeroPadSignal(\dtimeZeroPad) \in \ComplexSet^{M}$ be a signal of length $M$, obtained by zero padding a signal $\tdSignal \in
 \ComplexSet^{N}$ with zeros, such that
-\begin{align*} y(m) =
-  \begin{cases} x(m) & \textrm{for}\ m \in [0,N-1] \\ 0 & \textrm{otherwise}
+\begin{align*}
+  \zeroPadSignal(\dtimeZeroPad) =
+  \begin{cases}
+    \tdSignal(\dtimeZeroPad) & \textrm{for}\ \dtimeZeroPadIndex \in [0,N-1] \\
+    0 & \textrm{for}\ \dtimeZeroPadIndex \ge N
   \end{cases}
-\end{align*} The DFT of $y$ is then given by
-\begin{align*} DFT_k(y) &= \sum_{m=0}^{M-1} y(m) e^{- i 2 \pi m k' / N} \\ &=
-\sum_{n=0}^{N-1} x(n) e^{- i 2 \pi n k' / N} \\ &= \Spectrum(\omega_{k'})
-\end{align*} where $\Spectrum(\omega_{k'})$ is in fact the projection
-coefficient of the signal $x(n)$ onto a discrete Fourier transform sinusoid of
-frequency $\omega_{k'}$. This is exact for a time-limited signal, which is truly
-zero outside of the window.
-% VIVA / TODO :what about non-time-limited????
-Note that interpolation will not improve resolution in the sense of being able to resolve closely spaced peaks.
+\end{align*}
+The DFT of $\zeroPadSignal(\dtimeZeroPad)$ is given by
+\begin{align*}
+  DFT_k(\zeroPadSignal)
+  &= \sum_{m=0}^{M-1} \zeroPadSignal(m) e^{- i 2 \pi m k' / N} \\
+  &= \sum_{n=0}^{N-1} \zeroPadSignal(n) e^{- i 2 \pi n k' / N} \\ &= \Spectrum(\omega_{k'})
+,
+\end{align*}
+where $\Spectrum(\omega_{k'})$ is the coefficient of projection of $x(n)$ onto a discrete Fourier transform sinusoid of frequency $\omega_{k'}$. Such interpolation is exact for a time-limited signal, which is truly zero outside of the window. Zero padding will not however improve spectral resolution, or increase the amount of information contained in the spectrum. Zero padding is generally performed after applying a suitable window function.
+% VIVA / TODO :what about non-time-limited???? Apparently this differs....? I
+% think in this case I just get spectral leakage
 
-Since the FFT algorithm allows the DFT of spectra to be computed quickly and
-effective, padding the time domain signals with zeros prior to and FFT is an
-efficient way of interpolating a spectrum. However, for a given accuracy, this
-method is often more computationally expensive than padding the signal with a
-smaller number of zeros, and performing a quadratic interpolation of the
-spectrum amplitude in the vicinity of a peak. We refer to this as the
-quadratically interpolated FFT (QIFFT) method~\cite{}
+Since the FFT algorithm allows rapid computation of the DFT, padding the time
+domain signals with zeros prior to and FFT is often an efficient and accurate
+interpolation method.
+% QIFFT method:
 % https://www.dsprelated.com/freebooks/sasp/Sinusoidal_Peak_Interpolation.html
-In quadratic interpolation of sinusoidal spectrum-analysis peaks, we replace the main lobe of our window transform by a quadratic polynomial, or ``parabola''. This is valid for any practical window transform in a sufficiently small neighborhood about the peak, because the higher order terms in a Taylor series expansion about the peak converge to zero as the peak is approached.
 
-Note that, as mentioned in §D.1, the Gaussian window transform magnitude is precisely a parabola on a dB scale. As a result, quadratic spectral peak interpolation is exact under the Gaussian window. Of course, we must somehow remove the infinitely long tails of the Gaussian window in practice, but this does not cause much deviation from a parabola, as shown in Fig.3.36.
+% J. O. Smith and X. Serra, ``PARSHL: A program for the analysis/synthesis of inharmonic sounds based on a sinusoidal representation,'' in Proceedings of the 1987 International Computer Music Conference, Champaign-Urbana, Computer Music Association, searchable at http://quod.lib.umich.edu/i/icmc/, 1987, 
 
-values in the vicinity of the peaks. Since this is given accuracy, o
+% M. Abe and J. O. Smith, ``Design criteria for simple sinusoidal parameter estimation based on quadratic interpolation of FFT magnitude peaks,'' Audio Engineering Society Convention, San Francisco, 2004, 
 
-Since FFTs are efficient, this is an efficient interpolation method.
-However, in audio spectral modeling, there is usually a limit on the needed
-accuracy due to the limitations of audio perception.
-As a result, a ``perceptually ideal'' spectral interpolation method that is even more efficient is to zero-pad by some small factor (usually less than 5), followed by quadratic interpolation of the spectral magnitude. We call this the quadratically interpolated FFT (QIFFT) method [271,1]. The QIFFT method is usually more efficient than the equivalent degree of ideal interpolation, for a given level of perceptual error tolerance (specific guidelines are given in §5.6.2 below). The QIFFT method can be considered an approximate maximum likelihood method for spectral peak estimation, as we will see.
+%review paper (I think) https://ai2-s2-pdfs.s3.amazonaws.com/7bbc/c4d13458d0a6570fba35f508c2b44444fb07.pdf
+The location of spectral peaks may be obtained by so-called quadratically
+intepolated FFT(QIFFT). This consists of finding the location of the peak as the
+maxima of the parabola formed by the three points of the spectrum of a zero
+padded signal nearest the peak. The QIFFT method may be considered an approximate maximum likelihood method for spectral peak estimation. This approach is valid for any window, since for points in a region sufficiently close to a peak, the higher order terms in a Taylor series expansion about the peak converge to zero as the peak is approached. This is often more computationally efficient than zero padding alone.
+
+In the case of the Gaussian window however, since the window transform is
+exactly a parabola on a log scale, the parabolic approximation in exact for
+infinite windows. In practice however, small error may be introduced due to truncation.
+% show an example of the Gaussian window....?
+Neither choice of interpolation method improves the resolution of the spectrum, which is related to the window shape and length.
+% VIVA: related to amount of information
 % VIVA: what does this mean
-
-For a time-limited signal, which is zero outside of the measurement window, this
-is
-
-
-For time-limited this is idea, since the signal is zero outside of the
-window....for non-time limited signals (like mine)...what happens...? Such
-spectral interpolation is ideal when the closely spaced spectrum points. spacing
-of . We define the zero padding operator
-
-
-a causal signal with frequencies are within the desired resolution of the actual
-frequencies. ** note: padding with zeros apparently is the same as spectral
-interpolation -> this SHOULD actually be pretty good...no? - the only
-disadvantge, is I'm now taking the DFT of something which is not the original
-signal... ** note: zero padding should be done BEFORE windowing... ** note:
-apparently this is independent of the weird window effects I get...? ** there is
-also such a thing as ``upsampling'' - alternative approach
-
-Stack Exch Zero-padding in the time domain corresponds to interpolation in the
-Fourier domain. It is frequently used in audio, for example for picking peaks in
-sinusoidal analysis. While it doesn't increase the resolution, which really has
-to do with the window shape and length. As mentioned by @svenkatr, taking the
-transform of a signal that's not periodic in the DFT size is like multiplying
-with a rectangular window, equivalent in turn to convolving it's spectrum with
-the transform of the rectangle function (a sinc), which has high energy in
-sidelobes (off-center frequencies), making the true sinusoidal peaks harder to
-find. This is known as spectral leakage. But I disagree with @svenkatr that
-zero-padding is causing the rectangular windowing, they are separate issues. If
-you multiply your non-periodic signal by a suitable window (like the Hann or
-Hamming) that has appropriate length to have the frequency resolution that you
-need and then zero-pad for interpolation in frequency, things should work out
-just fine. By the way, zero-padding is not the only interpolation method that
-can be used. For example, in estimating parameters of sinusoidal peaks
-(amplitude, phase, frequency) in the DFT, local quadratic interpolation (take 3
-points around a peak and fit a parabola) can be used because it is more
-computationally efficient than padding to the exact frequency resolution that
-you want (would mean a much larger DFT size).
-
---> zero padding is basically interpolation in frequency domain...! -->
-alternative is local quadratic interpolation
-
-ZERO PADDING -> INTERPOLATION (from book)
-
-QIFFT (quadratic interpolation FFT)
-review paper (I think) https://ai2-s2-pdfs.s3.amazonaws.com/7bbc/c4d13458d0a6570fba35f508c2b44444fb07.pdf
-also a paper to reference (for quadratic interpolation FFT)
- M. Abe and J. O. Smith, “Design criteria for simple sinusoidal parameter
-estimation based on quadratic interpolation of FFT magnitude
-peaks,” in 117th Audio Engineering Soc., 2004, Paper no. 6256.
-
-
-
-\section{Better than FFT...}
-http://researchrepository.napier.ac.uk/4022/1/phd.pdf [p.43] <- some references
-here parametric approaches - what are these? non-parametric approaches - what
-are these?
-
-\section{FWHM -> decay time} Conversion between FWHM and decay time
-http://physik.uni-graz.at/~atr/publications/phd-thesis.pdf [p.189]
-
-\section{Sampling Theorem}
-
-Claude Shannon -> sampling theorem (best known)
-
-continuous time signal $x(t)$ with highest freq $\fmax$
-
-sample it periodically at a rate $f_s = 1/T_s > 2*f_max$, then the signal is
-exactly recovered from $\{x[k]\}$ the sampled values, using the interpolation
-rule:
-$$
-x(t) = \sum_{k=-\infty}^{\infty} x(k \Ts) h(t - k \Ts)
-$$
-where
-$$
-h(t) = \frac{sin(\pi t / \Ts)}{\pi t / \Ts}
-$$
-
-** Aliasing (alias...! non-unique...!)
-
-
-\section{Spectrum} FROM BEFORE: A correctly scaled fourier transform of a time
-domain signal is known as the power spectrum of the signal. real part ->
-absorption mode line - in fact, in the case of exponential decaying signal, such
-as
-$$
-  S(t) = S_0 e^{i \omega t}exp^{ -R_2 t }
-$$
-$R_2 = 1 / T_2$ rate constant, larger rate constant -> more rapid decay $T_2 = $
-time constant, the shape of the line is known as a Lorentzian, 'or to be precise
-the absorption mode Lorentzian' ....> What is this absorbtion mode stuff? %
-%http://www-keeler.ch.cam.ac.uk/lectures/understanding/chapter_4.pdf
-
-'The imaginary part of the spectrum gives a lineshape known as the dispersion
-mode Lorentzian'
-
-Absorbtion Lorenzian shape (show it) -> Integral/area is constant width = half
-the max height --> broader and shorter, narrower and taller something to do with
-height being $1/(\pi T_2)$ Hz % why Hz ??? Height directly proportional to
-amplitude...
-
-Dispersion Line obviously the integral thing isn't true any more... also broader
-than the absorption mode... %note Dispersion line ISNT realted to derivative
-line of ESR spectra
-
-Fourier transform is linear process, so
-\begin{equation} \FT{a x(t) + b y(t) } = a \FT{x(t)} + b \FT{y(t)}
-\end{equation} for any time domain functions $x(t)$ and $y(t)$.
-
-Also, time shift:
-$$
-\FT{x(t \pm t_0)} = \FT{x(t)} e^{\pm i \omega t_0}
-$$
-
-if sig is a sum of decaying terms, then total FT will be the sum of the line
-corresponding to each peak -> this is actually useful with max frequency
-
-** Phase -> what is the phase? what does it correspond to? how does it
-correspond to the imaginary part of FFT? Is it useful? (dont think so???)
-Interesting -> by shifting the phase of the wave I can swap the real and
-imaginary parts of the FT...? Is that true in my case..?
-
-after signal has decayed -> just recording noise --> reducing the time, mean
-better signal to noise ratio (SNR) --> but also means that not as much signal
-produced --> careful with this ----> Excitation is used instead time spend
-recording signal == aquisition time (is this a real term?)
-
-Sensitivity enhancement: Signal is strongest initially, and decays --> first
-part is ``more important'' --> multiply by a decaying function (1 -> 0) -->
-weighting gives more importance to early stuff ---> not (I think) this also
-affects amplitude...so should point this out.
-
-Example weighting function:
-$$
-W(t) = exp(-R_{LB} t)
-$$
-where $R_{LB} = $ rate constant (choice).
-
-Different $R_{LB}$ changes noise + also changes amplitude (so I need to
-normalise back, also amplitude meaning is lost -> which is kinda true anyway,
-right?)
-
-Note: weighting function will also broaden the lines (since decay is happening
-quicker) and reduce peak height...!
-
-NOTE: by taking the absolute value, actually I don't care about phase any more,
-because the absolute value doesn't vary with phase % check that it IS the
-absolute value that I should be taking Complex -> phase + magnitude Signals
-'power' in a frequency bin = amplitude (ish - not sure about this)
-
-Question: is my Lorentzian the shape of the amplitude or the shape of the real
-part that is in phase? Are these two thing equivalent? Does fitting with a
-Lorentzian imply that I need to use the real part of the spectrum?
-
-Question: maybe a better way to think about this is the absolute value and phase
-angle...?
-
-\section{FFT} * present FFT as a way of computing DFT * who came up with it *
-how important is it * how much faster is it * we don't have anything faster for
-a GENERAL signal
-
-\section{Alternatives} * These work for SPECIFIC cases.... STFT (short time fast
-fourier transform) -> at least get a reference and some comments with reference
-to existing work 
-%http://repository.cmu.edu/cgi/viewcontent.cgi?article=1065&context=dissertations
-z-transform - smaller windows spare FT - zero outputs (not intersting I don't
-think) FDM - constrained to decaying outputs (solve eigenvalue problem)
-
-
-\section{Obtaining Resonant Frequencies} * what is resonance and how do we
-obtain it from the spectrum A system exhibits resonance if frequency components
-at the resonant frequencies of the system oscillate with larger amplitudes than
-away from these resonant frequencies. In this case peaks in power spectrum will
-be seen at the corresponding resonant frequencies. Resonant frequency values can
-be recovered by peak fitting. [ mention Lorentz fitting here? compare to spline
-fitting? ]
-
-* mention
-
-*** Fast Fourier Transform ***
-
-The widely used Fast Fourier transform [***] algorith which reduces the
-computational of the DFT from an $\bigO(n^2)$ operation to an $\bigO(n log n)$
-operation.
-
-A discrete fourier transform of a time domain signal leads to a frequency domain
-spectrum, where an amplitude is associated with evenly spaced, discrete points
-in a frequency interval. This frequency domain representation of the signal is
-exact provided that the number of point...***
-
-This frequency amplitude is a complex number denoting the coefficient a given
-frequency in the discrete fourier series expansion. This can be convieniently
-plotted in an amplitude against frequency plot known as a power spectrum, where
-the peaks of the spectrum corrispond to the resonant frequencies of the system.
-
-The frequency resolution of the spectrum, that is the spacing of the discrete
-points in frequency space, is given by
-
-$$
-\Delta f = \frac{1}{T}
-$$
-
-where $T$ is the final time of the simulation. Care should be taken to ensure
-that the final time of the simulation is sufficiently long to account for the
-desired simulation error.
-
-% *** I can show this by showing in the results section how closely this matches
-the actual error found
-
-
-The maximum frequency, $f_{max}$, which can be resolved by a fourier transform
-is given by the Niquist-Shannon theorem which states
-$$
-f_{max} \leq \frac{1}{2 \Delta t_s}
-$$
-
-where $\Delta t_s$ is the time between sampling points of the signal, the
-sampling interval. A time domain signal in which the highest frequency component
-has a frequency less that $f_{max}$ is represented fully by the frequency domain
-spectrum. For time domain signals containing components of higher frequency that
-$f_{max}$ *** aliasing ***. % what happens here...!? Clearly the simulation time
-step, $\Delta t$, gives an upper limit on the sampling interval - therefore care
-should be taken to choose the $\Delta t$ of the simulation to be sufficiently
-small to allow the desired $f_{max}$ and also to allow for a sufficiently small
-error in the time domain signal. Which of these criteria is limiting factor will
-in general depend on the frequencies of interests.
-
-\section{Resonant Frequencies}
-\section{Mode Shapes}
-
-The fourier transform can be thought of as a factorisation of the signal into a
-temporal and spatial part. For a single point the spatial part will simply be a
-complex amplitude. However when the entire domain is considered each point has
-an associated complex amplitude for each frequency, which forms a spatial
-envelope which when multipled by the temporal part defines the oscillations
-associated with that frequency. When the frequency considered is a resonant
-frequency, then the envelope is known as the mode shape associated with that
-frequency.
-
-\section{Quality Factors}
-
+% what is ``upsampling'' - alternative approach?
+\section{Quality Factor}
 The quality factor is a widely used in engineering to describe the damping of an
 oscillating system. The qaulity factor, $Q$, indicates the rate at which energy
 is dissipated in the system. In applications where resonance is required,
@@ -573,128 +339,48 @@ In resonant system with a high quality factor, resonant frequency oscillations
 with have a long lifetime. Whilst oscillations away from the resonant frequency
 will die out quickly. Conversely in a system with a lower Q-factor the resonant
 oscillations will die out quickly and the resonant peak will have a larger
-bandwidth. Figure \ref{fig:signal-analysis-low-vs-high-q-spectrum} shows the
-resonant peaks of a circular PEC cavity, with a high quality factor, and the
-same signal with dissipation introduced, that is a low quality factor.
+bandwidth. 
 
-\begin{figure}
-\begin{center}
-    \includegraphics[scale=]{Figures/SignalAnalysis/lowVsHighQualitySpectrum}
-\end{center}
-\caption{}
-\label{fig:signal-analysis-low-vs-high-q-spectrum}
-\end{figure}
-
-For a dispersive system this will manifest itself in a wider spectrum line width
-[], and consequentially a larger error in the quality factor. Note that
+For a dispersive system this will manifest itself in a broadening spectrum line width [], and consequentially a larger error in the quality factor. Note that
 dispersion could be either physical or could be a non-physical dispersion
 introduced by a numerical method.
 
-A system with PEC boundaries and no material loss with no numerical errors is
-expected to have a zero linewidth and infinite quality factor.
-
 %WWWIIK
 
-% *** maybe mention Q-switching - how does Q-switching work? Am I going to
-research it?
+% *** maybe mention Q-switching - how does Q-switching work? Am I going to research it?
 
-\section{Envelopes} Since the signals being considered are of finite length, the
-periodic repetition of a finite signal results in a discontinuity, unless the
-final and initial values of the signal match exactly. This gives rise to a
-phenomena called spectral leakage, where non-physical non-zero spectral
-amplitudes are observed. For example consider a signal consisting of a single
-frequency
+\section{Lorentzian line shapes}
+FWHM -> decay time. Conversion between FWHM and decay time
+http://physik.uni-graz.at/~atr/publications/phd-thesis.pdf [p.189]
 
-$$
-f(x) = sin(i2 \pi f_{res} x)
-$$
-.
+% about absorbtion mode: http://www-keeler.ch.cam.ac.uk/lectures/understanding/chapter_4.pdf
 
-Then taking a discrete Fourier transform of the signal over a finite interval
-leads to spectral leakage as illustrated in figure
-\ref{fig:signal-analysis-speactral-leakage-sine-wave}. Note that for longer
-periods, less leakage occurs. Also note that figure {***} has significant lower
-leakage than figure {***} with a similar signal length. This is due to the
-signal in figure {***} having an integer multiple of cycles, resulting in a
-signal which can be repeated periodically exactly.
+\section{FFT}
+* present FFT as a way of computing DFT * who came up with it *
+how important is it
+* how much faster is it
+* we don't have anything faster for a GENERAL signal
+* none of this would be possible (i.e. DFT is too slow) without FFT
 
-\begin{figure}
-\begin{center}
-    \includegraphics[scale=]{Figures/SignalAnalysis/spectralLeakageSineWave}
-\end{center}
-\caption{Fourier transform of a number of sine waves with different intervals}
-\label{fig:signal-analysis-speactral-leakage-sine-wave}
-\end{figure}
+The widely used Fast Fourier transform [***] algorith which reduces the computational of the DFT from an $\bigO(n^2)$ operation to an $\bigO(n log n)$ operation. 
+
+\section{Alternatives} * These work for SPECIFIC cases.... STFT (short time fast
+fourier transform) -> at least get a reference and some comments with reference to existing work 
+%http://repository.cmu.edu/cgi/viewcontent.cgi?article=1065&context=dissertations
+z-transform - smaller windows spare FT - zero outputs (not intersting I don't think)
+FDM - constrained to decaying outputs (solve eigenvalue problem)
+%methods (supposedly) designed to reduce truncation * maxiumum entropy * linear prediction * FDM
+% thats what it says in
+%http://www-keeler.ch.cam.ac.uk/lectures/understanding/chapter_4.pdf
 
 
-These non-physical frequencies due to a finite interval can be reduced by
-multiplying the signal by a suitable window function prior to performing the
-DFT. This ensures that the initial and final values are zero. % This will
-introduce an additional periodicity the length of the signal... There are a
-number of choices of window, which should be selected according to the expected
-frequency content of the time domain signal. We use the popular Blackman
-envelope [***] prior to Fourier transforms in all examples in this work, unless
-specified otherwise. The Blackman envelope is given by % REF: Blackman, R. B.
-and Tukey, J. W. "Particular Pairs of Windows." In The Measurement of Power
-Spectra, From the Point of View of Communications Engineering. New York: Dover,
-pp. 98-99, 1959.
-$$
-A(x) = \frac{21}{50} \frac{1}{2} cos ( \frac{\pi x}{a} ) + \frac{2}{25} cos (
-\frac{2 \pi x }{a} )
-$$
 
-A short sample signal with a filter applied is shown for illustration in figure
-\ref{fig:signal-analysis-blackman-envelope}, alongside examples of spectra
-obtained from the same signal with and without the filter to illustrate the
-spectral leackage effect.
 
-\begin{figure}
-\begin{center}
-    \includegraphics[scale=]{Figures/SignalAnalysis/blackmanEnvelope}
-\end{center}
-\caption{Blackman envelope applied to a superposition of two sin waves + the
-spectrum of the superpositionof two sine waves of frequencies *** and *** with
-and without a blackman filter applied }
-\label{fig:signal-analysis-blackman-envelope}
-\end{figure}
+http://researchrepository.napier.ac.uk/4022/1/phd.pdf [p.43] <- some references
+here parametric approaches - what are these? non-parametric approaches - what
+are these?
 
-Figure \ref{fig:signal-analysis-comparison-of-envelopes} show the spectrum of
-the same time domain signal alongside the spectrum shown after applying a number
-of popularly used filters and the shape of these filters.
-
-\begin{figure}
-\begin{center}
-    \includegraphics[scale=]{Figures/SignalAnalysis/comparisonOfEnvelopes}
-\end{center}
-\caption{}
-\label{fig:signal-analysis-comparison-of-envelopes}
-\end{figure}
-
-\section{Need to explain the whole end to end process}
-
-%% : possible comparison of different
-\section{Zero frequency} If the frequency does not osciallate about zero, this
-will manifest itself in the spectrum as a peak centered on zero. This will occur
-of example when in a non-dissipative case the signal is sampled near a point
-where the cavity was excited. It is therefore advisable when possible to pick a
-point to sample a signal which is far from the source point.
-
-\section{Fitting Parameters}
-
-Lorenzian fitting assume a shape of the wave as
-
-$$
-e^{.../\tau}
-$$
-
-transformed into frequency space. We can use a Lorenzian fitting with a least
-squares approach to obtain a good fit for a peak - provided that the peak is
-isolated. However if the peak is near other peaks this can become a problem.
-
-%some solution would be required to fit the lorenzian to the peak.
-
-\section{Parametric Methods}
-
+MY BUMPH...
 Parametric methods such as the filter diagonalisation method (FDM) use an
 assumption of the shape of the signal to find the resonant frequencies by
 solving an eigenvalue problem. This method can be used to significantly reduce
@@ -705,21 +391,60 @@ However parametric methods are sensitive to dispersion which can degrade the
 signal amplitude for signals which are of a considerable length, and therefore
 while a better result can be obtained for a short run, for longer runs required
 to obtain a high accuracy the method is unsuitable.
+\section{TODO}
+The spacing of the discrete points in frequency space, is given by
+$$
+\Delta f = \frac{1}{T}
+$$
+where $T$ is the final time of the simulation. Care should be taken to ensure
+that the final time of the simulation is sufficiently long to account for the
+desired simulation error.
 
-\begin{itemize}
-  \item present the basis of the FFT method
-  \item dependence of resolution/cut-off
-	\item window functions / blackman envelope
-	\item filter diagonalisation method
-	\item Modal Shapes - how to obtain modes from resonant frequencies
-  \item comparison of the FFT + FDM
-  \item Summary of complete methods to recover resonant frequencies for a given
-problem
-\end{itemize}
+DFT does not require integrals over infinite limits to be calculated (i.e. calculus), as in FT
+% https://ccrma.stanford.edu/~jos/st/Introduction_DFT.html
 
+nice page on definitions
+%https://ccrma.stanford.edu/~jos/mdft/DFT_Definition.html
+
+* example of what a spectrum looks like * what are the peaks, what is resonance
+etc * Quantities of interest * Peak height * Peak width (Quality factor
+calculations) * FSR * phase
+
+* mention zero frequencies
+
+* LTI and Maxwells equations being an LTI system...? Sinusoids are eigenvalues of LTI systems.
+
+* Parsevals Theorem
+
+RESULTS: A system with PEC boundaries and no material loss with no numerical errors is expected to have a zero linewidth and infinite quality factor.
+
+QUESTION: also discuss RESONANCE in the physical problem section?
+mention broad frequency band responses as an advantage of time domain somewhere
+
+MODE SHAPES (GOES IN RESULTS)
+The fourier transform can be thought of as a factorisation of the signal into a
+temporal and spatial part. For a single point the spatial part will simply be a
+complex amplitude. However when the entire domain is considered each point has
+an associated complex amplitude for each frequency, which forms a spatial
+envelope which when multipled by the temporal part defines the oscillations
+associated with that frequency. When the frequency considered is a resonant
+frequency, then the envelope is known as the mode shape associated with that
+frequency.
+
+% what do I have
+** what I have: a discrete-time signal - discrete in x,
+* Q: how can we turn the signal which depends on time -> function that depends on frequency (spectrum)
+
+** continuous in y
+** finite length
+** discretely sampled
+** time domain (function of time)
+
+** how this connects with resonance
+
+** what is a signal...?
 
 %%% Local Variables:
 %%% mode: latex
 %%% TeX-master: "../Thesis"
 %%% End:
-

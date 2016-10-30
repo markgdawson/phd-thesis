@@ -352,18 +352,19 @@
 
 \newcommand{\invsqrN}{\frac{1}{\sqrt{N}}}
 \newcommand{\FT}[1]{\mathcal{F}\left[#1\right]} % maybe mathfrak or mathscr + \usepackage{mathrsfs}
-\newcommand{\Ts}{T_s}
-\newcommand{\fs}{f_s}
+\newcommand{\sampleT}{T}
+\newcommand{\samplingFreq}{f_s}
+\newcommand{\deltaFreq}{\Delta f}
+\newcommand{\omegaSampling}{\omega_s}
 \newcommand{\fmax}{f_{max}}
 \newcommand{\sig}{s}
 \newcommand{\signonortho}{\tilde{s}}
 \newcommand{\signonorthocont}{\hat{s}}
-\newcommand{\Spectrum}{S}
+\newcommand{\Spectrum}{X}
 \newcommand{\Projection}{\mathcal{P}}
 \newcommand{\DFTsum}{\sum_{n=0}^{N-1}}
 \newcommand{\DFTexp}[1]{e^{-i2 \pi n #1 / N}}
 \newcommand{\NiquistFreq}{f_N}
-\newcommand{\fourierBasis}{S}
 \newcommand{\dSinOneIndex}{l}
 \newcommand{\dSinTwoIndex}{m}
 \newcommand{\dSinAnyIndex}{k}
@@ -372,19 +373,36 @@
 \newcommand{\dSinOne}{s_l}
 \newcommand{\dSinTwo}{s_m}
 \newcommand{\dSinAny}{s_k}
-\newcommand{\omegaSinOne}{\omega_{\dSinAnyOne}}
-\newcommand{\omegaSinTwo}{\omega_{\dSinAnyTwo}}
+\newcommand{\freqSample}{f_s}
+\newcommand{\freqSampleAbove}{\epsilon}
+\newcommand{\sigSpaceVectOne}{\mathbf{u}}
+\newcommand{\sigSpaceVectTwo}{\mathbf{v}}
+\newcommand{\sigSpaceVectOneComp}{u_{n}}
+\newcommand{\sigSpaceVectTwoComp}{v_{n}}
+\newcommand{\sigSpace}{S_{DS}}
+\newcommand{\omegaSinOne}{\omega_{\dSinOneIndex}}
+\newcommand{\omegaSinTwo}{\omega_{\dSinTwoIndex}}
 \newcommand{\omegaSinAny}{\omega_{\dSinAnyIndex}}
+\newcommand{\omegaContrib}{\omega_f}
 \newcommand{\dtime}{t_n}
-\newcommand{\dtimeAny}{t_{\dSinAnyIndex}}
 \newcommand{\Nsamples}{N}
-\newcommand{\sampleInterval}{T}
+\newcommand{\sampleInterval}{\Delta t}
 \newcommand{\complexConj}[1]{\overline{#1}}
 \newcommand{\DFTbasis}{S_{DFT}}
 \newcommand{\nDFT}{n}
 \newcommand{\tdSignal}{x}  % discrete time signal
+\newcommand{\tdSignalSample}{x_n}  % discrete time signal
 \newcommand{\cdSignal}{x}  % continuous time signal
 
+% down sampling
+\newcommand{\downSampleSignal}{x_{L}}
+\newcommand{\downSampleSpectrum}{X_{L}}
+
+% zero padding
+\newcommand{\zeroPadSignal}{x_{zp}}
+\newcommand{\zeroPadSpectrum}{X_{zp}}
+\newcommand{\dtimeZeroPad}{\dtime}
+\newcommand{\dtimeZeroPadIndex}{m}
 % --------------------------------------------------------------------------------------------- %
 % Figures
 % --------------------------------------------------------------------------------------------- %
