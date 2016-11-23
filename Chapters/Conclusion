@@ -1,0 +1,8 @@
+
+%==============================================================
+\section{Concluding remarks}   \label{sc:conclusions}
+%==============================================================
+
+The use of a high-order accurate DG solver for the computation of electromagnetic resonant frequencies and the associated modes in cavities has been proposed. The method is capable of incorporating the dispersive character of frequency dependent materials using a single-pole Drude model. A unique capability of the proposed technique is the ability to incorporate the exact boundary representation of the boundary of the computational domain given by the CAD model. 
+
+The optimal rate of convergence on the error of the computed frequencies has been verified using numerical examples including two and three dimensional cavities, cavities with curved boundaries and dispersive materials. The results shows that the use of ultra-coarse meshes enables the efficient computation of the resonant frequencies and the coupling with a explicit time marching algorithm results in extremely low storage requirements, especially when compared to standard frequency domain solvers. The results demonstrate that the traditional isoparametric finite element method is not capable to attain the optimal rate of convergence when cavities with curved boundaries are considered. This is demonstrated to be related to the geometric approximation of curved boundaries as the NURBS-enhanced finite element method, which incorporates the exact description of the boundary, exhibits the expected optimal rate of convergence.

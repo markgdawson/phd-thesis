@@ -1,3 +1,92 @@
-\begin{thebibliography}{}
+\begin{thebibliography}{10}
+
+\bibitem{Balanis:ui}
+C~A Balanis.
+\newblock {Advanced electromagnetic engineering}, 1989.
+
+\bibitem{Jackson:490457}
+John~David Jackson.
+\newblock {\em {Classical electrodynamics}}.
+\newblock Wiley, New York, NY, 3rd edition edition, 1999.
+
+\bibitem{Ordal:1983bg}
+M~A Ordal, L~L Long, R~J Bell, S~E Bell, R~R Bell, R~W Alexander, and C~A Ward.
+\newblock {Optical properties of the metals Al, Co, Cu, Au, Fe, Pb, Ni, Pd, Pt,
+  Ag, Ti, and W in the infrared and far infrared}.
+\newblock {\em Applied Optics}, 22(7):1099--1119, April 1983.
+
+\bibitem{taflove2013advances}
+A.~Taflove, A.~Oskooi, and S.~G. Johnson.
+\newblock {\em Advances in FDTD computational electrodynamics: photonics and
+  nanotechnology}.
+\newblock Artech house, 2013.
+
+\bibitem{Fox:2001wm}
+M~Fox.
+\newblock {Optical Properties of Solids}.
+\newblock Oxford Master Series in Condensed Matter Physics, 2001.
+
+\bibitem{Taflove:1989ds}
+Allen Taflove and K~R Umashankar.
+\newblock {Review of FD-TD numerical modeling of electromagnetic wave
+  scattering and radar cross section}.
+\newblock In {\em Proceedings of the IEEE}, pages 682--699. IEEE, 1989.
+
+\bibitem{sullivan1996z}
+Dennis~M Sullivan.
+\newblock Z-transform theory and the fdtd method.
+\newblock {\em IEEE Transactions on antennas and propagation}, 44(1):28--34,
+  1996.
+
+\bibitem{Ashcroft:2005wp}
+N~W Ashcroft and N~D Mermin.
+\newblock {\em {Solid State Physics Int. ed}}.
+\newblock Holt-Saunders, 1976.
+
+\bibitem{Bandyopadhyay:1503732}
+Supriyo Bandyopadhyay.
+\newblock {\em {Physics of Nanostructured Solid State Devices}}.
+\newblock Springer, Boston, 2012.
+
+\bibitem{kelley1996piecewise}
+David~F Kelley and Raymond~J Luebbers.
+\newblock Piecewise linear recursive convolution for dispersive media using
+  fdtd.
+\newblock {\em IEEE Transactions on Antennas and Propagation}, 44(6):792--797,
+  1996.
+
+\bibitem{Stannigel:09}
+Kai Stannigel, Michael K\"{o}nig, Jens Niegemann, and Kurt Busch.
+\newblock Discontinuous galerkin time-domain computations of metallic
+  nanostructures.
+\newblock {\em Opt. Express}, 17(17):14934--14947, Aug 2009.
+
+\bibitem{Ji:2007dl}
+Xia Ji, Wei Cai, and Pingwen Zhang.
+\newblock {High-order DGTD methods for dispersive Maxwell's equations and
+  modelling of silver nanowire coupling}.
+\newblock {\em International Journal for Numerical Methods in Engineering},
+  69(2):308--325, January 2007.
+
+\bibitem{okoniewski1997simple}
+M~Okoniewski, M~Mrozowski, and MA~Stuchly.
+\newblock Simple treatment of multi-term dispersion in fdtd.
+\newblock {\em IEEE Microwave and Guided Wave Letters}, 7(5):121--123, 1997.
+
+\bibitem{kashiwa1990treatment}
+Tatsuya Kashiwa and Ichiro Fukai.
+\newblock A treatment by the fd-td method of the dispersive characteristics
+  associated with electronic polarization.
+\newblock {\em Microwave and Optical Technology Letters}, 3(6):203--205, 1990.
+
+\bibitem{Godlewski:2013tj}
+E~Godlewski.
+\newblock {Numerical Approximation of Hyperbolic Systems of Conservation Laws}.
+\newblock 2013.
+
+\bibitem{LeVeque:2002vc}
+Randall~J LeVeque.
+\newblock {Finite Volume Methods for Hyperbolic Problems}.
+\newblock 2002.
 
 \end{thebibliography}
