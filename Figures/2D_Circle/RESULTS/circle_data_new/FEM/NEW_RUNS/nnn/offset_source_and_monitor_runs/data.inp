@@ -1,0 +1,75 @@
+&inputDataFile
+ inputData%nsd = 2
+ inputData%inputFileDAT = "dat/meshCircularCavity_H3",
+ inputData%nurbsBoundary = "dat/circleExtR1",
+ inputData%inputMode = 1,
+ inputData%initialCondition = 0,
+ inputData%inputFileMonitor='monitor'
+ inputData%inputFileSource='source'
+ 
+ inputData%computeModes = .FALSE.,
+ inputData%modeBeta = 0.0D0,
+ inputData%maxFreqMonitor = 20,
+ inputData%modeStartCycle = 100,
+ inputData%monitorBinaryOutput = .FALSE.,
+ inputData%monitorWriteCycle = 100,
+ inputData%storeModeCycle = 100,
+ 
+ inputData%nefem = .FALSE.,
+  
+ inputData%nwlDesired = 10,
+ inputData%pOption = 3,
+ inputData%optionNodes = 1,
+ inputData%orderNodes = 0,
+
+ inputData%initialTime = 0.0D0,
+ inputData%tolSteadyState = 1.0D-6,
+ inputData%nOfCyclesMax = 0,
+ inputData%nOfTimeStepsPerCycle = 0,
+ inputData%cttTime = 0.7D0,
+ inputData%timeMarching = 1,
+ inputData%storedCurved = .TRUE.,
+ inputData%useAffineJacobians = .TRUE.,
+
+ inputData%snapshotCycle = -1,
+ inputData%nOfFramesPerCycle = 1,
+ inputData%outputAmpPhase = .FALSE.,
+
+ inputData%TFSF = .FALSE.,
+ inputData%mode = "TM",
+ inputData%lambda = 1.0D0,
+ inputData%phi = 0.0D0,
+ inputData%theta = 90.0D0,
+ inputData%incidentField = 0,
+ inputData%rcsComputation = .FALSE.,
+ inputData%rcsNOfAngles = 3601,
+
+ inputData%eps(1) = 1.0D0,
+ inputData%mu(1) = 1.0D0,
+ inputData%sigma(1) = 0.0D0,
+ inputData%dispersive(1) = .FALSE.,
+ inputData%eps(2) = 1.0D0,
+ inputData%mu(2) = 1.0D0,
+ inputData%sigma(2) = 0.0D0,
+ inputData%dispersive(2) = .FALSE.,
+ inputData%eps(3) = 1.0D0,
+ inputData%mu(3) = 1.0D0,
+ inputData%dispersive(3) = .FALSE.,
+ inputData%sigma(3) = 0.0D0,
+ inputData%eps(4) = 1.0D0,
+ inputData%mu(4) = 1.0D0,
+ inputData%sigma(4) = 0.0D0,
+ inputData%dispersive(4) = .FALSE.,
+
+ inputData%pmlValue = 0, 
+ inputData%pmlXmin = 40D0,
+ inputData%pmlXmax = 40D0,
+ inputData%pmlYmin = 40D0,
+ inputData%pmlYmax = 40D0,
+ inputData%pmlZmin = 40D0,
+ inputData%pmlZmax = 40D0,
+ inputData%pmlDegree = 2.0D0,
+ inputData%pmlR = 20,
+
+ inputData%timingActive = .FALSE.,
+/

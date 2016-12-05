@@ -1,0 +1,13 @@
+#!/bin/bash
+cat monitorPointList | while read line;
+do
+echo $line
+echo
+if [[ "$( cat $line | wc -l )" -eq 5 ]]
+then
+
+sed -i.bak '1a \
+2' $line;
+fi
+done
+

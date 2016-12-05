@@ -1,0 +1,13 @@
+#!/bin/bash
+JOBDIR=$(cd `dirname "${BASH_SOURCE[0]}"` && pwd)
+QIDFILE="${JOBDIR}/qid"
+
+cd "$JOBDIR"
+
+if [[ -f "${QIDFILE}" ]]
+then
+  echo 'ERROR: job submitted twice'
+  exit -1
+fi
+
+qsub -o "${JOBDIR}/out" -e "${JOBDIR}/err" -d "${JOBDIR}" "jobcard" > "${QIDFILE}"

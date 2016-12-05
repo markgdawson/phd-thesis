@@ -1,0 +1,7 @@
+cat fileList | while read line;
+do
+  echo $line;
+  fName=$(echo $line | sed 's/\/dat\//\//' )/uPoint.1.mat;
+  mkdir -p $(dirname $fName);
+  cp ${line}_uPoint.1.mat $(echo $line | sed 's/\/dat\//\//' )/uPoint.1.mat;
+done

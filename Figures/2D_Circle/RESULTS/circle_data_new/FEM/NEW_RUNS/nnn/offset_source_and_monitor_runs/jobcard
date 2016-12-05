@@ -1,0 +1,9 @@
+#!/bin/bash
+#PBS -N 13976.5
+#PBS -l nodes=4
+#PBS -l walltime=800:05:00
+#PBS -l mem=900mb
+#PBS -m bea
+
+mpiexec /home/mark.dawson/Source/maxwell-nefem/bin/release/maxwell2D-parallel >/dev/null
+
