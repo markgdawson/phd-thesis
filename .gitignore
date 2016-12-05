@@ -3,7 +3,6 @@ Chapters/.*.tex.swp
 *.blg
 *.log
 *.out
-*.pdf
 *.pdfsync
 *.toc
 _region*
