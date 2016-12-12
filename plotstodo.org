@@ -1,0 +1,122 @@
+#+TODO: TODO(t) RUN(r) RUNNING(r) POSTPROCESS(p) FIGURE(f) PUT(p) | DONE(d)
+
+* EXTRACTION PRIORITY
+** 2D FS ...? - just signals to generate the "all the spectra" plot
+** 2D Dispersive
+*** selected spectrum + signal example
+*** comparative non-dispersive signal/spectrum.
+*** get data:
+**** material parameters
+**** T
+**** initial condition
+** 2D Notched...
+** 3D timings extraction
+* Have I downloaded most recent timing comparison?
+* WAITING ON EXTRACTION
+* 2D Free Space Cavity (some runs)
+** check: 8x16 p1, 2x4 p1/p2
+** do all the initial spectrum comparisons (again)
+*** WITH THE SAME final time
+*** used dt=0.025, NTS=2^22, Tfin approx 104858 (power 2)
+*** put dt for each simulation in text (mention normalised)
+**** use a normalised dt. e.g. multiply by common factor etc? Exactly the same signal
+** use p=2,16x8 AND p=3,4x8 for all of these (should be easy)
+*** TODO effects of using a different IC
+***** gaussian at a point
+***** gaussian in time
+***** near/far monitor points
+*** PUT plot showing effect on peak of running for longer...
+*** TODO something to do with multiple monitor points?
+*** TODO something to do eventual noise in signal
+***** either...take those plots with a moving spectrum window
+***** or...take the plots where the ORIGINAL signal degrades...
+***** can I SEE this in the spectrum...?
+*** PUT importance of using start of the signal
+**** tried with no discard and 10,000 discard
+**** tried for 30 different discard times,
+     equally spaced on a log scale between 0 and 10000, for frequency 1
+***** the maximum difference observed was 10^13.5
+**** we conclude the the effect of the wave before reaching steady state is negligable for long signals (what about short signals?)
+*** PUT Comment on error only
+**** whilst error has little effect...noise at high period causes dramatic attenutation of higher frequencies....errors!
+*** FIGURE aliasing effects - PROBLEM -> I think I didn't do this with the same final time as everything else...!??
+**** dt = 0.025
+**** dt = 0.2
+**** dt = 0.4
+*** TODO single peak with different amounts of zero padding
+**** with Blackman filter (only? Rect too?)
+**** show single peak (same signal) with various amounts of zero padding
+**** show effect of zero padding on CONVERGENCE (i.e. conv plot with various degrees of zero padding).
+**** T=10000 -> with various degrees of zero padding....!
+**** only plot fundamental frequency
+**** something about QFFT convergence?
+**** mention QFFT (as an alternative) with an example -> show an example...mention issues with lower errors...
+*** show convergence with different amount of zero padding....!! nice plot....!
+*** POSTPROCESS time length - same zero padding on all (mention in text)
+**** no "special plotting"
+***** T=10
+***** T=100
+***** T=1000
+***** T=10000
+***** T=MAX, to check that a bigger time has no effect...
+*** POSTPROCESS Filter functions, with T=10000 (check that this is enough)
+**** DO THIS WITH A SINGLE PEAK....(effect will be the same for whole spectrum)
+**** Blackman
+**** Blackman-Harries
+**** Gaussian
+**** Rectangular
+*** POSTPROCESS Convergence in time for 10 frequencies, up to T=10000 (i.e. log10(4)), consistent zero padding
+*** Also get convergence plots with and without zero padding d with/without QFFT...?
+* 3D Cube
+** plot SPECTRA (using the same T as previously)
+** 3D Cube - add points for coarse meshes
+*** add even if I can't see the peak)
+* PP - less intense
+** dispersive
+*** NEED EXTRACTION dispersive spectrum -> do again WITHOUT units, but put units in the text
+* TIMING: uniform-p
+** RUNS: single-p STRONG scaling - do again for HEX as well as TET
+*** do the basic timings again on HPC wales
+**** build based on ACME presentation + either p=6 or p=8
+*** put in the text the number of time steps and the averages etc..
+*** Just redo these timing plots on blueice....
+*** Include some bar chart of total communication->computation
+** RUNS: single-p weak scaling - do for HEX as well as TET
+*** use my HEX and TET meshes, increase the problem size, and increase the processors as well
+* Adaptive p L2 norm: extra points for L2 norm mixed p
+*** point out that I'm using the relative L2 norm error...
+*** L2 required for p=2 and p=3...that is all
+* CAVITIES WITH SMALL FEATURES..
+** Loads of plots to get here
+** but what else can I get...?
+** also need to COMPARE TO PAPER...
+* PHOTONIC CRYTALS...RUN ME...! Better and corresponding
+* EXTRA PLOTS (NO RUNS)
+** 3D non-uniform cube
+*** show the mesh + partition - for weighted, unweighted and computed weights
+** Rectangular dispersive cavity
+*** show solution (E_1 and H_3) in a coarse mesh with high p
+*** show the error distribution for both
+*** if I've got BOTH TE AND TM - do the amplitude instead...?
+* EDITING PLOTS
+** 2D_FreeSpaceCavity/Conv/U[2]/F1_TE - remove lowest point
+** Change errors etc on the circle
+** Dispersive signals in time - remove units of time, mention in the text instead
+** 3D non-uniform cube
+*** first figure(red):
+**** x axis should contain 0 and nProcs
+**** show distribution of element p (to show that it correpsponds)
+**** maybe: show two mini subfigures next to it with the same scaling as the unweighted (so I can see the speed difference)
+*** second figure(yellow, (c) ):
+**** x axis should contain 0 and nProcs
+**** here I present the operation count, use the paaper, add some figures adapted from the paper
+**** In the text write and discuss the minimum of these figures. 0.7 meaning a maximum of 30% difference of CPU times in different processors.
+*** third figure(blue):
+**** x axis should contain 0 and nProcs
+**** next you show that you can "optimise" by timing a simulaiton in your current system
+**** If I time I get 0.8 (meaning a maximum of 20% difffernece of CPU times in different processors).
+*** CONCLUSION: you can imrpoce, but it isn't massive and requires an initial timing.
+*** need to make sure I can/have somehow shown the actual gain in CPU time
+
+*** OPERATION COUNT:
+**** get timings, and normalise with respect to the smallest, so I'm showing how much the timed p=8 compares to the untimed p=8
