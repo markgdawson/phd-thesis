@@ -66,10 +66,12 @@ The TM mode is considered and the frequencies are computed using a series of
 structured quadrilateral meshes with 4$\times$2, 8$\times$4, 16$\times$8,
 32$\times$16 and 64$\times$32 elements and different degrees of approximation.
 The spectra obtained is shown in Figure~\ref{fig:rectangle2DfreeSpace_Spectrum}
+
 \begin{itemize}
 \item EXAMPLE INTRODUCTION (PHYSICS)
 \item show the analytical solution
 \item refer to a reference problem (i.e. length etc)
+\item refer to a length of time for convergence in physical units
 \item show a table of first 10 analytical solution values (up to $f=2$) with $f_1...f_10$ labels
 \item include the analytical frequencies for the reference problem in the table
 \item EXAMPLE INTRODUCTION (NUMERICS)
@@ -85,32 +87,54 @@ note: TM only has one "good" component (which is U3), and TE has two U1 and U2 (
 %figure
 \begin{figure}[!ht]
 	\centering
-  \subfigure[4$\times$2 ]{\includegraphics[width=0.49\textwidth]{2D_FreeSpaceCavity/spectra/spectrum2x4}}
-  \subfigure[16$\times$8 ]{\includegraphics[width=0.49\textwidth]{2D_FreeSpaceCavity/spectra/spectrum8x16}}
-	\caption{Rectangular free space cavity: spectra for two meshes of quadrilaterals for different $p$.}
-	\label{fig:}
+  \subfigure[4$\times$2 ]{\includegraphics[width=0.49\textwidth]{2D_FreeSpaceCavity/spectra/spectrum2x4}\label{fig:2D_FreeSpaceCavity:2x4_spectra}}
+  \subfigure[16$\times$8 ]{\includegraphics[width=0.49\textwidth]{2D_FreeSpaceCavity/spectra/spectrum8x16}\label{fig:2D_FreeSpaceCavity:8x16_spectra}}	\caption{Rectangular free space cavity: spectra for two meshes of quadrilaterals for different $p$.}
 \end{figure}
 TODO: double check that the same point IC and the same final time is used in each case.
 TODO: change the spectra to be LENGTHWAYS (maybe less tall?) - check font size
 not affected
 
+\item Figure~\ref{fig:2D_FreeSpaceCavity:2x4_spectra}
 \begin{itemize}
-\item PLOT 1
 \item discuss the advantages of high order (higher frequency + higher amplitude)
+\item specify IC
+\item T=10000
+\item specify dt for each simulation...
+\item plots made with UNION of components (motivation: shows all peaks detected)
+\item does this put $p=1$ at a disadvantage
 \item say WHY we want higher amplitude...maybe this should have already happened by this stage?
 \item all frequencies captured up to...
 \item some comments about peak at zero
-\item PLOT 2
+\end{itemize}
+
+Figure~\ref{fig:2D_FreeSpaceCavity:8x16_spectra}
+\begin{itemize}
 \item Focus on the lowest frequency, compare the p=1 fine mesh vs p=2 coarse
   mesh, p=2 fne vs p=3 coarse (give ndof, nsteps for each example, total cpu time numbers)
-\item discuss the initial condition, we are using a delta function, which means
+\item discuss the initial condition, we are using a delta function, which means that its representation in the mesh changes as we refine
 \item mention that some frequencies are not captured
 \item mention that this is due to initial condition, and could be modified by: gaussian, multiple initial conditions
 \item show a plot of p=2, 16x8 with multiple initial conditions
-\item need to mention peak WIDTH (for the same final time?), make sure the final
-  time is ACTUALLY the same - width should be a measure of quality factor
-\item mention that these are done using a Blackman envelope (haven't introduced
-  this yet!!)
+\item need to mention peak WIDTH (for the same final time?), make sure the final time is ACTUALLY the same - width should be a measure of quality factor
+\item mention that these are done using a Blackman envelope (haven't introduced this yet!!)
+\item include a table with first 10 analytical frequencies
+\end{itemize}
+
+Figure~\ref{fig:2D_FreeSpaceCavity:discardTimes_4x8_p3}
+\begin{itemize}
+\item one might expect the initial to effect...
+\item Since signal duration is long, the effect on converged frequency estimate.
+\item for the following examples the the 4x8, p=3 spectra is selected
+\item message: don't discard the start
+\item the effects of noise due to numerical dispersion (causing attenuation of the signal) seen.
+\item higher frequencies attenuate more (due to low pass filtering of FEM)
+\item the variation observed in the fundemental frequency between a discard time of 0 and 10000 is of the order $10^{13.5}$. (30 samples, uniformly distributed in log space).
+\item Since signal duration is long, the effect on converged frequency estimate.
+\end{itemize}
+
+importance of signal:
+\begin{itemize}
+\item importance
 \end{itemize}
 
 Figure~\ref{fig:rectangle2DfreeSpace_Convergence} shows the evolution of the
@@ -119,9 +143,12 @@ for a degree of approximation $p$ ranging from 1 up to 3. Each error is computed
 from a single component. Figure (a) is computed from $E_2$, (b) from $E_1$, (c)
 from $E_3$, (d) from $H_2$, and both (e) and (f) from $H_3$.
 %figure
-TODO: cut out the points (p2 8x16) has some time marching error!
-TODO: Add extra (higher error) points to make plots more asthetically pleasing
-TODO: Add legends to all figures
+\begin{itemize}
+\item TODO: cut out the points (p2 8x16) has some time marching error!
+\item TODO: Add extra (higher error) points to make plots more asthetically
+  pleasing
+\item TODO: Add legends to all figures
+\end{itemize}
 \begin{figure}[!ht]
 	\centering
 
@@ -138,14 +165,16 @@ TODO: Add legends to all figures
 \item RECTANGULAR CAVITY CONVERGENCE PLOTS
 \item *only* a single component has been used, any component could have been used
 \item refer to which components/modes used for which plot in the text
-\item all components could have been used - this is easier
+\item explain all components could have been used - this is easier
 \item initial condition selected to excite these modes
 \item find a reference for the 2p+2 convergence rate
 \end{itemize}
 %text
 In this figure, and in subsequent examples, $f_i$ denotes the computed $i$-th resonant frequency and the frequencies are assumed ordered from lower to higher, i.e. $f_i < f_j$ if $i<j$. The error in the computed frequency $f_i$ is evaluated as $\epsilon_i = (|f_i - f_i^\star|)/f_i^\star$, where $f_i^\star$ is the known exact value of the resonant frequency~\cite{BalanisBook}.
 
-In all the examples, the expected $2p+2$ rate of convergence is approximately obtained, confirming the optimality of the proposed approach for computing the resonant frequencies of a free-space cavity. It can be observed that, for a given mesh and degree of approximation, the error increases as the frequency increases, illustrating the challenge in approximating higher frequencies. For instance, if the third mesh is used with a linear approximation (i.e., $p$=1), the resonant frequency $f_3 \approx$  8.38 THz is computed with an accuracy of $6.1 \times 10^{-4}$ whereas the error on the computed frequency $f_9 \approx$ 16.76 THz is $3.9 \times 10^{-3}$ (i.e. the error on the $f_9$ is more than 6 times higher than the error on the frequency $f_3$).
+In all the examples, the expected $2p+2$
+%TODO - reference here for 2p+2 convergence rate...!
+rate of convergence is approximately obtained, confirming the optimality of the proposed approach for computing the resonant frequencies of a free-space cavity. It can be observed that, for a given mesh and degree of approximation, the error increases as the frequency increases, illustrating the challenge in approximating higher frequencies. For instance, if the third mesh is used with a linear approximation (i.e., $p$=1), the resonant frequency $f_3 \approx$  8.38 THz is computed with an accuracy of $6.1 \times 10^{-4}$ whereas the error on the computed frequency $f_9 \approx$ 16.76 THz is $3.9 \times 10^{-3}$ (i.e. the error on the $f_9$ is more than 6 times higher than the error on the frequency $f_3$).
 
 The results also illustrate the benefit of using high-order approximations. In the second mesh, the use of a cubic approximation of the solution offers a result almost four orders more accurate than using a linear approximation and two orders of magnitude more accurate than using a quadratic approximation. In the four cases presented in Figure~\ref{fig:rectangle2DfreeSpace_Convergence}, the use of a cubic approximation in the second mesh provides a similar accuracy than the computation in the finest mesh with a linear approximation. This implies that the computation with $p$=3 provides the same accuracy than the computation with $p$=1 by reducing the number of degrees of freedom by a factor of almost 20. It is worth mentioning that the required use of finer meshes with linear elements induces a significantly higher computational cost due to the use of an explicit time marching scheme.
 
@@ -222,6 +251,20 @@ mesh 16 $\times$ 8 , $p = 2$ and $\TMz$ mode
 \subfigure[ Blackman-Harris window]{\includegraphics[width=\textwidth]{2D_FreeSpaceCavity/Windows/spectra/BlackmanHarrisWindow}}
 \subfigure[ Gaussian window]{\includegraphics[width=\textwidth]{2D_FreeSpaceCavity/Windows/spectra/GaussianWindow}}
 \end{figure}
+for WINDOWS discuss:
+\begin{itemize}
+\item Width of peaks
+\item Noise
+\item Amplitude (scaollping loss)
+\end{itemize}
+Discuss each one of them using perhaps the using the Fourier transform of the window itself. And basically conclude that you need to take a compromise. Refer to final time of 10000 (used here) and say that this is enough.
+
+Convergence in time figure:
+Show the four that are compared with spectra
+
+Discuss the advantages of both Blackman compared to Gaussian and rectangular.
+
+Mention that the one Blackman perform better than the other for low frequencies and contrary for high frequencies so basically similar performance.
 %figure DONE convergence with various windows
 \begin{figure}[!ht]
 	\centering
@@ -398,17 +441,7 @@ The evolution of the error on two computed resonant frequencies as a function of
 	\caption{Three dimensional cavity: $h$-convergence of the error for a selection of four choices of resonant frequency and solution component using hexahedral elements.}
 	\label{fig:cube3DfreeSpace_ConvergenceHex}
 \end{figure}
-
-\begin{figure}[!ht]
-	\centering
-	\subfigure[$f_5    \approx$ 1.118, $\USoltn_{3}$]{\includegraphics[width=0.49\textwidth]{3D_CubeCavity/Conv/TET/U[1]/F5_CF}}
-	\subfigure[$f_6    \approx$ 1.225, $\USoltn_{6}$]{\includegraphics[width=0.49\textwidth]{3D_CubeCavity/Conv/TET/U[6]/F6_CF}}
-	\subfigure[$f_9    \approx$ 1.581, $\USoltn_{4}$]{\includegraphics[width=0.49\textwidth]{3D_CubeCavity/Conv/TET/U[4]/F9_CF}}
-	\subfigure[$f_{10} \approx$ 1.658, $\USoltn_{2}$]{\includegraphics[width=0.49\textwidth]{3D_CubeCavity/Conv/TET/U[2]/F10_CF}}
-
-	\caption{Three dimensional cavity: $h$-convergence of the error for a selection of four choices of resonant frequency and solution component using tetrahedral elements.}
-	\label{fig:cube3DfreeSpace_ConvergenceTet}
-\end{figure}
+%viva - higher frequencies more challenging in 3D
 %text
 The results demonstrate the optimal convergence properties of the proposed approach to compute the resonant frequencies in three dimensional cavities and illustrate the challenge of computing high resonant frequencies as the accuracy of the frequency $f_5$ is almost two orders of magnitude higher than the accuracy for the frequency $f_9$. 
 
@@ -452,6 +485,18 @@ All the modes have been computed on a mesh with only 64 hexahedral elements and 
 
 \clearpage
 \subsection{Cavities with small features}
+Meshes
+- Discuss the required mesh refinement with FEM and how this can be avoided with NEFEM. (provide number of elements and induced time step).
+Show figures.
+\begin{itemize}
+\item Show the spectrum with a scale such that the two peaks are hardly differentiated (or not at all). Include a box explaining that this will be zoomed in.
+\item Show the modes
+\item Qualitative comparison with the dielectric circle.
+\item This will be the first problem with multi-material.
+\item You can show here results of the dielectric circle 
+\item You can show two different materials to show different frequencies where the split happens.
+\end{itemize}
+
 %figure
 \begin{figure}[!ht]
 	\centering
@@ -464,6 +509,13 @@ All the modes have been computed on a mesh with only 64 hexahedral elements and 
 %text TODO introduce 3D Sphere
 \section{Parallel}
 \subsection{3D Convergence plots}
+single p strong scaling plot
+\begin{itemize}
+\item use these plots to justify that communication it not relevant, so the most important is to distribute the work among all the processor properly ---> not sure about this statement, but I need a conclusion
+\item You could add two different communication strategies.
+\item do I need another figure with bigger meshes.
+\item This figure shows that when all the elements have the same p you just need to the same number of elements per processor, so the only thing is to minimise  interfaces in between processors (parametis)
+\end{itemize}
 \begin{figure}[!ht]
 	\centering
   \includegraphics[width=0.49\textwidth]{Parallel/3DSpeedPlot_unitCube_legend}
@@ -472,6 +524,25 @@ All the modes have been computed on a mesh with only 64 hexahedral elements and 
 \end{figure}
 \clearpage
 \subsection{3D Non-Uniform Cube}
+DESCRIPTION OF MESH:
+\begin{itemize}
+\item SHOW THE MESH and explaining the rationale of the test.
+Show a table with rows showing p=1,...,9.
+Columns showing min nwl and max nwl. THis motivates variable p.
+\item: TO THINK ABOUT. Including delta t. This will need s study of the stability limit for different p. http://wwwhome.math.utwente.nl/~botchevma/sarmany_ea07.pdf
+\item In many applications the mesh is generated so that a uniform distribution of nodes per wavelength are obtained. In the presence of small features you propose to use variable p to alleviate the meshing constraint.
+\item Provide in the text the min and max element size, time step induced if you were to use 
+\end{itemize}
+%TODO FIGURE - show the mesh and partition
+
+\begin{figure}[!ht]
+	\centering
+  \subfigure[histogram]{\includegraphics[width=0.49\textwidth]{Parallel/3D_UnitCube_nonUniform/elementSizeHsitogram}}
+  \subfigure[histogram]{\includegraphics[width=0.49\textwidth]{Parallel/3D_UnitCube_nonUniform/pHistogram}}
+\caption{3D unit cube: histograms of p and element size}
+	\label{fig:unitCubeNonUniformTimings}
+\end{figure}
+
 speed(normalised): 0.5551    0.6592    1.0000
 (computed from minimum timestep length)
 \begin{figure}[!ht]
@@ -492,14 +563,6 @@ Tets
 \caption{3D unit cube: weighting comparison}
 	\label{fig:unitCubeNonUniformTimings}
 \end{figure}
-\begin{figure}[!ht]
-	\centering
-  \subfigure[histogram]{\includegraphics[width=0.49\textwidth]{Parallel/3D_UnitCube_nonUniform/elementSizeHsitogram}}
-  \subfigure[histogram]{\includegraphics[width=0.49\textwidth]{Parallel/3D_UnitCube_nonUniform/pHistogram}}
-\caption{3D unit cube: histograms of p and element size}
-	\label{fig:unitCubeNonUniformTimings}
-\end{figure}
-
 change in delta t is only 6x
 hMin=0.003963734230961
 
@@ -519,17 +582,6 @@ hMin=0.003963734230961
 	\label{fig:unitCubeNonUniformGlobalAdaptivePL2Conv}
 \end{figure}
 L2 computed at $T=1$
-\begin{figure}[!ht]
-	\centering
-\subfigure[]{\includegraphics[width=0.49\textwidth]{AdaptiveP/localConvergenceFrame0_legend}}
-\subfigure[]{\includegraphics[width=0.49\textwidth]{AdaptiveP/localConvergenceFrame1}}
-\end{figure}
-\begin{figure}[!ht]
-	\centering
-  \includegraphics[width=\textwidth]{AdaptiveP/nestedElementsWithoutP}
-\caption{3D unit cube: histograms of p and element size}
-	\label{fig:unitCubeNonUniformTimings}
-\end{figure}
 % text TODO
 %% * use the same dimensions as the 3D Cube
 \section{Photonic Crystals}
