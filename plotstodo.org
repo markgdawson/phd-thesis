@@ -13,37 +13,22 @@
 ** 3D timings extraction
 * Have I downloaded most recent timing comparison?
 * WAITING ON EXTRACTION
-* 2D Free Space Cavity (some runs)
-** check: 8x16 p1, 2x4 p1/p2
-** do all the initial spectrum comparisons (again)
-*** WITH THE SAME final time
-*** used dt=0.025, NTS=2^22, Tfin approx 104858 (power 2)
-*** put dt for each simulation in text (mention normalised)
-**** use a normalised dt. e.g. multiply by common factor etc? Exactly the same signal
-** use p=2,16x8 AND p=3,4x8 for all of these (should be easy)
-*** TODO effects of using a different IC
-***** gaussian at a point
-***** gaussian in time
-***** near/far monitor points
-*** PUT plot showing effect on peak of running for longer...
-*** TODO something to do with multiple monitor points?
-*** TODO something to do eventual noise in signal
-***** either...take those plots with a moving spectrum window
-***** or...take the plots where the ORIGINAL signal degrades...
-***** can I SEE this in the spectrum...?
-*** PUT importance of using start of the signal
-**** tried with no discard and 10,000 discard
-**** tried for 30 different discard times,
-     equally spaced on a log scale between 0 and 10000, for frequency 1
-***** the maximum difference observed was 10^13.5
-**** we conclude the the effect of the wave before reaching steady state is negligable for long signals (what about short signals?)
-*** PUT Comment on error only
+* +2D Free Space Cavity (some runs)+
+** do all the initial spectrum comparisons (again) with rect window
+*** usual final time...
+*** hConv + pConv
+*** do the 4x2 mesh pConv also
+*** do 4x2 mesh pConv with Blackman also, check that it looks the same...!
+*** see what the story is..
+** +other plots+
+*** +PUT plot showing effect on peak of running for longer...+
+*** +PUT Comment on error only+
 **** whilst error has little effect...noise at high period causes dramatic attenutation of higher frequencies....errors!
-*** FIGURE aliasing effects - PROBLEM -> I think I didn't do this with the same final time as everything else...!??
+*** +FIGURE aliasing effects - PROBLEM -> I think I didn't do this with the same final time as everything else...!??+
 **** dt = 0.025
 **** dt = 0.2
 **** dt = 0.4
-*** TODO single peak with different amounts of zero padding
+*** +TODO single peak with different amounts of zero padding+
 **** with Blackman filter (only? Rect too?)
 **** show single peak (same signal) with various amounts of zero padding
 **** show effect of zero padding on CONVERGENCE (i.e. conv plot with various degrees of zero padding).
@@ -51,22 +36,55 @@
 **** only plot fundamental frequency
 **** something about QFFT convergence?
 **** mention QFFT (as an alternative) with an example -> show an example...mention issues with lower errors...
-*** show convergence with different amount of zero padding....!! nice plot....!
-*** POSTPROCESS time length - same zero padding on all (mention in text)
-**** no "special plotting"
-***** T=10
-***** T=100
-***** T=1000
-***** T=10000
-***** T=MAX, to check that a bigger time has no effect...
-*** POSTPROCESS Filter functions, with T=10000 (check that this is enough)
+*** +TODO enough timesteps...?+
+*** +POSTPROCESS Filter functions, with T=10000 (check that this is enough)+
 **** DO THIS WITH A SINGLE PEAK....(effect will be the same for whole spectrum)
 **** Blackman
 **** Blackman-Harries
 **** Gaussian
 **** Rectangular
-*** POSTPROCESS Convergence in time for 10 frequencies, up to T=10000 (i.e. log10(4)), consistent zero padding
-*** Also get convergence plots with and without zero padding d with/without QFFT...?
+*** +Also get convergence plots with and without zero padding d with/without QFFT...?+
+*** POSTPROCESS conv in time freqs 1,10 (two plots) - show some zero padding, lots of zero padding, no zero padding
+*** TODO effects of using a different IC
+***** gaussian at a point
+***** gaussian in time
+***** near/far monitor points
+*** TODO something to do with eventual noise in signal
+***** either...take those plots with a moving spectrum window
+***** or...take the plots where the ORIGINAL signal degrades...
+***** can I SEE this in the spectrum...?
+*** TODO something to do with comparing multiple monitor point?
+*** PUT importance of using start of the signal
+**** tried with no discard and 10,000 discard
+**** tried for 30 different discard times,
+     equally spaced on a log scale between 0 and 10000, for frequency 1
+***** the maximum difference observed was 10^13.5
+**** we conclude the the effect of the wave before reaching steady state is negligable for long signals (what about short signals?)
+* 2D Circle
+** +SCALING...!+
+** +from dropbox files, scale frequencies - should be quick...+
+** write in 'the fundamental frequency of this device is...'
+** RUNNING look for monitor point effect files (ACME) + put it in <- RUNNING this stuff...!
+** show the spectra (in the context of monitor points)
+** MAYBE: show how convergence depends on monitor points?
+* +2D Dispersive Volumetric+
+** +solution snapshots (E,H,Z...) - initial + at some point in time+
+** show pointwise error - i.e. a plot of this minus the soltn
+** MAYBE: shape of volumetric source?
+** MAYBE: pointwise error (show)
+** MAYBE: show the L2 norm of the amplitude instead of two components
+** MAYBE: show divergence in time....??
+* WAITING: 2D Dispersive cavity
+  -> waiting for COMPARISON signal (running on the cluster)
+  -> LOADS of stuff running on the cluster....look at it...!
+  -> would like to demo the amplitude duifference at high T
+** find p=2 128 elem uPoint (Disp + nonDisp) --> actually, use 4x8_p2 instead...for now...
+*** compare signal two different points in time
+*** compare spectra
+** RUN the mode shapes AGAIN...with 4x8,p3...?
+* Notches
+** get mode shapes from ACME conference paper...(Dropbox)
+** compare frequency
 * 3D Cube
 ** plot SPECTRA (using the same T as previously)
 ** 3D Cube - add points for coarse meshes

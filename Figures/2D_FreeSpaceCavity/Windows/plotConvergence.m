@@ -1,12 +1,18 @@
-close all;
 plotNames = {
-    'Blackman',
-    'Blackman-Harris',
+    'Rect',
     'Gaussian',
-    'Cosine',
-    'Hann',
-    'Rect' };
+    'Blackman',
+    'Blackman-Harris'
+     };
  nPlots=length(plotNames);
+ 
+ colors = [
+    0              0    1.0000
+    0    0.7000    1.0000
+    %0.8000         0    1.0000
+    0.5000         0    1.0000
+    1.0000    0.6000         0
+          ];
  
  lineStys = {
      '+-';
@@ -38,7 +44,8 @@ for iFreq=3:10
     for i=1:nPlots
         dn = plotNames{i};
         lineSty = lineStys{i};
-        plot(log10(c{i}.T),log10(c{i}.error(iFreq,:)./a(iFreq)),lineSty,'displayName',dn,'lineWidth',2);
+        h = plot(log10(c{i}.T),log10(c{i}.error(iFreq,:)./a(iFreq)),lineSty,'displayName',dn,'lineWidth',2);
+        h.Color = colors(i,:);
         hold all;
     end
     legend show
@@ -48,9 +55,10 @@ for iFreq=3:10
     figReverseLineOrder
     
     ca=gca;
-    ca.Children(4).Color='k';
-    ca.Children(3).Color=[0.4940    0.1840    0.5560];
+    ca.Children(1).DisplayName = 'Rectangular';
+    %ca.Children(4).Color='k';
+    %ca.Children(3).Color=[0.4940    0.1840    0.5560];
     
     
-    latexExportFigure('save',sprintf('conv/F%d',iFreq),'type','pdf','legopt',true);
+    latexExportFigure('save',sprintf('conv/F%d',iFreq));
 end

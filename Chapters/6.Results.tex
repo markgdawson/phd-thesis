@@ -67,50 +67,53 @@ structured quadrilateral meshes with 4$\times$2, 8$\times$4, 16$\times$8,
 32$\times$16 and 64$\times$32 elements and different degrees of approximation.
 The spectra obtained is shown in Figure~\ref{fig:rectangle2DfreeSpace_Spectrum}
 
+EXAMPLE INTRODUCTION (PHYSICS)
 \begin{itemize}
-\item EXAMPLE INTRODUCTION (PHYSICS)
 \item show the analytical solution
 \item refer to a reference problem (i.e. length etc)
 \item refer to a length of time for convergence in physical units
 \item show a table of first 10 analytical solution values (up to $f=2$) with $f_1...f_10$ labels
 \item include the analytical frequencies for the reference problem in the table
-\item EXAMPLE INTRODUCTION (NUMERICS)
-\item say the type of initial condition (delta, location, intensity)
-\item final time + timesteps used (for each example) : make sure everything is
-  normalised (same final time)
-\item say that the way the initial condition is represented depends on the shape functions.
-\item say that spectrum computed is the UNION of all the components (justify by
-  saying that this shows all frequencies that have been captured).
 \end{itemize}
-
-note: TM only has one "good" component (which is U3), and TE has two U1 and U2 (but no U3) is the only component 
-%figure
+  
+EXAMPLE INTRODUCTION (NUMERICS)
+\begin{itemize}
+\item initial condition, a point excitation, unity height at [0,0]
+\item dt = 0.025 (as seen by FT, but not necessarily that of the simulation)
+\item final time, $T = 2^(22) * 0.025$
+\item specify the resolution in frequency space
+\item hexagonal elements, uniform refinement
+\item say that the way the initial condition is represented depends on the shape functions.
+\item say that spectrum computed is the UNION of the amplitude all the components. motivation: shows all peaks detected)
+\item note: TM only has one "good" component (which is U3), and TE has two U1 and U2 (but no U3) is the only component 
+\end{itemize}
 \begin{figure}[!ht]
 	\centering
-  \subfigure[4$\times$2 ]{\includegraphics[width=0.49\textwidth]{2D_FreeSpaceCavity/spectra/spectrum2x4}\label{fig:2D_FreeSpaceCavity:2x4_spectra}}
-  \subfigure[16$\times$8 ]{\includegraphics[width=0.49\textwidth]{2D_FreeSpaceCavity/spectra/spectrum8x16}\label{fig:2D_FreeSpaceCavity:8x16_spectra}}	\caption{Rectangular free space cavity: spectra for two meshes of quadrilaterals for different $p$.}
+  \subfigure[4$\times$2, h-refinement]{
+    \includegraphics[width=\textwidth]{2D_FreeSpaceCavity/SpectrumComparison/pVsH/hConv_2x4_legend}
+    \label{fig:2D_FreeSpaceCavity:1x2_spectra_hConv}}
+  \\
+  \subfigure[4$\times$2, p-refinement]{
+    \includegraphics[width=\textwidth]{2D_FreeSpaceCavity/SpectrumComparison/pVsH/pConv_2x4_legend}
+    \label{fig:2D_FreeSpaceCavity:1x2_spectra_pConv}} \\
+% /media/mark/slim/blueice_final/2D_FreeSpaceCavity_exampleSpectra/SpecComparisonPlot/original/allSameSourceAndMonitor/extraruns/signals
 \end{figure}
-TODO: double check that the same point IC and the same final time is used in each case.
-TODO: change the spectra to be LENGTHWAYS (maybe less tall?) - check font size
-not affected
-
-\item Figure~\ref{fig:2D_FreeSpaceCavity:2x4_spectra}
+Figure~\ref{fig:2D_FreeSpaceCavity:1x2_spectra_hConv}
 \begin{itemize}
-\item discuss the advantages of high order (higher frequency + higher amplitude)
-\item specify IC
-\item T=10000
-\item specify dt for each simulation...
-\item plots made with UNION of components (motivation: shows all peaks detected)
-\item does this put $p=1$ at a disadvantage
+\item point out that the black line is the same on both
+\item discuss the advantages of high order vs low order (higher frequency + higher amplitude)
+\item Q:does the uniform length of time put $p=1$ at a disadvantage
 \item say WHY we want higher amplitude...maybe this should have already happened by this stage?
 \item all frequencies captured up to...
 \item some comments about peak at zero
 \end{itemize}
 
-Figure~\ref{fig:2D_FreeSpaceCavity:8x16_spectra}
+Figure~\ref{fig:2D_FreeSpaceCavity:1x2_spectra_pConv}
 \begin{itemize}
-\item Focus on the lowest frequency, compare the p=1 fine mesh vs p=2 coarse
+\item Focus on the lowest frequency, compare the p=2 vs 8x16 coarse
   mesh, p=2 fne vs p=3 coarse (give ndof, nsteps for each example, total cpu time numbers)
+\item compare number of degrees of freedom: href = 6    24    96, pref= 6 12 20
+\item compare H2 + p=3 as having a similar number of degrees of freedom.
 \item discuss the initial condition, we are using a delta function, which means that its representation in the mesh changes as we refine
 \item mention that some frequencies are not captured
 \item mention that this is due to initial condition, and could be modified by: gaussian, multiple initial conditions
@@ -120,9 +123,27 @@ Figure~\ref{fig:2D_FreeSpaceCavity:8x16_spectra}
 \item include a table with first 10 analytical frequencies
 \end{itemize}
 
+\begin{figure}[!ht]
+	\centering
+  \subfigure[8$\times$4, p-refinement]{
+    \includegraphics[width=\textwidth]{2D_FreeSpaceCavity/SpectrumComparison/pVsH/pConv_4x8_legend}
+    \label{fig:2D_FreeSpaceCavity:1x2_spectra_pConv}} \\
+\end{figure}
+
+Message: In practice, best results achieved with a combination of p and h refinement
+Figure~\ref{fig:2D_FreeSpaceCavity:4x8_spectra_pConv}
+\begin{itemize}
+\item say a better resolution can be obtained from a combination of h and p refinement
+\item conclude: mesh refinement improves ability to capture higher frequencies
+\item for p=3 each peak in the range 0:2.5 corresponds exactly to a resonant frequency in the table above, i.e. the frequencies 1->33 are all captured. Above 2.5 some peaks are missing and badly captured.
+\item compare ndof and amplitude/frequencies captured for each line with the href and pref
+\end{itemize}
+
+Message: Do not discard start of the signal...
+TODO
 Figure~\ref{fig:2D_FreeSpaceCavity:discardTimes_4x8_p3}
 \begin{itemize}
-\item one might expect the initial to effect...
+\item discarding the initial signal has no effect (on signal)
 \item Since signal duration is long, the effect on converged frequency estimate.
 \item for the following examples the the 4x8, p=3 spectra is selected
 \item message: don't discard the start
@@ -132,11 +153,150 @@ Figure~\ref{fig:2D_FreeSpaceCavity:discardTimes_4x8_p3}
 \item Since signal duration is long, the effect on converged frequency estimate.
 \end{itemize}
 
-importance of signal:
+Message: start of signal is important...
+TODO: no figure
 \begin{itemize}
-\item importance
+\item select the 4x8, p=3 spectra is selected
+\item the effects of noise due to numerical dispersion (causing attenuation of the signal) seen.
+\item higher frequencies attenuate more (due to low pass filtering of FEM)
+\item the variation observed in the fundemental frequency between a discard time of 0 and 10000 is of the order $10^{13.5}$. (30 samples, uniformly distributed in log space).
+\item Since signal duration is long, the effect on converged frequency estimate.
 \end{itemize}
 
+%============================================================
+%============================================================
+
+\clearpage
+\subsection{Window functions}
+%figure
+\begin{figure}[!ht]
+	\centering
+  \subfigure[Rectangular]{\includegraphics[width=0.49\textwidth]{2D_FreeSpaceCavity/Windows/newRuns/filter_4x8_p3_Rect}}
+  \subfigure[Gaussian]{\includegraphics[width=0.49\textwidth]{2D_FreeSpaceCavity/Windows/newRuns/filter_4x8_p3_Gaussian}}
+  \subfigure[Blackman]{\includegraphics[width=0.49\textwidth]{2D_FreeSpaceCavity/Windows/newRuns/filter_4x8_p3_Blackman}}
+  \subfigure[Blackman-Harris]{\includegraphics[width=0.49\textwidth]{2D_FreeSpaceCavity/Windows/newRuns/filter_4x8_p3_Blackman-Harris}}
+\end{figure}
+%figure DONE convergence with various windows
+\begin{figure}[!ht]
+	\centering
+  \subfigure[$f_{3}$]{\includegraphics[width=0.45\textwidth]{2D_FreeSpaceCavity/Windows/conv/F3}} 
+  \subfigure[$f_{4}$]{\includegraphics[width=0.45\textwidth]{2D_FreeSpaceCavity/Windows/conv/F4}}
+  %\subfigure[$f_{8}$]{\includegraphics[width=0.45\textwidth]{2D_FreeSpaceCavity/Windows/conv/F8}}
+  \subfigure[$f_{9}$]{\includegraphics[width=0.45\textwidth]{2D_FreeSpaceCavity/Windows/conv/F9}}
+  \subfigure[$f_{10}$]{\includegraphics[width=0.45\textwidth]{2D_FreeSpaceCavity/Windows/conv/F10_legend}}
+	\label{fig:rectangle2DfreeSpace_filteringConvergence}
+\end{figure}
+
+\begin{figure}[!ht]
+	\centering
+  \subfigure[Rectangular]{\includegraphics[width=\textwidth]{2D_FreeSpaceCavity/Windows/newRuns/filter_4x8_p3_Rect_spec}}
+  \subfigure[Blackman]{\includegraphics[width=\textwidth]{2D_FreeSpaceCavity/Windows/newRuns/filter_4x8_p3_Blackman_spec}}
+\end{figure}
+for WINDOWS single-peak figures discuss:
+NOTE: THE CONVERGENCE IN TIME PLOT IS DONE USING ZERO-PADDING (nothing else so far is)
+\begin{itemize}
+\item rectangular has minimal scalloping loss
+\item rectangular has minimal scalloping loss
+\item windows can be selected to sharpen peaks, but retain width
+\item blackman, lots of loss of amplitude - but sharp peaks
+\item blackman/blackman harris get there faster...Mention that the one Blackman perform better than the other for low frequencies and contrary for high frequencies so basically similar performance.
+\item consistently perform better than rectangular window
+\item Width of peaks
+\item Noise
+\item Discuss each one of them using the using the Fourier transform of the window itself. And basically conclude that you need to take a compromise. Refer to final time of 10000 (used here) and say that this is enough.
+\end{itemize}
+
+\clearpage
+\subsection{Aliasing effects}
+%figure
+\begin{figure}[!ht]
+	\centering
+\subfigure[$\Delta t = 0.025$]{\includegraphics[width=\textwidth]{2D_FreeSpaceCavity/Aliasing/new/4x8_p3_dt=0_025}} \\
+\subfigure[$\Delta t = 0.2$]{\includegraphics[width=\textwidth]{2D_FreeSpaceCavity/Aliasing/new/4x8_p3_dt=0_2}} \\
+\subfigure[$\Delta t = 0.4$]{\includegraphics[width=\textwidth]{2D_FreeSpaceCavity/Aliasing/new/4x8_p3_dt=0_4}} \\
+	\caption{Rectangular free-space cavity: spectrum with and without aliasing
+    effects for two choices of timestep}
+	\label{fig:rectangle2DfreeSpace_aliasing}
+\end{figure}
+
+Aliasing: Figure~\ref{fig:rectangle2DfreeSpace_aliasing}
+Message: the time steps needs to be small enough
+\begin{itemize}
+\item T fixed at $2^{22}$ timesteps (as previous examples)
+\item dt is increased
+\item again, union of all components shown
+\item no zero padding (yet)
+\item additional peaks start appearing
+\item location of peak not affected, but becomes harder to distinguish from noise
+\end{itemize}
+
+\begin{figure}[!ht]
+	\centering
+\includegraphics[width=\textwidth]{2D_FreeSpaceCavity/convergenceInTime/nTS2pow22_4x8_p3_f1_dt=0_025_legend} \label{fig:2D_FreeSpaceCavity:peakNarrowingInTime}
+\end{figure}
+
+Message: We need to run for long periods of time
+Figure~\ref{fig:2D_FreeSpaceCavity:convergenceInTime}
+TODO: need to adjust fonts on this figure...
+\begin{itemize}
+\item select the 4x8, p=3 spectra is selected (same dt)
+\item refer up to figure on windows (showing convergence in time)
+\item shown WITH window functions...
+\item Figure~\ref{fig:2D_FreeSpaceCavity:peakNarrowingInTime} shows the narrowing of the peak with time
+\item Figure~\ref{} shows the corresponding convergence of the frequency in time (rectangular window)
+\item point out the time used in the previous examples, and the error associated with this time on the spectrum width/shape AND the final error (convergence in time)
+\item high frequencies have higher error, due to the difficulty in capturing these frequencies, and the need for refinement.
+\item low errors require a longer time
+\end{itemize}
+
+%figure TODO figure showing modes and convergence (i.e. FEM as a filter)
+
+Message:zero padding can be used to improve resolution - but the spectra don't look the way one would expect
+\begin{itemize}
+\item started with previous in the first figure
+\item done with RECTANGULAR window
+\item other figures show zero padding in the close vicinity of the peak
+\item frequency domain interpolation does not follow the way the untrained eye expects
+\item amplitude loss (division by N)
+\item iterpolation causes evidence of leakage to be visible - note this isn't CAUSED by zero padding, interpolation by zero padding interpolates the missing information missing?
+\item note that lower resolution in the input signal, results in a lower resolution spectrum, regardless of zero padding
+\item do I need to mention QFFT?
+\end{itemize}
+
+\begin{figure}[!ht]
+	\centering
+  \subfigure[$2^{22}$ timesteps without padding]{\includegraphics[width=0.45\textwidth]{2D_FreeSpaceCavity/zeroPadding/PAD_sig22_22}}
+  \subfigure[$2^{19}$ timesteps, padded to $2^{22}$]{\includegraphics[width=0.45\textwidth]{2D_FreeSpaceCavity/zeroPadding/PAD_sig19_22}} \\
+  % \subfigure[$2^{22}$ timesteps, padded to $2^{23}$]{\includegraphics[width=0.45\textwidth]{2D_FreeSpaceCavity/zeroPadding/PAD_sig22_23}}
+  % \subfigure[$2^{19}$ timesteps, padded to $2^{23}$]{\includegraphics[width=0.45\textwidth]{2D_FreeSpaceCavity/zeroPadding/PAD_sig19_23}} \\
+  % \subfigure[$2^{22}$ timesteps, padded to $2^{24}$]{\includegraphics[width=0.45\textwidth]{2D_FreeSpaceCavity/zeroPadding/PAD_sig22_24}}
+  % \subfigure[$2^{19}$ timesteps, padded to $2^{24}$]{\includegraphics[width=0.45\textwidth]{2D_FreeSpaceCavity/zeroPadding/PAD_sig19_24}} \\
+  \subfigure[$2^{22}$ timesteps, padded to $2^{25}$]{\includegraphics[width=0.45\textwidth]{2D_FreeSpaceCavity/zeroPadding/PAD_sig22_25}}
+  \subfigure[$2^{19}$ timesteps, padded to $2^{25}$]{\includegraphics[width=0.45\textwidth]{2D_FreeSpaceCavity/zeroPadding/PAD_sig19_25}} \\
+  \caption{Rectangular}
+%
+\end{figure}
+
+\begin{figure}[!ht]
+	\centering
+  \subfigure[$2^{22}$ timesteps without padding]{\includegraphics[width=0.45\textwidth]{2D_FreeSpaceCavity/zeroPadding/PAD_Blackman_sig22_22}}
+  \subfigure[$2^{19}$ timesteps, padded to $2^{22}$]{\includegraphics[width=0.45\textwidth]{2D_FreeSpaceCavity/zeroPadding/PAD_Blackman_sig19_22}} \\
+  % \subfigure[$2^{22}$ timesteps, padded to $2^{23}$]{\includegraphics[width=0.45\textwidth]{2D_FreeSpaceCavity/zeroPadding/PAD_Blackman_sig22_23}}
+  % \subfigure[$2^{19}$ timesteps, padded to $2^{23}$]{\includegraphics[width=0.45\textwidth]{2D_FreeSpaceCavity/zeroPadding/PAD_Blackman_sig19_23}} \\
+  % \subfigure[$2^{22}$ timesteps, padded to $2^{24}$]{\includegraphics[width=0.45\textwidth]{2D_FreeSpaceCavity/zeroPadding/PAD_Blackman_sig22_24}}
+  % \subfigure[$2^{19}$ timesteps, padded to $2^{24}$]{\includegraphics[width=0.45\textwidth]{2D_FreeSpaceCavity/zeroPadding/PAD_Blackman_sig19_24}} \\
+  \subfigure[$2^{22}$ timesteps, padded to $2^{25}$]{\includegraphics[width=0.45\textwidth]{2D_FreeSpaceCavity/zeroPadding/PAD_Blackman_sig22_25}}
+  \subfigure[$2^{19}$ timesteps, padded to $2^{25}$]{\includegraphics[width=0.45\textwidth]{2D_FreeSpaceCavity/zeroPadding/PAD_Blackman_sig19_25}} \\
+	\label{fig:rectangle2DfreeSpace_filteringConvergence}
+  \caption{Blackman}
+\end{figure}
+
+NOTE THE CHANGES IN SCALE
+
+\begin{figure}[!ht]
+	\centering
+	\label{fig:rectangle2DfreeSpace_filteringConvergence}
+\end{figure}
 Figure~\ref{fig:rectangle2DfreeSpace_Convergence} shows the evolution of the
 error on four computed resonant frequencies as a function of the element size
 for a degree of approximation $p$ ranging from 1 up to 3. Each error is computed
@@ -151,13 +311,12 @@ from $E_3$, (d) from $H_2$, and both (e) and (f) from $H_3$.
 \end{itemize}
 \begin{figure}[!ht]
 	\centering
-
    \subfigure[$f_{1} \approx, \USoltn_{2}, \TEz $]{\includegraphics[width=0.49\textwidth]{2D_FreeSpaceCavity/Conv/U[2]/F1_TE}}
-   \subfigure[$f_{2} \approx, \USoltn_{1}, \TEz $]{\includegraphics[width=0.49\textwidth]{2D_FreeSpaceCavity/Conv/U[1]/F2_TE}}
-   \subfigure[$f_{3} \approx, \USoltn_{3}, \TMz $]{\includegraphics[width=0.49\textwidth]{2D_FreeSpaceCavity/Conv/U[3]/F3_TM}}
-   \subfigure[$f_{6} \approx, \USoltn_{2}, \TMz $]{\includegraphics[width=0.49\textwidth]{2D_FreeSpaceCavity/Conv/U[2]/F6_TM}}
-   \subfigure[$f_{8} \approx, \USoltn_{3}, \TMz $]{\includegraphics[width=0.49\textwidth]{2D_FreeSpaceCavity/Conv/U[3]/F8_TM}}
-   \subfigure[$f_{10} \approx, \USoltn_{3}, \TMz $]{\includegraphics[width=0.49\textwidth]{2D_FreeSpaceCavity/Conv/U[3]/F10_TM}}
+   \subfigure[$f_{2} \approx, \USoltn_{1}, \TEz $]{\includegraphics[width=0.49\textwidth]{2D_FreeSpaceCavity/Conv/U[1]/F2_TE_legend}} \\
+   \subfigure[$f_{3} \approx, \USoltn_{3}, \TMz $]{\includegraphics[width=0.49\textwidth]{2D_FreeSpaceCavity/Conv/U[3]/F3_TM_legend}}
+   \subfigure[$f_{6} \approx, \USoltn_{2}, \TMz $]{\includegraphics[width=0.49\textwidth]{2D_FreeSpaceCavity/Conv/U[2]/F6_TM_legend}} \\
+   \subfigure[$f_{8} \approx, \USoltn_{3}, \TMz $]{\includegraphics[width=0.49\textwidth]{2D_FreeSpaceCavity/Conv/U[3]/F8_TM_legend}}
+   \subfigure[$f_{10} \approx, \USoltn_{3}, \TMz $]{\includegraphics[width=0.49\textwidth]{2D_FreeSpaceCavity/Conv/U[3]/F10_TM_legend}}
 	\caption{Rectangular free-space cavity: $h$-convergence of the error for six resonant frequencies.}
 	\label{fig:rectangle2DfreeSpace_Convergence}
 \end{figure}
@@ -204,77 +363,6 @@ To further illustrate the potential of the proposed approach, Figure~\ref{fig:re
 %text
 The computation has been performed on a very coarse mesh with only 8 elements and using a degree of approximation $p$=4 and the high quality of the mode shape can be clearly observed.
 
-%============================================================
-%============================================================
-\clearpage
-\subsection{Aliasing effects}
-%figure TODO: make whole width of page to show spectra, use the p=3 mesh above?
-\begin{figure}[!ht]
-	\centering
-\subfigure[$\Delta t = 0.025$]{\includegraphics[width=\textwidth]{2D_FreeSpaceCavity/Aliasing/4x8_p3_TM_notaliased}} \\
-\subfigure[$\Delta t = 0.2$]{\includegraphics[width=\textwidth]{2D_FreeSpaceCavity/Aliasing/4x8_p3_TM_dt0_2}} \\
-\subfigure[$\Delta t = 0.4$]{\includegraphics[width=\textwidth]{2D_FreeSpaceCavity/Aliasing/4x8_p3_TM_aliased}} \\
-	\caption{Rectangular free-space cavity: spectrum with and without aliasing
-    effects for two choices of timestep}
-	\label{fig:rectangle2DfreeSpace_modesHF}
-\end{figure}
-
-%text TODO
-spectrum - $T = 418300$, zero padded to $2^{ 24 }$, $\TMz$ mode, same IC as above
-peaks which coincide have a higher amplitude
-say in words that the timestep has no effect on error (no need for plot -
-doesn't show much)
-
-%figure TODO figure showing modes and convergence (i.e. FEM as a filter)
-
-\clearpage
-\subsection{Window functions}
-%text TODO
-same mesh for both sets of plots:
-mesh 16 $\times$ 8 , $p = 2$ and $\TMz$ mode
-                x: [-0.5000 0]
-             mode: 'TM'
-    nOfComponents: 3
-     nOfTimeSteps: 896000
-               dt: 0.0250
-\begin{figure}[!ht]
-	\centering
-\subfigure[$T=10$]{\includegraphics[width=0.49\textwidth]{Windows/spectra/BlackmanHarris-T10}} \subfigure[$T=100$]{\includegraphics[width=0.49\textwidth]{Windows/spectra/BlackmanHarris-T100}}
-\subfigure[$T=1000$]{\includegraphics[width=0.49\textwidth]{Windows/spectra/BlackmanHarris-T1000}}
-\subfigure[$T=10000$]{\includegraphics[width=0.49\textwidth]{Windows/spectra/BlackmanHarris-T10000}}
-\end{figure}
-%figure: DONE various windows (spectra)
-\begin{figure}[!ht]
-	\centering
-\subfigure[ Rectangular window]{\includegraphics[width=\textwidth]{2D_FreeSpaceCavity/Windows/spectra/RectWindow}}
-\subfigure[ Blackman window]{\includegraphics[width=\textwidth]{2D_FreeSpaceCavity/Windows/spectra/BlackmanWindow}}
-\subfigure[ Blackman-Harris window]{\includegraphics[width=\textwidth]{2D_FreeSpaceCavity/Windows/spectra/BlackmanHarrisWindow}}
-\subfigure[ Gaussian window]{\includegraphics[width=\textwidth]{2D_FreeSpaceCavity/Windows/spectra/GaussianWindow}}
-\end{figure}
-for WINDOWS discuss:
-\begin{itemize}
-\item Width of peaks
-\item Noise
-\item Amplitude (scaollping loss)
-\end{itemize}
-Discuss each one of them using perhaps the using the Fourier transform of the window itself. And basically conclude that you need to take a compromise. Refer to final time of 10000 (used here) and say that this is enough.
-
-Convergence in time figure:
-Show the four that are compared with spectra
-
-Discuss the advantages of both Blackman compared to Gaussian and rectangular.
-
-Mention that the one Blackman perform better than the other for low frequencies and contrary for high frequencies so basically similar performance.
-%figure DONE convergence with various windows
-\begin{figure}[!ht]
-	\centering
-  \subfigure[$f_{3}$]{\includegraphics[width=0.45\textwidth]{2D_FreeSpaceCavity/Windows/conv/F3}}
-  %\subfigure[$f_{4}$]{\includegraphics[width=0.45\textwidth]{2D_FreeSpaceCavity/Windows/conv/F4}}
-  %\subfigure[$f_{8}$]{\includegraphics[width=0.45\textwidth]{2D_FreeSpaceCavity/Windows/conv/F8}}
-  %\subfigure[$f_{9}$]{\includegraphics[width=0.45\textwidth]{2D_FreeSpaceCavity/Windows/conv/F9}}
-  \subfigure[$f_{10}$]{\includegraphics[width=0.45\textwidth]{2D_FreeSpaceCavity/Windows/conv/F10_legend}}
-	\label{fig:rectangle2DfreeSpace_filteringConvergence}
-\end{figure}
 \clearpage
 \subsection{Effect of the geometric representation for cavities with curved boundaries}
 %text
@@ -284,9 +372,9 @@ The resonator is discretised using a series of unstructured triangular meshes wi
 %figure REVISE - 2D Circle convergence comparison - more of them!
 \begin{figure}[!ht]
 	\centering
-	\subfigure[$h$-refinement]{\includegraphics[width=0.49\textwidth]{figs/circleFreeSpace_hRef}}
-	\subfigure[$p$-refinement]{\includegraphics[width=0.49\textwidth]{figs/circleFreeSpace_pRef}}
-	\caption{Disk resonator: $h$-convergence and $p$-convergence of the error for the first resonant frequency $f_1 \approx$ 57.59 THz.}
+	\subfigure[$h$-refinement]{\includegraphics[width=0.49\textwidth]{2D_Circle/convergenceFigures/circleFreeSpce_hRef_legend}}
+	\subfigure[$p$-refinement]{\includegraphics[width=0.49\textwidth]{2D_Circle/convergenceFigures/circleFreeSpce_pRef_legend}}
+	\caption{Disk resonator: $h$-convergence and $p$-convergence of the error for the first resonant frequency $f_1$.}
 	\label{fig:circleFEMvsNEFEM_Convergence}
 \end{figure}
 %text
@@ -323,12 +411,11 @@ Next, the performance of both low and high-order approximations is studied. Figu
 %figure REVISE : Circle convergence CPU times
 \begin{figure}[!ht]
 	\centering
-	\subfigure[]{\includegraphics[width=0.49\textwidth]{figs/circleFreeSpace_ndof}}
-	\subfigure[]{\includegraphics[width=0.49\textwidth]{figs/circleFreeSpace_cpu}}
-	\caption{Disk resonator: Comparison of $h$ and $p$ refinement in terms of (a) the number of degrees of freedom (\ndof) and (b) the CPU time for the computation of the first resonant frequency $f_1 \approx$ 57.59 THz.}
+  \subfigure[degrees of freedom]{\includegraphics[width=0.49\textwidth]{2D_Circle/convergenceFigures/circleFreeSpce_ndof_legend}}
+  \subfigure[Wall time]{\includegraphics[width=0.49\textwidth]{2D_Circle/convergenceFigures/circleFreeSpce_cpu_legend}}
+	\caption{Disk resonator: Comparison of $h$ and $p$ refinement in terms of (a) the number of degrees of freedom (\ndof) and (b) the wall time for the computation of the first resonant frequency $f_1$.}
 	\label{fig:circleHvsP}
 \end{figure}
-
 %text
 The comparison in terms of number of degrees of freedom in Figure~\ref{fig:circleHvsP} (a) shows, as expected that high-order elements significantly outperform low-order elements when the solution is smooth due to the exponential rate of convergence of a $p$-refinement strategy compared to the algebraic rate of an $h$-refinement strategy. In this example, for an error in the first resonant frequency of $10^{-4}$ the number of degrees of freedom required using NEFEM with linear approximation is 1,149, whereas the same accuracy can be obtained using approximately 204 degrees of freedom. For high accurate results, namely an error in the first resonant frequency of $2.5 \times 10^{-7}$, the use of high-order methods is even more advantageous. NEFEM with linear approximation requires 18,432 degrees of freedom, whereas the same accuracy can be obtained using only 360 degrees of freedom. 
 
@@ -366,7 +453,16 @@ First, the implementation of the DG method for a lossless single-pole Drude medi
 \end{pmatrix}.
 \end{equation*}
 
-The computations are performed on a series of structured quadrilateral meshes with 4$\times$2, 8$\times$4, 16$\times$8, 32$\times$16,  64$\times$32 and 128$\times$64 elements and for a degree of approximation from $p$=1 to $p$=4. Initial and boundary conditions corresponding to the analytical solution are considered.
+The computations are performed on a series of uniformly refined unstructured triangular meshes with elements and for a degree of approximation from $p$=1 to $p$=4. Initial and boundary conditions corresponding to the analytical solution are considered.
+
+\begin{figure}[!ht]
+	\centering
+	\subfigure[$E_1$]{\includegraphics[width=0.49\textwidth]{2D_DispersiveVolumetricSource/soltnT3_TRI_H4_p2_E1}}
+	\subfigure[$E_2$]{\includegraphics[width=0.49\textwidth]{2D_DispersiveVolumetricSource/soltnT3_TRI_H4_p2_E2}}
+	\subfigure[$E_3$]{\includegraphics[width=0.49\textwidth]{2D_DispersiveVolumetricSource/soltnT3_TRI_H4_p2_E3}}
+	\caption{Rectangular dispersive cavity: snapshots of the electric field intensity obtained from a 136 element mesh with $p=2$ at $T=3$.}
+	\label{fig:rectangle2DdispersiveTest_Convergence}
+\end{figure}
 
 Figure~\ref{fig:rectangle2DdispersiveTest_Convergence} shows the $\mathcal{L}^2(\Omega)$ norm of the error of two components of the electromagnetic field, namely $E_1$ and $H_3$, as a function of the characteristic element size $h$. In all cases, the expected optimal rate of convergence (i.e, $p$+1) is observed. 
 %figure DONE: Volumetric source convergence
@@ -413,10 +509,49 @@ Finally, Figure~\ref{fig:dispersiveFreeSpaceSpectrum} shows the computed spectru
 %figure LATER: dispersive spectrum comparison -  can I do better?
 \begin{figure}[!ht]
 \centering
-\includegraphics[width=0.6\textwidth]{figs/dispersiveFreeSpaceSpectrum}
+\includegraphics[width=\textwidth]{2D_DispersivePlate/SpectrumComparison/dispVsNonDisp}
 \caption{Rectangular dispersive cavity: Comparison of computed spectra for a for free-space and dispersive cavity.}
 \label{fig:dispersiveFreeSpaceSpectrum}
 \end{figure}
+
+\begin{figure}[!ht]
+\centering
+\subfigure[$f_1,E_3$]{\includegraphics[width=0.46\textwidth]{2D_DispersivePlate/Modes/F1_U3}}
+\subfigure[$f_2,H_1$]{\includegraphics[width=0.46\textwidth]{2D_DispersivePlate/Modes/F2_U1}}
+\subfigure[$f_2,H_2$]{\includegraphics[width=0.46\textwidth]{2D_DispersivePlate/Modes/F2_U2}}
+\subfigure[$f_2,E_3$]{\includegraphics[width=0.46\textwidth]{2D_DispersivePlate/Modes/F2_U3}}
+\subfigure[$f_3,H_2$]{\includegraphics[width=0.46\textwidth]{2D_DispersivePlate/Modes/F3_U2}}
+\subfigure[$f_5,H_2$]{\includegraphics[width=0.46\textwidth]{2D_DispersivePlate/Modes/F5_U2}}
+\subfigure[$f_6,E_3$]{\includegraphics[width=0.46\textwidth]{2D_DispersivePlate/Modes/F6_U3}}
+\caption{Rectangular dispersive cavity: mode shapes for a 32 element mesh, with $p=2$.}
+\label{fig:dispersiveFreeSpaceSpectrum}
+\end{figure}
+
+\begin{figure}[!ht]
+\centering
+\subfigure[$f_5,|\mathbf{H}|$]{\includegraphics[width=0.46\textwidth]{2D_DispersivePlate/Modes/F5_AmpH}}
+\caption{Rectangular dispersive cavity: mode shapes for a 32 element mesh, with $p=2$.}
+\label{fig:dispersiveFreeSpaceSpectrum}
+\end{figure}
+
+frequencies:
+0.573093071579933
+0.718288226075311
+0.910187134866009
+1.038485020399094
+1.125144932732563
+1.256364956498146
+1.352221811226707
+1.419845223426819
+1.526010036468506
+1.586255573838266
+1.605777069926262
+1.681876927614212
+1.807270944118500
+1.824646443128586
+1.956731081008911
+
+/Data/2D_DispersiveCavity/modeShapes/nOfCyclesMax_500
 %text
 The results reveal a shift of all the frequencies, being more important for low frequencies than for the higher frequencies. It can also be observed that the amplitude is lower for the dispersive cavity compared to the cavity filled with air.
 
@@ -529,7 +664,8 @@ DESCRIPTION OF MESH:
 \item SHOW THE MESH and explaining the rationale of the test.
 Show a table with rows showing p=1,...,9.
 Columns showing min nwl and max nwl. THis motivates variable p.
-\item: TO THINK ABOUT. Including delta t. This will need s study of the stability limit for different p. http://wwwhome.math.utwente.nl/~botchevma/sarmany_ea07.pdf
+\item: TO THINK ABOUT. Including delta t. This will need s study of the stability limit for different p.
+  %http://wwwhome.math.utwente.nl/~botchevma/sarmany_ea07.pdf
 \item In many applications the mesh is generated so that a uniform distribution of nodes per wavelength are obtained. In the presence of small features you propose to use variable p to alleviate the meshing constraint.
 \item Provide in the text the min and max element size, time step induced if you were to use 
 \end{itemize}
